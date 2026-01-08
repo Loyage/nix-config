@@ -20,5 +20,7 @@
     neovim
     yazi
     yadm
+    gcc
+    zsh
   ];
 }

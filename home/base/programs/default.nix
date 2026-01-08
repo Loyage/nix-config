@@ -23,6 +23,7 @@ let
     nmap # network exploration tool
     file # file type detection
     gh # git hub cli
+    gh-copilot
     fh # flakehub cli
     zellij # terminal workspace
     glow # markdown previewer in terminal
@@ -59,7 +60,6 @@ let
     carapace
     jujutsu
     uv
-    sketchybar
     clash-meta
   ];
 

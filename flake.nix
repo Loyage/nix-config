@@ -145,11 +145,12 @@
           {
             nixpkgs = {
               overlays = [ inputs.nix-yazi-flavors.overlays.default ];
-              config.allowUnfree = true;
+              # config.allowUnfree = true;
             };
           }
           ./modules/base
           ./modules/linux
+          ./hosts/linux/hardware-configuration.nix
 
           home-manager.nixosModules.home-manager
           {

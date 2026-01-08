@@ -3,6 +3,9 @@ let
   gui-tools = with pkgs; [
     kitty
     firefox
+    rofi
+    clash-verge-rev
+    waybar
     # zen
   ];
 in
