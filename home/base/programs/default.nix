@@ -9,6 +9,7 @@ let
   ];
 
   cli-tools = with pkgs; [
+    cargo
     bat
     autojump
     zoxide
@@ -34,6 +35,7 @@ let
     vivid # Generator for LS_COLORS
     statix # Lints and suggestions for nix
     yadm # Yet Another Dotfiles Manager
+    python3
 
     gnused # sed: stream editor, use a script to perform basic text transformations on an input stream (a file or input from a pipeline)
     gnutar # tar
@@ -75,6 +77,10 @@ in
     neovim = {
       enable = true;
       defaultEditor = true;
+      plugins = with pkgs.vimPlugins; [
+        nvim-treesitter.withAllGrammars
+        lazy-nvim
+      ];
     };
 
     # skim provides a single executable: sk.

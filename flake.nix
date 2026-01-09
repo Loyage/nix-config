@@ -53,6 +53,10 @@
       flake = false;
     };
     nix-yazi-flavors.url = "github:aguirre-matteo/nix-yazi-flavors";
+    zen-browser = {
+      url = "github:youwen5/zen-browser-flake";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
   };
 
   # The `outputs` function will return all the build results of the flake.
@@ -75,10 +79,7 @@
 
       # specialArgs 内的参数可以在各个模块中访问到，只需要你添加到函数输入变量中即可
       specialArgs =
-        inputs
-        // {
-          inherit mylib myvars;
-        };
+        { inherit inputs myvars mylib; };
     in
     {
       darwinConfigurations."${myvars.darwinHostname}" = nix-darwin.lib.darwinSystem {
@@ -138,6 +139,7 @@
           system = "x86_64-linux";
           overlays = [
             inputs.nix-yazi-flavors.overlays.default
+          # ] ++ (import ./overlays inputs);
           ];
           config.allowUnfree = true;
         };
