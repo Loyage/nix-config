@@ -3,57 +3,76 @@
 , ...
 }:
 let
-  username = myvars.username;
-  hostname = myvars.nixosHostname;
+  inherit (myvars) username nixosHostname;
 in
 {
-  networking.hostName = hostname;
+  boot = {
+    loader = {
+      systemd-boot.enable = true;
+      efi.canTouchEfiVariables = true;
+    };
+    # kernelPackages = with pkgs; [ linuxPackages_latest ];
+  };
+
+  networking.hostName = nixosHostname;
+  networking.networkmanager.enable = true;
+  # Configure network proxy if necessary
+  # networking.proxy.default = "http://user:password@proxy:port/";
+  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
+
+  time.timeZone = "Asia/Shanghai";
+
+  # Select internationalisation properties.
+  i18n.defaultLocale = "en_US.UTF-8";
+  i18n.extraLocaleSettings = {
+    LC_ADDRESS = "zh_CN.UTF-8";
+    LC_IDENTIFICATION = "zh_CN.UTF-8";
+    LC_MEASUREMENT = "zh_CN.UTF-8";
+    LC_MONETARY = "zh_CN.UTF-8";
+    LC_NAME = "zh_CN.UTF-8";
+    LC_NUMERIC = "zh_CN.UTF-8";
+    LC_PAPER = "zh_CN.UTF-8";
+    LC_TELEPHONE = "zh_CN.UTF-8";
+    LC_TIME = "zh_CN.UTF-8";
+  };
+
   users.users."${username}" = {
+    isSystemUser = true;
     home = "/home/${username}";
     description = username;
-    isSystemUser = true;
     group = "loyage";
     shell = pkgs.zsh;
   };
   users.groups.loyage = { };
   nix.settings.trusted-users = [ username ];
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
 
-  # Configure network connections interactively with nmcli or nmtui.
-  networking.networkmanager.enable = true;
-
-  # Set your time zone.
-  time.timeZone = "Asia/Shanghai";
-
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
-
-  # Select internationalisation properties.
-  i18n.defaultLocale = "en_US.UTF-8";
   programs.hyprland.enable = true;
   programs.niri.enable = true;
-  programs.hyprlock.enable = true;
 
   services = {
+    # 打印服务
+    printing.enable = true;
+    # 音频服务
+    pulseaudio.enable = false;
     pipewire = {
       enable = true;
       alsa.enable = true;
       alsa.support32Bit = true;
       pulse.enable = true;
     };
+
+    openssh.enable = true;
     flatpak.enable = true;
-    hypridle.enable = true;
     xserver.enable = true;
 
     greetd = {
       enable = true;
-      settings = {
-        default_session = {
-          command = "${pkgs.tuigreet}/bin/tuigreet --time --cmd start-hyprland";
-          user = "greeter";
+      settings = rec {
+        initial_session = {
+          command = "${pkgs.tuigreet}/bin/tuigreet --time --cmd niri-session";
+          user = "loyage";
         };
+        default_session = initial_session;
       };
     };
     # displayManager.sddm.wayland.enable = true;

@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ pkgs, ... }:
 {
   home.sessionVariables = {
     GTK_IM_MODULE = "fcitx";

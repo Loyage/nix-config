@@ -8,18 +8,18 @@
     xwayland-satellite
   ];
 
-  xdg.configFile =
-    let
-      mkSymlink = config.lib.file.mkOutOfStoreSymlink;
-      confPath = "${config.home.homeDirectory}/nix-config/home/linux/programs/niri/conf";
-    in
-    {
-      "niri/config.kdl".source = mkSymlink "${confPath}/config.kdl";
-      "niri/keybindings.kdl".source = mkSymlink "${confPath}/keybindings.kdl";
-      "niri/noctalia-shell.kdl".source = mkSymlink "${confPath}/noctalia-shell.kdl";
-      # "niri/spawn-at-startup.kdl".source = mkSymlink "${confPath}/spawn-at-startup.kdl";
-      "niri/windowrules.kdl".source = mkSymlink "${confPath}/windowrules.kdl";
-    };
+  # xdg.configFile =
+  #   let
+  #     mkSymlink = config.lib.file.mkOutOfStoreSymlink;
+  #     confPath = "${config.home.homeDirectory}/nix-config/home/linux/programs/niri/conf";
+  #   in
+  #   {
+  #     "niri/config.kdl".source = mkSymlink "${confPath}/config.kdl";
+  #     "niri/keybindings.kdl".source = mkSymlink "${confPath}/keybindings.kdl";
+  #     "niri/noctalia-shell.kdl".source = mkSymlink "${confPath}/noctalia-shell.kdl";
+  #     "niri/spawn-at-startup.kdl".source = mkSymlink "${confPath}/spawn-at-startup.kdl";
+  #     "niri/windowrules.kdl".source = mkSymlink "${confPath}/windowrules.kdl";
+  #   };
 
   # systemd.user.services.niri-flake-polkit = {
   #   Unit = {
