@@ -1,14 +1,17 @@
-{ hostname
-, username
+{ pkgs
+, myvars
 , ...
 }:
+let
+  inherit (myvars) username darwinHostname;
+in
 {
-  networking.hostName = hostname;
+  networking.hostName = darwinHostname;
   users.users."${username}" = {
     home = "/Users/${username}";
     description = username;
   };
   nix.settings.trusted-users = [ username ];
-  networking.computerName = hostname;
-  system.defaults.smb.NetBIOSName = hostname;
+  networking.computerName = darwinHostname;
+  system.defaults.smb.NetBIOSName = darwinHostname;
 }
