@@ -16,7 +16,6 @@ let
     which
     oh-my-posh
     fastfetch
-    tealdeer # tldr client
     fzf # fuzzy finder
     ripgrep # rg
     aria2 # download manager
