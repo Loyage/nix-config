@@ -1,0 +1,68 @@
+return {
+  -- 类似IDE的顶栏导航功能
+  {
+    "Bekaboo/dropbar.nvim",
+    config = function()
+      local api = require("dropbar.api")
+      local utils = require("dropbar.utils")
+      vim.keymap.set("n", "<Leader>;", api.pick)
+
+      local confirm = function()
+        local menu = utils.menu.get_current()
+        if not menu then
+          return
+        end
+        local cursor = vim.api.nvim_win_get_cursor(menu.win)
+        local component = menu.entries[cursor[1]]:first_clickable(cursor[2])
+        if component then
+          menu:click_on(component)
+        end
+      end
+
+      require("dropbar").setup({
+        menu = {
+          -- When on, automatically set the cursor to the closest previous/next
+          -- clickable component in the direction of cursor movement on CursorMoved
+          quick_navigation = true,
+          ---@type table<string, string|function|table<string, string|function>>
+          keymaps = {
+            ["<LeftMouse>"] = function()
+              local menu = utils.menu.get_current()
+              if not menu then
+                return
+              end
+              local mouse = vim.fn.getmousepos()
+              if mouse.winid ~= menu.win then
+                local parent_menu = api.get_dropbar_menu(mouse.winid)
+                if parent_menu and parent_menu.sub_menu then
+                  parent_menu.sub_menu:close()
+                end
+                if vim.api.nvim_win_is_valid(mouse.winid) then
+                  vim.api.nvim_set_current_win(mouse.winid)
+                end
+                return
+              end
+              menu:click_at({ mouse.line, mouse.column }, nil, 1, "l")
+            end,
+            ["<CR>"] = confirm,
+            ["i"] = confirm,
+            ["<esc>"] = "<C-w>q",
+            ["q"] = "<C-w>q",
+            ["n"] = "<C-w>q",
+            ["<MouseMove>"] = function()
+              local menu = utils.menu.get_current()
+              if not menu then
+                return
+              end
+              local mouse = vim.fn.getmousepos()
+              if mouse.winid ~= menu.win then
+                return
+              end
+              menu:update_hover_hl({ mouse.line, mouse.column - 1 })
+            end,
+          },
+        },
+      })
+    end,
+  },
+}

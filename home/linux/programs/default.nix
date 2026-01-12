@@ -6,8 +6,9 @@ let
     wf-recorder # screen recording
     kitty
     rofi
-    waybar
-    waypaper
+    # waybar
+    # waypaper
+    wl-clipboard-rs
     swww
     firefox
     bluetuith
@@ -15,12 +16,14 @@ let
   ];
   work-tools = with pkgs; [
     wpsoffice-cn
+    usbutils
   ];
   social-softs = with pkgs; [
     qq
     wechat-uos
     netease-cloud-music-gtk
     obs-studio
+    wemeet
   ];
   other-tools = with pkgs; [
     tree-sitter

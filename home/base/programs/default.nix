@@ -1,4 +1,8 @@
-{ pkgs, mylib, ... }:
+{ pkgs
+, mylib
+, config
+, ...
+}:
 let
   archives = with pkgs; [
     zip
@@ -11,11 +15,13 @@ let
   cli-tools = with pkgs; [
     cargo
     bat
+    btop # resource monitor
     autojump
     zoxide
     which
     oh-my-posh
     fastfetch
+    tree
     fzf # fuzzy finder
     ripgrep # rg
     aria2 # download manager
@@ -25,7 +31,6 @@ let
     gh # git hub cli
     gh-copilot
     fh # flakehub cli
-    zellij # terminal workspace
     glow # markdown previewer in terminal
     chafa # image to ANSI/Unicode character art
     gomi # rm to trash
@@ -35,6 +40,12 @@ let
     statix # Lints and suggestions for nix
     yadm # Yet Another Dotfiles Manager
     python3
+    cava # Console-based Audio Visualizer for Alsa
+    zellij # terminal multiplexer
+
+    opencode
+    claude-code
+    codex
 
     gnused # sed: stream editor, use a script to perform basic text transformations on an input stream (a file or input from a pipeline)
     gnutar # tar
@@ -48,7 +59,6 @@ let
     lazydocker
     lazynpm
     htop-vim # htop with vim keybindings
-    btop # resource monitor
   ];
 
   dev-tools = with pkgs; [
@@ -72,15 +82,6 @@ in
   home.packages = archives ++ cli-tools ++ tui-tools ++ dev-tools ++ gui-tools;
 
   programs = {
-    # modern vim
-    neovim = {
-      enable = true;
-      defaultEditor = true;
-      plugins = with pkgs.vimPlugins; [
-        nvim-treesitter.withAllGrammars
-        lazy-nvim
-      ];
-    };
 
     # skim provides a single executable: sk.
     # Basically anywhere you would want to use grep, try sk instead.
@@ -89,6 +90,19 @@ in
       enableZshIntegration = true;
     };
   };
+  xdg.configFile =
+    let
+      mkLink = config.lib.file.mkOutOfStoreSymlink;
+      confPath = "${config.home.homeDirectory}/nix-config/config";
+    in
+    {
+      "btop".source = mkLink "${confPath}/btop";
+      "nvim".source = mkLink "${confPath}/nvim";
+      "zellij".source = mkLink "${confPath}/zellij";
+      "zsh".source = mkLink "${confPath}/zsh";
+      "kitty".source = mkLink "${confPath}/kitty";
+      "avater".source = mkLink "${confPath}/avater";
+    };
 
   imports = mylib.scanPaths ./.;
 }

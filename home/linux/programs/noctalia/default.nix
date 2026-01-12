@@ -1,13 +1,11 @@
 { lib
 , config
+, inputs
 , pkgs
 , ...
 }:
-
 {
-
   home.packages = [
-    pkgs.noctalia-shell
     pkgs.qt6Packages.qt6ct # for icon theme
     pkgs.app2unit # Launch Desktop Entries (or arbitrary commands) as Systemd user units
   ]
@@ -15,36 +13,45 @@
     pkgs.gpu-screen-recorder # recoding screen
   ]);
 
-  # home.file."Pictures/Wallpapers".source = ~/wallpapers;
+  imports = [
+    inputs.noctalia.homeModules.default
+  ];
+
+  # configure options
+  programs.noctalia-shell = {
+    enable = true;
+    plugins = {
+      sources = [
+        {
+          enabled = true;
+          name = "Official Noctalia Plugins";
+          url = "https://github.com/noctalia-dev/noctalia-plugins";
+        }
+      ];
+      states = {
+        catwalk.enabled = true;
+        todo.enabled = true;
+        kaomoji-provider.enabled = true;
+        version = 1;
+      };
+
+      pluginSettings = {
+        catwalk = {
+          minimumThreshold = 25;
+          hideBackground = true;
+          # this may also be a string or a path to a JSON file.
+        };
+      };
+    };
+  };
 
   xdg.configFile =
     let
       mkSymlink = config.lib.file.mkOutOfStoreSymlink;
-      confPath = "${config.home.homeDirectory}/nix-config/home/linux/programs/noctalia";
+      confPath = ./conf;
     in
     {
       "noctalia/settings.json".source = mkSymlink "${confPath}/settings.json";
       "qt6ct/qt6ct.conf".source = mkSymlink "${confPath}/qt6ct.conf";
     };
-
-  # systemd.user.services.noctalia-shell = {
-  #   Unit = {
-  #     Description = "Noctalia Shell - Wayland desktop shell";
-  #     Documentation = "https://docs.noctalia.dev/docs";
-  #     PartOf = [ config.wayland.systemd.target ];
-  #     After = [ config.wayland.systemd.target ];
-  #   };
-  #
-  #   Service = {
-  #     Restart = "on-failure";
-  #
-  #     Environment = [
-  #       "QT_QPA_PLATFORM=wayland;xcb"
-  #       "QT_QPA_PLATFORMTHEME=qt6ct"
-  #       "QT_AUTO_SCREEN_SCALE_FACTOR=1"
-  #     ];
-  #   };
-  #
-  #   Install.WantedBy = [ config.wayland.systemd.target ];
-  # };
 }

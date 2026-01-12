@@ -1,4 +1,5 @@
-{ pkgs
+{ config
+, pkgs
 , ...
 }: {
   programs.zsh = {
@@ -44,6 +45,4 @@
       }
     ];
   };
-
-  home.shellAliases = { };
 }

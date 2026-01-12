@@ -1,0 +1,61 @@
+// Window rules let you adjust behavior for individual windows.
+// Find more information on the wiki:
+// https://yalter.github.io/niri/Configuration:-Window-Rules
+
+workspace "1terminal"
+workspace "2browser"
+workspace "3chat"
+workspace "4gaming"
+workspace "6file"
+workspace "0other"
+
+// Terminal applications - open in workspace 1
+window-rule {
+    match app-id="kitty"
+    open-on-workspace "1terminal"
+    open-maximized true
+}
+
+// Web browsers - open in workspace 2
+window-rule {
+    match app-id="firefox"
+    open-on-workspace "2browser"
+    open-maximized true
+}
+window-rule {
+    match app-id="zen"
+    open-on-workspace "2browser"
+    open-maximized true
+}
+
+// Chat applications - open in workspace 3
+window-rule {
+    match app-id="wechat"
+    open-on-workspace "3chat"
+}
+window-rule {
+    match app-id="QQ"
+    open-on-workspace "3chat"
+}
+
+// Gaming applications - open in workspace 4
+window-rule {
+    match app-id="steam"
+    open-on-workspace "4gaming"
+}
+
+// File management applications - open in workspace 6
+window-rule {
+    match app-id="thunar"
+    open-on-workspace "6file"
+}
+
+// Other applications - open in workspace 0
+window-rule {
+    match app-id="clash-verge"
+    open-on-workspace "0other"
+}
+window-rule {
+    match app-id="obs"
+    open-on-workspace "0other"
+}

@@ -1,0 +1,3 @@
+spawn-at-startup "noctalia-shell"
+spawn-at-startup "fcitx5"
+spawn-at-startup "clash-verge"

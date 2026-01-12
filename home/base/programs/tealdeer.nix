@@ -1,4 +1,3 @@
-# tldr client
 { ... }: {
   programs.tealdeer = {
     enable = true;

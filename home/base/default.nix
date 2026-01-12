@@ -3,7 +3,6 @@
 }: {
   # import sub modules
   imports = [
-    ./shell.nix
     ./git.nix
     ./programs
   ];

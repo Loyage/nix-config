@@ -57,6 +57,10 @@
       url = "github:youwen5/zen-browser-flake";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
+    noctalia = {
+      url = "github:noctalia-dev/noctalia-shell";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   # The `outputs` function will return all the build results of the flake.
@@ -139,7 +143,7 @@
           system = "x86_64-linux";
           overlays = [
             inputs.nix-yazi-flavors.overlays.default
-          # ] ++ (import ./overlays inputs);
+            # ] ++ (import ./overlays inputs);
           ];
           config.allowUnfree = true;
         };

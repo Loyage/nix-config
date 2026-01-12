@@ -1,12 +1,14 @@
 {
     "appLauncher": {
+        "autoPasteClipboard": false,
+        "clipboardWrapText": true,
         "customLaunchPrefix": "",
         "customLaunchPrefixEnabled": false,
         "enableClipPreview": true,
         "enableClipboardHistory": true,
         "iconMode": "native",
         "ignoreMouseInput": false,
-        "pinnedExecs": [
+        "pinnedApps": [
         ],
         "position": "center",
         "screenshotAnnotationTool": "",
@@ -19,7 +21,6 @@
     },
     "audio": {
         "cavaFrameRate": 30,
-        "externalMixer": "pwvucontrol || pavucontrol",
         "mprisBlacklist": [
         ],
         "preferredPlayer": "",
@@ -28,13 +29,13 @@
         "volumeStep": 1
     },
     "bar": {
-        "backgroundOpacity": 0.2,
+        "backgroundOpacity": 0.25,
         "capsuleOpacity": 1,
         "density": "comfortable",
         "exclusive": true,
         "floating": false,
-        "marginHorizontal": 0.25,
-        "marginVertical": 0.25,
+        "marginHorizontal": 0,
+        "marginVertical": 0,
         "monitors": [
         ],
         "outerCorners": false,
@@ -50,13 +51,13 @@
                     "enableScrollWheel": true,
                     "followFocusedScreen": false,
                     "groupedBorderOpacity": 1,
-                    "hideUnoccupied": false,
+                    "hideUnoccupied": true,
                     "iconScale": 0.8,
                     "id": "Workspace",
                     "labelMode": "index",
-                    "showApplications": false,
+                    "showApplications": true,
                     "showLabelsOnlyWhenOccupied": true,
-                    "unfocusedIconsOpacity": 1
+                    "unfocusedIconsOpacity": 0.3
                 }
             ],
             "left": [
@@ -109,7 +110,10 @@
             ],
             "right": [
                 {
-                    "id": "ScreenRecorder"
+                    "id": "plugin:catwalk"
+                },
+                {
+                    "id": "plugin:todo"
                 },
                 {
                     "hideWhenZero": false,
@@ -117,31 +121,38 @@
                     "showUnreadBadge": true
                 },
                 {
-                    "deviceNativePath": "",
+                    "displayMode": "onhover",
+                    "id": "Network"
+                },
+                {
+                    "displayMode": "onhover",
+                    "id": "Bluetooth"
+                },
+                {
                     "displayMode": "alwaysShow",
-                    "hideIfNotDetected": true,
+                    "hideIfNotDetected": false,
                     "id": "Battery",
                     "showNoctaliaPerformance": true,
                     "showPowerProfiles": true,
                     "warningThreshold": 30
                 },
                 {
-                    "displayMode": "alwaysShow",
-                    "id": "Volume"
+                    "id": "WallpaperSelector"
                 },
                 {
                     "displayMode": "alwaysShow",
+                    "id": "Volume",
+                    "middleClickCommand": "pwvucontrol || pavucontrol"
+                },
+                {
+                    "displayMode": "alwaysHide",
                     "id": "Brightness"
                 },
                 {
-                    "blacklist": [
-                    ],
                     "colorizeIcons": false,
-                    "drawerEnabled": true,
+                    "drawerEnabled": false,
                     "hidePassive": false,
-                    "id": "Tray",
-                    "pinned": [
-                    ]
+                    "id": "Tray"
                 },
                 {
                     "colorizeDistroLogo": false,
@@ -172,17 +183,12 @@
             },
             {
                 "enabled": true,
-                "id": "timer-card"
-            },
-            {
-                "enabled": true,
                 "id": "weather-card"
             }
         ]
     },
     "colorSchemes": {
         "darkMode": false,
-        "generateTemplatesForPredefined": true,
         "manualSunrise": "06:30",
         "manualSunset": "18:30",
         "matugenSchemeType": "scheme-monochrome",
@@ -274,7 +280,7 @@
                         "hideMode": "visible",
                         "id": "MediaPlayer",
                         "roundedCorners": true,
-                        "scale": 1.1501312913284876,
+                        "scale": 1.1495972783947788,
                         "showAlbumArt": true,
                         "showBackground": true,
                         "showButtons": true,
@@ -289,6 +295,32 @@
                         "showBackground": true,
                         "x": 230,
                         "y": 161
+                    },
+                    {
+                        "defaultSettings": {
+                            "completedCount": 0,
+                            "count": 0,
+                            "showBackground": true,
+                            "showCompleted": true,
+                            "todos": [
+                            ]
+                        },
+                        "id": "plugin:todo",
+                        "scale": 1.5053787919183539,
+                        "showBackground": true,
+                        "x": 1156,
+                        "y": 170
+                    },
+                    {
+                        "defaultSettings": {
+                            "hideBackground": false,
+                            "minimumThreshold": 10
+                        },
+                        "id": "plugin:catwalk",
+                        "scale": 0.5,
+                        "showBackground": true,
+                        "x": 782,
+                        "y": 170
                     }
                 ]
             }
@@ -309,6 +341,7 @@
         "pinnedApps": [
         ],
         "pinnedStatic": false,
+        "position": "bottom",
         "size": 1
     },
     "general": {
@@ -330,6 +363,7 @@
         "shadowDirection": "bottom_right",
         "shadowOffsetX": 2,
         "shadowOffsetY": 3,
+        "showChangelogOnStartup": true,
         "showHibernateOnLockScreen": false,
         "showScreenCorners": false,
         "showSessionButtonsOnLockScreen": true
@@ -346,6 +380,8 @@
     "location": {
         "analogClockInCalendar": false,
         "firstDayOfWeek": 1,
+        "hideWeatherCityName": false,
+        "hideWeatherTimezone": false,
         "name": "Beijing",
         "showCalendarEvents": true,
         "showCalendarWeather": true,
@@ -413,18 +449,6 @@
         "monitors": [
         ],
         "overlayLayer": true
-    },
-    "screenRecorder": {
-        "audioCodec": "opus",
-        "audioSource": "default_output",
-        "colorRange": "limited",
-        "copyToClipboard": false,
-        "directory": "~/Videos",
-        "frameRate": 30,
-        "quality": "high",
-        "showCursor": true,
-        "videoCodec": "h264",
-        "videoSource": "portal"
     },
     "sessionMenu": {
         "countdownDuration": 10000,
@@ -523,21 +547,26 @@
         "walker": false,
         "wezterm": false,
         "yazi": false,
-        "zed": false
+        "zed": false,
+        "zenBrowser": false
     },
     "ui": {
+        "bluetoothDetailsViewMode": "grid",
+        "bluetoothHideUnnamedDevices": false,
         "boxBorderEnabled": false,
         "fontDefault": "Maple Mono NF CN",
         "fontDefaultScale": 1,
         "fontFixed": "Maple Mono NF CN",
         "fontFixedScale": 1,
+        "networkPanelView": "wifi",
         "panelBackgroundOpacity": 0.7,
         "panelsAttachedToBar": true,
         "settingsPanelMode": "attached",
-        "tooltipsEnabled": true
+        "tooltipsEnabled": true,
+        "wifiDetailsViewMode": "grid"
     },
     "wallpaper": {
-        "directory": "/home/loyage/Pictrues/Wallpapers",
+        "directory": "/home/loyage/Pictures/Wallpapers",
         "enableMultiMonitorDirectories": false,
         "enabled": true,
         "fillColor": "#000000",

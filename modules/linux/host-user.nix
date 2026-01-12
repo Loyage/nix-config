@@ -60,6 +60,9 @@ in
       alsa.support32Bit = true;
       pulse.enable = true;
     };
+    # 电池管理服务
+    power-profiles-daemon.enable = true;
+    upower.enable = true;
 
     openssh.enable = true;
     flatpak.enable = true;
