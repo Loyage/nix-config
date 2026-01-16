@@ -1,0 +1,17 @@
+# show status bar and vertical scrollbar
+set guioptions sv
+# allowing to change the colors
+# set recolor true
+# set recolor-lightcolor "#000000"
+# set recolor-darkcolor "#E0E0E0"
+# set recolor-keephue true
+# zoom and scroll step size
+set zoom-step 20
+set scroll-step 80
+# copy selection to system clipboardset
+set selection-clipboard clipboard
+# enable incremental search
+set incremental-search true
+# shortcut - zoom
+map <C-i> zoom in
+map <C-o> zoom out

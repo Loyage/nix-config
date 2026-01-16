@@ -1,0 +1,35 @@
+gui:
+  skipDiscardChangeWarning: true
+
+keybinding:
+  universal:
+    return: '<esc>'
+    # prevBlock-alt: 'n'
+    # nextBlock-alt: 'i'
+    nextMatch: '='
+    prevMatch: '-'
+    new: 'k'
+    edit: 'o'
+    openFile: 'O'
+    scrollUpMain-alt1: 'U'
+    scrollDownMain-alt1: 'E'
+    scrollUpMain-alt2: '<c-u>'
+    scrollDownMain-alt2: '<c-e>'
+    redo: '<c-r>'
+    diffingMenu: 'M'
+    filteringMenu: '<c-f>'
+    toggleRangeSelect: v
+  files:
+    ignoreFile: 'I'
+  commits:
+    moveDownCommit: '<c-e>'
+    moveUpCommit: '<c-u>'
+    openInBrowser: o
+    viewBisectOptions: b
+    startInteractiveRebase: O
+    cherryPickCopy: C
+    pasteCommits: V
+
+  branches:
+    viewGitFlowOptions: 'I'
+    setUpstream: 'U'

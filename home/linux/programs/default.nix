@@ -13,6 +13,7 @@ let
     firefox
     bluetuith
     clash-verge-rev
+    cava # Console-based Audio Visualizer for Alsa
   ];
   work-tools = with pkgs; [
     wpsoffice-cn

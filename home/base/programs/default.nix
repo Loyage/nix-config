@@ -40,7 +40,6 @@ let
     statix # Lints and suggestions for nix
     yadm # Yet Another Dotfiles Manager
     python3
-    cava # Console-based Audio Visualizer for Alsa
     zellij # terminal multiplexer
 
     opencode
@@ -96,12 +95,14 @@ in
       confPath = "${config.home.homeDirectory}/nix-config/config";
     in
     {
+      "avater.png".source = mkLink "${confPath}/avater.png";
       "btop".source = mkLink "${confPath}/btop";
+      "kitty".source = mkLink "${confPath}/kitty";
+      "lazygit".source = mkLink "${confPath}/lazygit";
       "nvim".source = mkLink "${confPath}/nvim";
+      "zathura".source = mkLink "${confPath}/zathura";
       "zellij".source = mkLink "${confPath}/zellij";
       "zsh".source = mkLink "${confPath}/zsh";
-      "kitty".source = mkLink "${confPath}/kitty";
-      "avater".source = mkLink "${confPath}/avater";
     };
 
   imports = mylib.scanPaths ./.;
