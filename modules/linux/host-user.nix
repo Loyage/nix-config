@@ -31,6 +31,15 @@ in
     # kernelPackages = with pkgs; [ linuxPackages_latest ];
   };
 
+  # 休眠配置
+  powerManagement.enable = true;
+  # 1. 指定休眠恢复设备（使用 UUID 或设备路径）
+  boot.resumeDevice = "/dev/disk/by-uuid/df95c572-dab8-4e6e-b58f-622b312cb28c";
+  # 2. 添加内核参数（可选，但推荐）
+  boot.kernelParams = [ "resume=UUID=df95c572-dab8-4e6e-b58f-622b312cb28c" ];
+  # 3. 启用 systemd 休眠目标（如果使用图形界面）
+  systemd.targets.hibernate.enable = true;
+
   networking.hostName = nixosHostname;
   networking.networkmanager.enable = true;
   # Configure network proxy if necessary
