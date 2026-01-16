@@ -34,6 +34,7 @@
         "density": "comfortable",
         "exclusive": true,
         "floating": false,
+        "hideOnOverview": false,
         "marginHorizontal": 0,
         "marginVertical": 0,
         "monitors": [
@@ -95,10 +96,15 @@
                     "useFixedWidth": false
                 },
                 {
+                    "compactMode": false,
+                    "compactShowAlbumArt": true,
+                    "compactShowVisualizer": false,
                     "hideMode": "hidden",
                     "hideWhenIdle": false,
                     "id": "MediaMini",
                     "maxWidth": 145,
+                    "panelShowAlbumArt": true,
+                    "panelShowVisualizer": true,
                     "scrollingMode": "hover",
                     "showAlbumArt": false,
                     "showArtistFirst": true,
@@ -110,9 +116,21 @@
             ],
             "right": [
                 {
+                    "defaultSettings": {
+                        "hideBackground": false,
+                        "minimumThreshold": 10
+                    },
                     "id": "plugin:catwalk"
                 },
                 {
+                    "defaultSettings": {
+                        "completedCount": 0,
+                        "count": 0,
+                        "showBackground": true,
+                        "showCompleted": true,
+                        "todos": [
+                        ]
+                    },
                     "id": "plugin:todo"
                 },
                 {
@@ -129,6 +147,7 @@
                     "id": "Bluetooth"
                 },
                 {
+                    "deviceNativePath": "",
                     "displayMode": "alwaysShow",
                     "hideIfNotDetected": false,
                     "id": "Battery",
@@ -149,10 +168,14 @@
                     "id": "Brightness"
                 },
                 {
+                    "blacklist": [
+                    ],
                     "colorizeIcons": false,
                     "drawerEnabled": false,
                     "hidePassive": false,
-                    "id": "Tray"
+                    "id": "Tray",
+                    "pinned": [
+                    ]
                 },
                 {
                     "colorizeDistroLogo": false,
@@ -232,9 +255,6 @@
                 },
                 {
                     "id": "Bluetooth"
-                },
-                {
-                    "id": "ScreenRecorder"
                 },
                 {
                     "id": "WallpaperSelector"
@@ -366,7 +386,8 @@
         "showChangelogOnStartup": true,
         "showHibernateOnLockScreen": false,
         "showScreenCorners": false,
-        "showSessionButtonsOnLockScreen": true
+        "showSessionButtonsOnLockScreen": true,
+        "telemetryEnabled": true
     },
     "hooks": {
         "darkModeChange": "",
@@ -375,6 +396,7 @@
         "performanceModeEnabled": "",
         "screenLock": "",
         "screenUnlock": "",
+        "session": "",
         "wallpaperChange": ""
     },
     "location": {
@@ -497,7 +519,7 @@
         "showHeader": true,
         "showNumberLabels": true
     },
-    "settingsVersion": 37,
+    "settingsVersion": 40,
     "systemMonitor": {
         "cpuCriticalThreshold": 95,
         "cpuPollingInterval": 10000,
@@ -523,32 +545,9 @@
         "warningColor": ""
     },
     "templates": {
-        "alacritty": false,
-        "cava": false,
-        "code": false,
-        "discord": false,
-        "emacs": false,
-        "enableUserTemplates": false,
-        "foot": false,
-        "fuzzel": false,
-        "ghostty": false,
-        "gtk": false,
-        "helix": false,
-        "hyprland": false,
-        "kcolorscheme": false,
-        "kitty": false,
-        "mango": false,
-        "niri": false,
-        "pywalfox": false,
-        "qt": false,
-        "spicetify": false,
-        "telegram": false,
-        "vicinae": false,
-        "walker": false,
-        "wezterm": false,
-        "yazi": false,
-        "zed": false,
-        "zenBrowser": false
+        "activeTemplates": [
+        ],
+        "enableUserTemplates": false
     },
     "ui": {
         "bluetoothDetailsViewMode": "grid",
