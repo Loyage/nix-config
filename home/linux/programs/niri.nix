@@ -8,10 +8,6 @@
     xwayland-satellite
   ];
 
-  xdg.configFile = {
-    "niri".source = config.lib.file.mkOutOfStoreSymlink ./conf;
-  };
-
   # systemd.user.services.niri-flake-polkit = {
   #   Unit = {
   #     Description = "PolicyKit Authentication Agent provided by niri-flake";

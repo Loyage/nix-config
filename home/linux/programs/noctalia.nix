@@ -44,14 +44,4 @@
       };
     };
   };
-
-  xdg.configFile =
-    let
-      mkSymlink = config.lib.file.mkOutOfStoreSymlink;
-      confPath = ./conf;
-    in
-    {
-      "noctalia/settings.json".source = mkSymlink "${confPath}/settings.json";
-      "qt6ct/qt6ct.conf".source = mkSymlink "${confPath}/qt6ct.conf";
-    };
 }

@@ -1,4 +1,8 @@
-{ pkgs, mylib, ... }:
+{ pkgs
+, config
+, mylib
+, ...
+}:
 let
   hypr-tools = with pkgs; [
     hyprpicker # color picker
@@ -33,5 +37,18 @@ let
 in
 {
   home.packages = hypr-tools ++ work-tools ++ social-softs ++ other-tools;
+
+  xdg.configFile =
+    let
+      mkLink = config.lib.file.mkOutOfStoreSymlink;
+      confPath = "${config.home.homeDirectory}/nix-config/config";
+    in
+    {
+      "niri".source = mkLink "${confPath}/niri";
+      "noctalia/settings.json".source = mkLink "${confPath}/noctalia/settings.json";
+      "qt6ct/qt6ct.conf".source = mkLink "${confPath}/noctalia/qt6ct.conf";
+    };
+
+
   imports = mylib.scanPaths ./.;
 }

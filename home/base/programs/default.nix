@@ -41,14 +41,15 @@ let
     yadm # Yet Another Dotfiles Manager
     python3
     zellij # terminal multiplexer
-
-    opencode
-    claude-code
-    codex
-
     gnused # sed: stream editor, use a script to perform basic text transformations on an input stream (a file or input from a pipeline)
     gnutar # tar
     gawk # awk: a programming language that is designed for text processing and typically used as a data extraction and reporting tool
+  ];
+
+  ai-tools = with pkgs; [
+    opencode
+    claude-code
+    codex
   ];
 
   tui-tools = with pkgs; [
@@ -68,7 +69,6 @@ let
     cmake
     nodejs
     carapace
-    jujutsu
     uv
     clash-meta
   ];
@@ -78,7 +78,7 @@ let
   ];
 in
 {
-  home.packages = archives ++ cli-tools ++ tui-tools ++ dev-tools ++ gui-tools;
+  home.packages = archives ++ cli-tools ++ ai-tools ++ tui-tools ++ dev-tools ++ gui-tools;
 
   programs = {
 
