@@ -17,6 +17,7 @@ let
   ];
   work-tools = with pkgs; [
     wpsoffice-cn
+    typora
     usbutils
   ];
   social-softs = with pkgs; [

@@ -8,8 +8,25 @@ in
 {
   boot = {
     loader = {
-      systemd-boot.enable = true;
+      systemd-boot.enable = false;
       efi.canTouchEfiVariables = true;
+      grub = {
+        enable = true;
+        device = "nodev"; # UEFI 系统必须用 nodev
+        efiSupport = true;
+
+        # 双系统支持（如果需要 Windows）
+        extraEntries = ''
+          menuentry "Windows 10" {
+            insmod part_gpt
+            insmod fat
+            insmod search_fs_uuid
+            insmod chain
+            search --fs-uuid --set=root 710465b7-864b-46a3-b9d5-039246813491
+            chainloader /EFI/Microsoft/Boot/bootmgfw.efi
+          }
+        '';
+      };
     };
     # kernelPackages = with pkgs; [ linuxPackages_latest ];
   };
@@ -48,6 +65,8 @@ in
 
   programs.hyprland.enable = true;
   programs.niri.enable = true;
+
+  documentation.nixos.enable = false;
 
   services = {
     # 打印服务
