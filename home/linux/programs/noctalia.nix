@@ -30,10 +30,7 @@
       sources = [
         {
           enabled = true;
-          name = "
-      Official
-      Noctalia
-      Plugins ";
+          name = "Official Noctalia Plugins ";
           url = " https://github.com/noctalia-dev/noctalia-plugins ";
         }
       ];
@@ -41,6 +38,8 @@
         catwalk.enabled = true;
         todo.enabled = true;
         kaomoji-provider.enabled = true;
+        keybind-cheatsheet.enabled = true;
+        fancy-audiovisualizer.enabled = true;
         version = 1;
       };
 
@@ -48,7 +47,6 @@
         catwalk = {
           minimumThreshold = 25;
           hideBackground = true;
-          # this may also be a string or a path to a JSON file.
         };
       };
     };

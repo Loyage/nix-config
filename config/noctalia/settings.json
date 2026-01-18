@@ -73,7 +73,7 @@
                 },
                 {
                     "compactMode": false,
-                    "diskPath": "/persistent",
+                    "diskPath": "/",
                     "id": "SystemMonitor",
                     "showCpuTemp": false,
                     "showCpuUsage": true,
@@ -115,6 +115,13 @@
                 }
             ],
             "right": [
+                {
+                    "defaultSettings": {
+                        "hideBackground": false,
+                        "minimumThreshold": 10
+                    },
+                    "id": "plugin:catwalk"
+                },
                 {
                     "hideWhenZero": false,
                     "hideWhenZeroUnread": false,
@@ -276,8 +283,8 @@
                         "showBackground": true,
                         "useCustomFont": false,
                         "usePrimaryColor": false,
-                        "x": 92,
-                        "y": 161
+                        "x": 68,
+                        "y": 136
                     },
                     {
                         "hideMode": "visible",
@@ -289,15 +296,26 @@
                         "showButtons": true,
                         "showVisualizer": true,
                         "visualizerType": "linear",
-                        "x": 92,
-                        "y": 299
+                        "x": 68,
+                        "y": 272
                     },
                     {
                         "id": "Weather",
                         "scale": 1.339282355295889,
                         "showBackground": true,
-                        "x": 230,
-                        "y": 161
+                        "x": 204,
+                        "y": 136
+                    },
+                    {
+                        "defaultSettings": {
+                            "hideBackground": false,
+                            "minimumThreshold": 10
+                        },
+                        "id": "plugin:catwalk",
+                        "scale": 1.215888539131018,
+                        "showBackground": true,
+                        "x": 544,
+                        "y": 136
                     }
                 ]
             }
