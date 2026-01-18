@@ -10,6 +10,7 @@ let
     wf-recorder # screen recording
     kitty
     rofi
+    papirus-icon-theme
     # waybar
     # waypaper
     wl-clipboard-rs
@@ -47,8 +48,8 @@ in
       "niri".source = mkLink "${confPath}/niri";
       "noctalia/settings.json".source = mkLink "${confPath}/noctalia/settings.json";
       "qt6ct/qt6ct.conf".source = mkLink "${confPath}/noctalia/qt6ct.conf";
+      "hypr/hypridle.conf".source = mkLink "${confPath}/hypr/hypridle.conf";
     };
-
 
   imports = mylib.scanPaths ./.;
 }

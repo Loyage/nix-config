@@ -17,6 +17,12 @@
     inputs.noctalia.homeModules.default
   ];
 
+  home.sessionVariables = {
+    QT_QPA_PLATFORM = "wayland;xcb";
+    QT_QPA_PLATFORMTHEME = "qt6ct";
+    QT_AUTO_SCREEN_SCALE_FACTOR = 1;
+  };
+
   # configure options
   programs.noctalia-shell = {
     enable = true;
@@ -24,8 +30,11 @@
       sources = [
         {
           enabled = true;
-          name = "Official Noctalia Plugins";
-          url = "https://github.com/noctalia-dev/noctalia-plugins";
+          name = "
+      Official
+      Noctalia
+      Plugins ";
+          url = " https://github.com/noctalia-dev/noctalia-plugins ";
         }
       ];
       states = {
@@ -45,3 +54,4 @@
     };
   };
 }
+

@@ -116,25 +116,8 @@
             ],
             "right": [
                 {
-                    "defaultSettings": {
-                        "hideBackground": false,
-                        "minimumThreshold": 10
-                    },
-                    "id": "plugin:catwalk"
-                },
-                {
-                    "defaultSettings": {
-                        "completedCount": 0,
-                        "count": 0,
-                        "showBackground": true,
-                        "showCompleted": true,
-                        "todos": [
-                        ]
-                    },
-                    "id": "plugin:todo"
-                },
-                {
                     "hideWhenZero": false,
+                    "hideWhenZeroUnread": false,
                     "id": "NotificationHistory",
                     "showUnreadBadge": true
                 },
@@ -315,32 +298,6 @@
                         "showBackground": true,
                         "x": 230,
                         "y": 161
-                    },
-                    {
-                        "defaultSettings": {
-                            "completedCount": 0,
-                            "count": 0,
-                            "showBackground": true,
-                            "showCompleted": true,
-                            "todos": [
-                            ]
-                        },
-                        "id": "plugin:todo",
-                        "scale": 1.5053787919183539,
-                        "showBackground": true,
-                        "x": 1156,
-                        "y": 170
-                    },
-                    {
-                        "defaultSettings": {
-                            "hideBackground": false,
-                            "minimumThreshold": 10
-                        },
-                        "id": "plugin:catwalk",
-                        "scale": 0.5,
-                        "showBackground": true,
-                        "x": 782,
-                        "y": 170
                     }
                 ]
             }
@@ -387,7 +344,7 @@
         "showHibernateOnLockScreen": false,
         "showScreenCorners": false,
         "showSessionButtonsOnLockScreen": true,
-        "telemetryEnabled": true
+        "telemetryEnabled": false
     },
     "hooks": {
         "darkModeChange": "",
@@ -434,6 +391,7 @@
         "backgroundOpacity": 1,
         "criticalUrgencyDuration": 15,
         "enableKeyboardLayoutToast": true,
+        "enableMediaToast": false,
         "enabled": true,
         "location": "top_right",
         "lowUrgencyDuration": 3,
@@ -519,7 +477,7 @@
         "showHeader": true,
         "showNumberLabels": true
     },
-    "settingsVersion": 40,
+    "settingsVersion": 41,
     "systemMonitor": {
         "cpuCriticalThreshold": 95,
         "cpuPollingInterval": 10000,
