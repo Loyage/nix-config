@@ -72,11 +72,11 @@
                     "usePrimaryColor": false
                 },
                 {
-                    "compactMode": false,
+                    "compactMode": true,
                     "diskPath": "/",
                     "id": "SystemMonitor",
-                    "showCpuTemp": false,
-                    "showCpuUsage": true,
+                    "showCpuTemp": true,
+                    "showCpuUsage": false,
                     "showDiskUsage": true,
                     "showGpuTemp": false,
                     "showLoadAverage": false,
