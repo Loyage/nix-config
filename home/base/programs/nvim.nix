@@ -2,10 +2,6 @@
 , pkgs
 , ...
 }:
-let
-  # modern vim
-  program = "nvim";
-in
 {
   programs.neovim = {
     enable = true;
@@ -18,5 +14,6 @@ in
 
   home.packages = with pkgs; [
     lua-language-server
+    marksman
   ];
 }
