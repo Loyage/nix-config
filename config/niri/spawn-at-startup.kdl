@@ -1,3 +1,4 @@
 spawn-at-startup "noctalia-shell"
 spawn-at-startup "fcitx5" // 输入法
 spawn-at-startup "clash-verge" // 代理
+spawn-at-startup "thunderbird" // 邮箱客户端

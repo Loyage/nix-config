@@ -6,8 +6,8 @@
 let
   archives = with pkgs; [
     zip
-    xz
     unzip
+    xz
     p7zip
     ouch
   ];
@@ -50,6 +50,7 @@ let
     opencode
     claude-code
     codex
+    gemini-cli
   ];
 
   tui-tools = with pkgs; [
@@ -63,7 +64,6 @@ let
 
   dev-tools = with pkgs; [
     neovide
-    gnupg
     lua
     luarocks
     cmake

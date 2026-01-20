@@ -8,19 +8,19 @@ let
     hyprpicker # color picker
     hyprshot # screen shot
     wf-recorder # screen recording
-    kitty
-    rofi
     papirus-icon-theme
+    wl-clipboard-rs
+    cava # Console-based Audio Visualizer for Alsa
+    # rofi
     # waybar
     # waypaper
-    wl-clipboard-rs
-    swww
-    firefox
-    bluetuith
-    clash-verge-rev
-    cava # Console-based Audio Visualizer for Alsa
+    # swww
   ];
   work-tools = with pkgs; [
+    bluetuith
+    kitty
+    firefox
+    clash-verge-rev
     wpsoffice-cn
     typora
     usbutils
@@ -31,6 +31,7 @@ let
     netease-cloud-music-gtk
     obs-studio
     wemeet
+    thunderbird
   ];
   other-tools = with pkgs; [
     tree-sitter

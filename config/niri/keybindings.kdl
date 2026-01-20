@@ -13,6 +13,7 @@ binds {
     // shows a list of important hotkeys.
     Mod+Shift+Slash { spawn "noctalia-shell" "ipc" "call" "plugin:keybind-cheatsheet" "toggle"; }
     Mod+Shift+T { spawn "noctalia-shell" "ipc" "call" "plugin:todo" "togglePanel"; }
+    CTRL+Mod+Period { spawn "kitty" "-e" "btop"; } // Btop
 
     // Suggested binds for running programs: terminal, app launcher, screen locker.
     Mod+Return { spawn "kitty"; }
