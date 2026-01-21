@@ -32,6 +32,11 @@ let
     obs-studio
     wemeet
     thunderbird
+
+    ## for game
+    wine
+    lutris
+    protonplus
   ];
   other-tools = with pkgs; [
     tree-sitter
