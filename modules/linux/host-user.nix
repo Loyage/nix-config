@@ -14,6 +14,7 @@ in
         enable = true;
         device = "nodev"; # UEFI 系统必须用 nodev
         efiSupport = true;
+        configurationLimit = 2;
 
         # 双系统支持（如果需要 Windows）
         extraEntries = ''

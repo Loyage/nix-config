@@ -29,7 +29,7 @@ let
     nmap # network exploration tool
     file # file type detection
     gh # git hub cli
-    gh-copilot
+    github-copilot-cli
     fh # flakehub cli
     glow # markdown previewer in terminal
     chafa # image to ANSI/Unicode character art

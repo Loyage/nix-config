@@ -123,11 +123,6 @@ alias nf='fastfetch'
 alias pf='fastfetch'
 alias ff='fastfetch'
 
-# github copilot cli
-if command -v gh &>/dev/null; then
-  eval "$(gh copilot alias -- bash)"
-fi
-
 # yadm
 if command -v yadm &>/dev/null; then
   alias y='yadm'
