@@ -3,19 +3,18 @@
 }:
 {
   home.packages = with pkgs; [
-    # Niri v25.08 will create X11 sockets on disk, export $DISPLAY, and spawn `xwayland-satellite` on-demand when an X11 client connects
     xwayland-satellite
   ];
 
-  systemd.user.services.niri-flake-polkit = {
+  systemd.user.services.hyprland-polkit = {
     Unit = {
-      Description = "PolicyKit Authentication Agent provided by niri-flake";
+      Description = "PolicyKit Authentication Agent for Hyprland";
       After = [
         "graphical-session.target"
       ];
       Wants = [ "graphical-session-pre.target" ];
     };
-    Install.WantedBy = [ "niri.service" ];
+    Install.WantedBy = [ "graphical-session.target" ];
     Service = {
       Type = "simple";
       ExecStart = "${pkgs.kdePackages.polkit-kde-agent-1}/libexec/polkit-kde-authentication-agent-1";
@@ -25,6 +24,5 @@
     };
   };
 
-  # hypridle: idle management daemon 
   services.hypridle.enable = true;
 }

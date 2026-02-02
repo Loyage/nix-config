@@ -41,6 +41,7 @@ let
   ];
   other-tools = with pkgs; [
     tree-sitter
+    fzf # fuzzy finder for session selector
   ];
 in
 {
@@ -52,10 +53,10 @@ in
       confPath = "${config.home.homeDirectory}/nix-config/config";
     in
     {
+      "hypr".source = mkLink "${confPath}/hypr";
       "niri".source = mkLink "${confPath}/niri";
       "noctalia/settings.json".source = mkLink "${confPath}/noctalia/settings.json";
       "qt6ct/qt6ct.conf".source = mkLink "${confPath}/noctalia/qt6ct.conf";
-      "hypr/hypridle.conf".source = mkLink "${confPath}/hypr/hypridle.conf";
     };
 
   imports = mylib.scanPaths ./.;

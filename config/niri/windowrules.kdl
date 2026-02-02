@@ -41,15 +41,17 @@ window-rule {
 window-rule {
     match app-id="wechat"
     open-on-workspace "3chat"
+    default-column-width { proportion 0.75; }
 }
 window-rule {
     match app-id="QQ"
     open-on-workspace "3chat"
+    default-column-width { proportion 0.6; }
 }
 window-rule {
     match app-id="thunderbird"
     open-on-workspace "3chat"
-    open-maximized true
+    default-column-width { proportion 0.6; }
 }
 
 // Gaming applications - open in workspace 4
