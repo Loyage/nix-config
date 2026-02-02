@@ -22,5 +22,8 @@
     yadm
     gcc
     zsh
+    just
+    jq
+    home-manager
   ];
 }
