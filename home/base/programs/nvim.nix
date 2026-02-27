@@ -15,6 +15,6 @@
   home.packages = with pkgs; [
     stylua
     lua-language-server
-    marksman
+    # marksman # not good on mac
   ];
 }

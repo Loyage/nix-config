@@ -82,6 +82,10 @@ alias zshrc="nvim ~/.config/zsh/"
 alias echo_path='echo $PATH | tr ":" "\n"'
 alias c='clear'
 
+# ai tools
+alias oc="opencode -c"
+alias cl="claude -c"
+
 # git
 alias gconf='git config user.name "loyage";git config user.email "792058350@qq.com"'
 alias ggconf='git config --global user.name "loyage";git config --global user.email "792058350@qq.com"'
