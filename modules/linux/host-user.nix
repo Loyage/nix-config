@@ -105,7 +105,7 @@ in
           user = myvars.username;
           command = ''
             ${pkgs.tuigreet}/bin/tuigreet \
-            ${config.services.displayManager.sessionData.desktops}/share/wayland-sessions \
+            --sessions ${config.services.displayManager.sessionData.desktops}/share/wayland-sessions:${config.services.displayManager.sessionData.desktops}/share/xsessions \
             --time \
             --asterisks \
             --remember \
