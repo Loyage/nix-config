@@ -1,6 +1,9 @@
-{ lib, mylib, myvars, ... }:
+{ lib, mylib, myvars, inputs, ... }:
 {
   home.homeDirectory = lib.mkForce "/home/${myvars.username}";
-  imports = (mylib.scanPaths ./.) ++ [ ../base ];
+  imports = (mylib.scanPaths ./.) ++ [
+    ../base
+    inputs.nix-openclaw.homeManagerModules.openclaw
+  ];
 }
 

@@ -61,6 +61,10 @@
       url = "github:noctalia-dev/noctalia-shell";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
+    nix-openclaw = {
+      url = "github:openclaw/nix-openclaw";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
   };
 
   # The `outputs` function will return all the build results of the flake.
@@ -143,6 +147,7 @@
           system = "x86_64-linux";
           overlays = [
             inputs.nix-yazi-flavors.overlays.default
+            inputs.nix-openclaw.overlays.default
             # ] ++ (import ./overlays inputs);
           ];
           config.allowUnfree = true;
@@ -154,6 +159,7 @@
               # config.allowUnfree = true;
             };
           }
+          # inputs.nix-openclaw.nixosModules.openclaw-gateway
           ./modules/base
           ./modules/linux
           ./hosts/linux/hardware-configuration.nix

@@ -20,10 +20,10 @@ if command -v bat &>/dev/null; then
   alias cat='bat'
 fi
 
-# zoxide -> cd
-if command -v zoxide &>/dev/null; then
-  eval "$(zoxide init zsh --cmd cd)"
-fi
+# # zoxide -> cd
+# if command -v zoxide &>/dev/null; then
+#   eval "$(zoxide init zsh --cmd cd)"
+# fi
 
 # gomi -> rm
 if command -v gomi &>/dev/null; then
