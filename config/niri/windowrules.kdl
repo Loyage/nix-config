@@ -68,10 +68,6 @@ window-rule {
 
 // Other applications - open in workspace 0
 window-rule {
-    match app-id="clash-verge"
-    open-on-workspace "0other"
-}
-window-rule {
     match app-id="obs"
     open-on-workspace "0other"
 }

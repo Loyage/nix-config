@@ -11,20 +11,19 @@ binds {
 
     // Mod-Shift-/, which is usually the same as Mod-?,
     // shows a list of important hotkeys.
-    // #"Noctalia-shell"
-    Mod+Space { spawn "noctalia-shell" "ipc" "call" "launcher" "toggle"; }
-    Mod+Shift+Slash { spawn "noctalia-shell" "ipc" "call" "plugin:keybind-cheatsheet" "toggle"; }
-    Mod+Shift+T { spawn "noctalia-shell" "ipc" "call" "plugin:todo" "togglePanel"; }
-    // Locker
+    // #"👍"
+    Mod+Space hotkey-overlay-title="launcher" { spawn "noctalia-shell" "ipc" "call" "launcher" "toggle"; }
+    Mod+Shift+Slash hotkey-overlay-title="keybind-cheatsheet" { spawn "noctalia-shell" "ipc" "call" "plugin:keybind-cheatsheet" "toggle"; }
+    Mod+Shift+T hotkey-overlay-title="todo" { spawn "noctalia-shell" "ipc" "call" "plugin:todo" "togglePanel"; }
+    // Utility shortcuts
+    Mod+C hotkey-overlay-title="calculator" { spawn "noctalia-shell" "ipc" "call" "launcher" "calculator"; }
+    Mod+V hotkey-overlay-title="clipper" { spawn "noctalia-shell" "ipc" "call" "plugin:clipper" "toggle"; }
+    Mod+Comma hotkey-overlay-title="settings" { spawn "noctalia-shell" "ipc" "call" "settings" "toggle"; }
+    CTRL+Alt+1 hotkey-overlay-title="emoji" { spawn "noctalia-shell" "ipc" "call" "launcher" "emoji"; }
+    // #"Locker""
     CTRL+Alt+L hotkey-overlay-title="lock" { spawn "noctalia-shell" "ipc" "call" "lockScreen" "lock"; }
     CTRL+Alt+S hotkey-overlay-title="suspend" { spawn "noctalia-shell" "ipc" "call" "sessionMenu" "lockAndSuspend"; }
-    // Utility shortcuts
-    Mod+C { spawn "noctalia-shell" "ipc" "call" "launcher" "calculator"; }
-    Mod+S { spawn "noctalia-shell" "ipc" "call" "controlCenter" "toggle"; }
-    Mod+V { spawn "noctalia-shell" "ipc" "call" "plugin:clipper" "toggle"; }
-    Mod+Comma { spawn "noctalia-shell" "ipc" "call" "settings" "toggle"; }
-    CTRL+Mod+Q { spawn "noctalia-shell" "ipc" "call" "sessionMenu" "toggle"; }
-    CTRL+Alt+1 { spawn "noctalia-shell" "ipc" "call" "launcher" "emoji"; }
+    CTRL+Mod+Q hotkey-overlay-title="session menu" { spawn "noctalia-shell" "ipc" "call" "sessionMenu" "toggle"; }
 
     // Suggested binds for running programs: terminal, app launcher, screen locker.
     // #"Programs"
@@ -132,16 +131,16 @@ binds {
     // Mod+Shift+Ctrl+Left  { move-workspace-to-monitor-left; }
     // ...
 
-    "Mod+Page_Down"      { focus-workspace-down; }
-    "Mod+Page_Up" { focus-workspace-up; }
+    Mod+Page_Down      { focus-workspace-down; }
+    Mod+Page_Up { focus-workspace-up; }
     Mod+U { focus-workspace-down; }
     Mod+I { focus-workspace-up; }
-    "Mod+Ctrl+Page_Down" { move-column-to-workspace-down; }
-    "Mod+Ctrl+Page_Up" { move-column-to-workspace-up; }
+    Mod+Ctrl+Page_Down { move-column-to-workspace-down; }
+    Mod+Ctrl+Page_Up { move-column-to-workspace-up; }
     Mod+Ctrl+U { move-column-to-workspace-down; }
     Mod+Ctrl+I { move-column-to-workspace-up; }
-    "Mod+Shift+Page_Down" { move-workspace-down; }
-    "Mod+Shift+Page_Up" { move-workspace-up; }
+    Mod+Shift+Page_Down { move-workspace-down; }
+    Mod+Shift+Page_Up { move-workspace-up; }
     Mod+Shift+U { move-workspace-down; }
     Mod+Shift+I { move-workspace-up; }
 
