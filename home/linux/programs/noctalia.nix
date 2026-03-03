@@ -40,6 +40,7 @@
         kaomoji-provider.enabled = true;
         keybind-cheatsheet.enabled = true;
         fancy-audiovisualizer.enabled = true;
+        clipper.enabled = true;
         version = 1;
       };
 

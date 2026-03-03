@@ -21,7 +21,7 @@ binds {
     // Utility shortcuts
     Mod+C { spawn "noctalia-shell" "ipc" "call" "launcher" "calculator"; }
     Mod+S { spawn "noctalia-shell" "ipc" "call" "controlCenter" "toggle"; }
-    Mod+V { spawn "noctalia-shell" "ipc" "call" "launcher" "clipboard"; }
+    Mod+V { spawn "noctalia-shell" "ipc" "call" "plugin:clipper" "toggle"; }
     Mod+Comma { spawn "noctalia-shell" "ipc" "call" "settings" "toggle"; }
     CTRL+Mod+Q { spawn "noctalia-shell" "ipc" "call" "sessionMenu" "toggle"; }
     CTRL+Alt+1 { spawn "noctalia-shell" "ipc" "call" "launcher" "emoji"; }

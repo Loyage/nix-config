@@ -1,4 +1,5 @@
 { pkgs
+, lib
 , mylib
 , config
 , ...
@@ -67,7 +68,7 @@ let
     lua
     luarocks
     cmake
-    nodejs
+    (lib.lowPrio nodejs) # 低优先级，避免与 openclaw 的 corepack 冲突
     carapace
     uv
     clash-meta
