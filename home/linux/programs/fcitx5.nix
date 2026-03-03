@@ -18,6 +18,7 @@
           ];
         })
         fcitx5-gtk # gtk im module
+        fcitx5-mellow-themes
       ];
     };
   };

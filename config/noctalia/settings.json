@@ -236,7 +236,7 @@
         ]
     },
     "colorSchemes": {
-        "darkMode": true,
+        "darkMode": false,
         "generationMethod": "tonal-spot",
         "manualSunrise": "06:30",
         "manualSunset": "18:30",
@@ -340,17 +340,6 @@
                         "scale": 1.339282355295889,
                         "showBackground": true,
                         "x": 204,
-                        "y": 136
-                    },
-                    {
-                        "defaultSettings": {
-                            "hideBackground": false,
-                            "minimumThreshold": 10
-                        },
-                        "id": "plugin:catwalk",
-                        "scale": 1.215888539131018,
-                        "showBackground": true,
-                        "x": 544,
                         "y": 136
                     },
                     {
