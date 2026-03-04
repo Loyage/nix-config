@@ -42,7 +42,7 @@ in
   # 3. 启用 systemd 休眠目标（如果使用图形界面）
   systemd.targets.hibernate.enable = true;
 
-  networking.hostName = nixosHostname;
+  # hostname 在 flake.nix 中通过 mkNixosSystem 函数设置
   networking.networkmanager.enable = true;
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";

@@ -88,8 +88,48 @@
       # specialArgs 内的参数可以在各个模块中访问到，只需要你添加到函数输入变量中即可
       specialArgs =
         { inherit inputs myvars mylib; };
+
+      # 生成 NixOS 配置的函数
+      mkNixosSystem = hostName: hostConfig:
+        nixpkgs.lib.nixosSystem {
+          inherit specialArgs;
+          system = hostConfig.system;
+          pkgs = import inputs.nixpkgs-unstable {
+            system = hostConfig.system;
+            overlays = [
+              inputs.nix-yazi-flavors.overlays.default
+              inputs.nix-openclaw.overlays.default
+            ];
+            config.allowUnfree = true;
+          };
+          modules = [
+            {
+              nixpkgs = {
+                overlays = [ inputs.nix-yazi-flavors.overlays.default ];
+              };
+              # 设置主机名
+              networking.hostName = hostConfig.hostname;
+            }
+            ./modules/base
+            ./modules/linux
+            # 每个主机独立的硬件配置
+            ./hosts/${hostName}/hardware-configuration.nix
+
+            home-manager.nixosModules.home-manager
+            {
+              home-manager = {
+                useGlobalPkgs = true;
+                useUserPackages = true;
+                extraSpecialArgs = specialArgs;
+                backupFileExtension = "home-manager.backup";
+                users.${myvars.username} = import ./home/linux;
+              };
+            }
+          ];
+        };
     in
     {
+      # macOS 配置
       darwinConfigurations."${myvars.darwinHostname}" = nix-darwin.lib.darwinSystem {
         inherit specialArgs;
         system = "aarch64-darwin";
@@ -104,7 +144,6 @@
           ./modules/base
           ./modules/darwin
 
-          # Home Manager module
           home-manager.darwinModules.home-manager
           {
             home-manager = {
@@ -116,16 +155,13 @@
             };
           }
 
-          # Nix-Homebrew module
           nix-homebrew.darwinModules.nix-homebrew
           {
             nix-homebrew = {
               enable = true;
               user = myvars.username;
-              enableRosetta = true; # Apple Silicon only
+              enableRosetta = true;
               autoMigrate = false;
-
-              # Optional: Declarative tap management
               taps = {
                 "homebrew/homebrew-bundle" = inputs.homebrew-bundle;
                 "homebrew/homebrew-cask" = inputs.homebrew-cask;
@@ -140,41 +176,7 @@
         ];
       };
 
-      nixosConfigurations."${myvars.nixosHostname}" = nixpkgs.lib.nixosSystem {
-        inherit specialArgs;
-        system = "x86_64-linux";
-        pkgs = import inputs.nixpkgs-unstable {
-          system = "x86_64-linux";
-          overlays = [
-            inputs.nix-yazi-flavors.overlays.default
-            inputs.nix-openclaw.overlays.default
-            # ] ++ (import ./overlays inputs);
-          ];
-          config.allowUnfree = true;
-        };
-        modules = [
-          {
-            nixpkgs = {
-              overlays = [ inputs.nix-yazi-flavors.overlays.default ];
-              # config.allowUnfree = true;
-            };
-          }
-          # inputs.nix-openclaw.nixosModules.openclaw-gateway
-          ./modules/base
-          ./modules/linux
-          ./hosts/linux/hardware-configuration.nix
-
-          home-manager.nixosModules.home-manager
-          {
-            home-manager = {
-              useGlobalPkgs = true;
-              useUserPackages = true;
-              extraSpecialArgs = specialArgs;
-              backupFileExtension = "home-manager.backup";
-              users.${myvars.username} = import ./home/linux;
-            };
-          }
-        ];
-      };
+      # NixOS 配置（多主机支持）
+      nixosConfigurations = lib.mapAttrs mkNixosSystem myvars.nixosHosts;
     };
 }
