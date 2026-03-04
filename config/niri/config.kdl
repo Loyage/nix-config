@@ -49,8 +49,8 @@ input {
         dwt // disable-when-typing.
         // dwtp // disable-when-trackpointing.
         natural-scroll // inverts the scrolling direction.
-        // accel-speed 0.2
-        // accel-profile "flat"
+        accel-speed 0.3 // 触摸板加速，范围 -1.0 到 1.0，正值加快
+        accel-profile "adaptive" // adaptive（自适应）或 flat（线性）
         // tap-button-map "left-middle-right"
     }
 
