@@ -1,0 +1,141 @@
+{ pkgs
+, config
+, myvars
+, ...
+}:
+let
+  inherit (myvars) username nixosHostname;
+in
+{
+  boot = {
+    loader = {
+      systemd-boot.enable = false;
+      efi.canTouchEfiVariables = true;
+      grub = {
+        enable = true;
+        device = "nodev"; # UEFI 系统必须用 nodev
+        efiSupport = true;
+        configurationLimit = 2;
+
+        # 双系统支持（如果需要 Windows）
+        extraEntries = ''
+          menuentry "Windows 11" {
+            insmod part_gpt
+            insmod fat
+            insmod search_fs_uuid
+            insmod chain
+            search --fs-uuid --set=root A0DF-3002
+            chainloader /EFI/Microsoft/Boot/bootmgfw.efi
+          }
+        '';
+      };
+    };
+    # kernelPackages = with pkgs; [ linuxPackages_latest ];
+  };
+
+  # 休眠配置
+  powerManagement.enable = true;
+  # 1. 指定休眠恢复设备（使用 UUID 或设备路径）
+  boot.resumeDevice = "/dev/disk/by-uuid/697709dd-619f-40a0-a0dd-3be148c9a3f1";
+  # 2. 添加内核参数（可选，但推荐）
+  boot.kernelParams = [ "resume=UUID=697709dd-619f-40a0-a0dd-3be148c9a3f1" ];
+  # 3. 启用 systemd 休眠目标（如果使用图形界面）
+  systemd.targets.hibernate.enable = true;
+
+  # hostname 在 flake.nix 中通过 mkNixosSystem 函数设置
+  networking.networkmanager.enable = true;
+  # Configure network proxy if necessary
+  # networking.proxy.default = "http://user:password@proxy:port/";
+  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
+
+  security.pam.services.greetd.enableGnomeKeyring = true;
+
+  time.timeZone = "Asia/Shanghai";
+
+  # Select internationalisation properties.
+  i18n.defaultLocale = "en_US.UTF-8";
+  i18n.extraLocaleSettings = {
+    LC_ADDRESS = "zh_CN.UTF-8";
+    LC_IDENTIFICATION = "zh_CN.UTF-8";
+    LC_MEASUREMENT = "zh_CN.UTF-8";
+    LC_MONETARY = "zh_CN.UTF-8";
+    LC_NAME = "zh_CN.UTF-8";
+    LC_NUMERIC = "zh_CN.UTF-8";
+    LC_PAPER = "zh_CN.UTF-8";
+    LC_TELEPHONE = "zh_CN.UTF-8";
+    LC_TIME = "zh_CN.UTF-8";
+  };
+
+  users.users."${username}" = {
+    isSystemUser = true;
+    home = "/home/${username}";
+    description = username;
+    group = "loyage";
+    shell = pkgs.zsh;
+  };
+  users.groups.loyage = { };
+  nix.settings.trusted-users = [ username ];
+
+  programs.hyprland.enable = true;
+  programs.niri.enable = true;
+
+  services = {
+    # 打印服务
+    printing.enable = true;
+    # 音频服务
+    pulseaudio.enable = false;
+    pipewire = {
+      enable = true;
+      alsa.enable = true;
+      alsa.support32Bit = true;
+      pulse.enable = true;
+    };
+    # 电池管理服务
+    power-profiles-daemon.enable = true;
+    upower.enable = true;
+
+    openssh.enable = true;
+    flatpak.enable = true;
+    xserver.enable = true;
+
+    greetd = {
+      enable = true;
+      settings = {
+        default_session = {
+          user = myvars.username;
+          command = ''
+            ${pkgs.tuigreet}/bin/tuigreet \
+            --sessions ${config.services.displayManager.sessionData.desktops}/share/wayland-sessions:${config.services.displayManager.sessionData.desktops}/share/xsessions \
+            --time \
+            --asterisks \
+            --remember \
+            --remember-session \
+            --theme "border=magenta;text=cyan;prompt=green;time=red;action=blue;button=yellow;container=black;input=red"
+          '';
+        };
+      };
+    };
+  };
+
+  hardware.bluetooth = {
+    enable = true;
+    powerOnBoot = true;
+    settings = {
+      General = {
+        # Shows battery charge of connected devices on supported
+        # Bluetooth adapters. Defaults to 'false'.
+        Experimental = true;
+        # When enabled other devices can connect faster to us, however
+        # the tradeoff is increased power consumption. Defaults to
+        # 'false'.
+        FastConnectable = true;
+      };
+      Policy = {
+        # Enable all controllers when they are found. This includes
+        # adapters present on start as well as adapters that are plugged
+        # in later on. Defaults to 'true'.
+        AutoEnable = true;
+      };
+    };
+  };
+}

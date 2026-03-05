@@ -8,10 +8,10 @@
       "https://cache.nixos.org" # Official NixOS Cache
       "https://nix-community.cachix.org" #Community Cachix Cache
     ];
-    # trusted-public-keys = [
-    #   # nix community's cache server public key
-    #   "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-    # ];
+    trusted-public-keys = [
+      # nix community's cache server public key
+      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+    ];
   };
 
   inputs = {
@@ -114,6 +114,7 @@
             ./modules/linux
             # 每个主机独立的硬件配置
             ./hosts/${hostName}/hardware-configuration.nix
+            ./hosts/${hostName}/host-user.nix
 
             home-manager.nixosModules.home-manager
             {
