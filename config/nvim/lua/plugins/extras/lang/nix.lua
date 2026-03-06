@@ -40,4 +40,12 @@ return {
       },
     },
   },
+  -- Mason: 确保 nixpkgs-fmt 已安装
+  {
+    "mason-org/mason.nvim",
+    opts = function(_, opts)
+      opts.ensure_installed = opts.ensure_installed or {}
+      table.insert(opts.ensure_installed, "nixpkgs-fmt")
+    end,
+  },
 }

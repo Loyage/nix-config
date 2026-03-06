@@ -116,3 +116,12 @@ home-generations:
 [macos]
 home-clean:
   home-manager remove-generations old
+
+# ─────────────────────────────────────────────────────────────────────────────
+# 
+# ─────────────────────────────────────────────────────────────────────────────
+# 展示一个 nix flake 所提供的东西
+[linux]
+[macos]
+show target:
+  nix flake show {{target}}
