@@ -39,7 +39,6 @@ let
     duf # disk usage
     vivid # Generator for LS_COLORS
     statix # Lints and suggestions for nix
-    yadm # Yet Another Dotfiles Manager
     python3
     zellij # terminal multiplexer
     gnused # sed: stream editor, use a script to perform basic text transformations on an input stream (a file or input from a pipeline)

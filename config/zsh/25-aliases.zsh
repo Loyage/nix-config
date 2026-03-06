@@ -128,19 +128,6 @@ alias nf='fastfetch'
 alias pf='fastfetch'
 alias ff='fastfetch'
 
-# yadm
-if command -v yadm &>/dev/null; then
-  alias y='yadm'
-  alias ys='yadm status'
-  alias ya='yadm add'
-  alias yau='yadm add -u && ys' # update tracked files
-  alias yc='yadm commit -m'
-  alias ypush='yadm push && ys'
-  alias ypull='yadm pull && ysj'
-  alias yls='yadm ls-files'
-  alias ylog='yadm log --oneline --graph --decorate --all'
-fi
-
 # -----------------------------------------------------
 # For Arch Linux
 # -----------------------------------------------------

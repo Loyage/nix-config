@@ -19,7 +19,6 @@
     git
     neovim
     yazi
-    yadm
     gcc
     zsh
     just
