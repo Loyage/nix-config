@@ -1,9 +1,15 @@
-{ pkgs, ... }:
+{ pkgs, config, ... }:
 {
   home.sessionVariables = {
     GTK_IM_MODULE = "fcitx";
     QT_IM_MODULE = "fcitx";
     XMODIFIERS = "@im=fcitx";
+  };
+
+  # Rime 配置文件符号链接
+  home.file.".local/share/fcitx5/rime/default.custom.yaml" = {
+    source = config.lib.file.mkOutOfStoreSymlink
+      "${config.home.homeDirectory}/nix-config/config/rime/default.custom.yaml";
   };
 
   i18n.inputMethod = {

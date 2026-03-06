@@ -1,0 +1,8 @@
+patch:
+  __include: rime_ice_suggestion:/
+
+  schema_list:
+    - schema: double_pinyin_flypy
+
+  key_binder:
+    ctrl+shift+space: "switcher@double_pinyin_flypy"
