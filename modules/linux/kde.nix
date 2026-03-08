@@ -32,6 +32,10 @@
     kdePackages.breeze
     kdePackages.breeze-icons
     kdePackages.breeze-gtk
+    whitesur-kde
+    whitesur-icon-theme
+    whitesur-gtk-theme
+    whitesur-cursors
   ];
 
   # XDG 桌面门户（KDE portal 会与 Hyprland portal 共存，系统自动选择）
