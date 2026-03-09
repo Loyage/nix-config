@@ -18,8 +18,8 @@ let
   ];
   work-tools = with pkgs; [
     bluetuith
-    kitty
     firefox
+    kitty
     clash-verge-rev
     wpsoffice-cn
     typora

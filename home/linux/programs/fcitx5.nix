@@ -1,9 +1,13 @@
-{ pkgs, config, ... }:
+{ pkgs
+, config
+, lib
+, ...
+}:
 {
   home.sessionVariables = {
     GTK_IM_MODULE = "fcitx";
     QT_IM_MODULE = "fcitx";
-    GLFW_IM_MODULE = "ibus";
+    GLFW_IM_MODULE = lib.mkForce "fcitx5";
     XMODIFIERS = "@im=fcitx";
   };
 

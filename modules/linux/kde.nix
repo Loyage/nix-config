@@ -27,6 +27,7 @@
     # Wayland 支持
     kdePackages.kwayland
     kdePackages.kwayland-integration
+    kdePackages.fcitx5-qt
 
     # 主题和外观
     kdePackages.breeze

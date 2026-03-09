@@ -4,7 +4,7 @@ let
 in
 {
   programs.openclaw = {
-    enable = true;
+    enable = false;
 
     # 文档目录（包含 AGENTS.md, SOUL.md, TOOLS.md 等）
     documents = mylib.relativeToRoot "config/openclaw";
