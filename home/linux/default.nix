@@ -4,6 +4,7 @@
   imports = (mylib.scanPaths ./.) ++ [
     ../base
     inputs.nix-openclaw.homeManagerModules.openclaw
+    inputs.plasma-manager.homeModules.plasma-manager
   ];
 }
 

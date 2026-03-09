@@ -33,6 +33,7 @@
     kdePackages.breeze
     kdePackages.breeze-icons
     kdePackages.breeze-gtk
+    kdePackages.qtstyleplugin-kvantum # kvantum 窗口样式引擎
     whitesur-kde
     whitesur-icon-theme
     whitesur-gtk-theme
