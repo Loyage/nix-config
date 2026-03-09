@@ -55,4 +55,13 @@
 
   # D-Bus 服务
   services.dbus.packages = [ pkgs.kdePackages.kwallet ];
+
+  # 输入法环境变量必须在系统层设置，才能进入 KDE Plasma Wayland 的 systemd 用户会话
+  # home.sessionVariables 只写入 ~/.profile，greetd 启动的图形会话不会 source 它
+  environment.sessionVariables = {
+    GTK_IM_MODULE = "fcitx";
+    QT_IM_MODULE  = "fcitx";
+    XMODIFIERS    = "@im=fcitx";
+    GLFW_IM_MODULE = "fcitx5"; # kitty 使用 GLFW，需要此变量
+  };
 }
