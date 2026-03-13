@@ -6,3 +6,9 @@ patch:
 
   key_binder:
     ctrl+shift+space: "switcher@double_pinyin_flypy"
+
+  ascii_composer/good_old_caps_lock: true
+
+  ascii_composer/switch_key:
+    Shift_L: noop
+    Shift_R: noop

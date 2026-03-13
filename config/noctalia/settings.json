@@ -405,27 +405,6 @@
                         "showBackground": true,
                         "x": 1224,
                         "y": 136
-                    },
-                    {
-                        "defaultSettings": {
-                            "barWidth": 0.6,
-                            "bloomIntensity": 0.5,
-                            "customPrimaryColor": "#6750A4",
-                            "customSecondaryColor": "#625B71",
-                            "fadeWhenIdle": false,
-                            "innerDiameter": 0.7,
-                            "ringOpacity": 0.8,
-                            "rotationSpeed": 0.5,
-                            "sensitivity": 1.5,
-                            "useCustomColors": false,
-                            "visualizationMode": 3,
-                            "waveThickness": 1
-                        },
-                        "id": "plugin:fancy-audiovisualizer",
-                        "scale": 2.33044718873722,
-                        "showBackground": true,
-                        "x": 510,
-                        "y": 170
                     }
                 ]
             }
