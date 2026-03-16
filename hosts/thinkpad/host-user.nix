@@ -41,6 +41,10 @@ in
   boot.kernelParams = [ "resume=UUID=df95c572-dab8-4e6e-b58f-622b312cb28c" ];
   # 3. 启用 systemd 休眠目标（如果使用图形界面）
   systemd.targets.hibernate.enable = true;
+  # 4. 配置 systemd 关机超时时间（原本为90s）
+  systemd.extraConfig = ''
+    DefaultTimeoutStopSec=10s
+  '';
 
   # hostname 在 flake.nix 中通过 mkNixosSystem 函数设置
   networking.networkmanager.enable = true;
