@@ -10,6 +10,7 @@ let
     wf-recorder # screen recording
     papirus-icon-theme
     wl-clipboard-rs
+    wl-mirror
     cava # Console-based Audio Visualizer for Alsa
     # rofi
     # waybar
