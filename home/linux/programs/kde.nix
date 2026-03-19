@@ -1,8 +1,10 @@
-{ pkgs, ... }:
+{ pkgs, config, lib, ... }:
 {
   # GTK 主题（通过 Home Manager gtk 模块）
+  # force = true 防止 KDE 运行时生成的 GTK 配置与 HM 符号链接冲突
   gtk = {
     enable = true;
+    gtk2.configLocation = "${config.xdg.configHome}/gtk-2.0/gtkrc";
     theme = {
       name = "WhiteSur-dark";
       package = pkgs.whitesur-gtk-theme;
@@ -17,6 +19,11 @@
       size = 24;
     };
   };
+  # 强制覆盖 KDE 运行时生成的 GTK 配置文件，避免 HM 每次 rebuild 冲突
+  home.file."${config.xdg.configHome}/gtk-2.0/gtkrc".force = lib.mkForce true;
+  home.file."${config.xdg.configHome}/gtk-3.0/settings.ini".force = lib.mkForce true;
+  home.file."${config.xdg.configHome}/gtk-4.0/settings.ini".force = lib.mkForce true;
+  home.file."${config.xdg.configHome}/gtk-4.0/gtk.css".force = lib.mkForce true;
 
   programs.plasma = {
     enable = true;
