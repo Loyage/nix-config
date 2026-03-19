@@ -43,7 +43,7 @@ in
   systemd.targets.hibernate.enable = true;
   # 4. 配置 systemd 关机超时时间（原本为90s）
   systemd.settings.Manager = {
-    DefaultTimeoutStopSec = "10s";
+    DefaultTimeoutStopSec = "5s";
   };
 
   # hostname 在 flake.nix 中通过 mkNixosSystem 函数设置
