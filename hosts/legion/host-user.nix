@@ -98,7 +98,14 @@ in
     power-profiles-daemon.enable = true;
     upower.enable = true;
 
-    openssh.enable = true;
+    openssh = {
+      enable = true;
+      settings = {
+        PasswordAuthentication = false;
+        PubkeyAuthentication = true;
+        PermitRootLogin = "no";
+      };
+    };
     flatpak.enable = true;
     xserver.enable = true;
 
