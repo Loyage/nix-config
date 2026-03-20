@@ -20,6 +20,7 @@ let
   work-tools = with pkgs; [
     bluetuith
     firefox
+    chromium
     kitty
     clash-verge-rev
     wpsoffice-cn
