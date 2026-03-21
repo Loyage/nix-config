@@ -41,6 +41,8 @@
         keybind-cheatsheet.enabled = true;
         fancy-audiovisualizer.enabled = true;
         clipper.enabled = true;
+        screen-toolkit.enabled = true;
+        niri-animation-picker.enabled = true;
         version = 1;
       };
 

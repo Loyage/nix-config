@@ -118,15 +118,15 @@
                     "showCpuCores": false,
                     "showCpuFreq": false,
                     "showCpuTemp": true,
-                    "showCpuUsage": false,
+                    "showCpuUsage": true,
                     "showDiskAvailable": false,
                     "showDiskUsage": true,
                     "showDiskUsageAsPercent": false,
                     "showGpuTemp": false,
                     "showLoadAverage": false,
-                    "showMemoryAsPercent": true,
+                    "showMemoryAsPercent": false,
                     "showMemoryUsage": true,
-                    "showNetworkStats": true,
+                    "showNetworkStats": false,
                     "showSwapUsage": false,
                     "textColor": "none",
                     "useMonospaceFont": true,
@@ -161,30 +161,10 @@
             ],
             "right": [
                 {
-                    "defaultSettings": {
-                        "hideBackground": false,
-                        "minimumThreshold": 10
-                    },
-                    "id": "plugin:catwalk"
+                    "id": "plugin:todo"
                 },
                 {
-                    "defaultSettings": {
-                        "completedCount": 0,
-                        "count": 0,
-                        "current_page_id": 0,
-                        "isExpanded": false,
-                        "pages": [
-                            {
-                                "id": 0,
-                                "name": "General"
-                            }
-                        ],
-                        "showBackground": true,
-                        "showCompleted": true,
-                        "todos": [
-                        ]
-                    },
-                    "id": "plugin:todo"
+                    "id": "plugin:catwalk"
                 },
                 {
                     "hideWhenZero": false,
@@ -220,6 +200,13 @@
                     "id": "WallpaperSelector"
                 },
                 {
+                    "applyToAllMonitors": false,
+                    "displayMode": "alwaysHide",
+                    "iconColor": "none",
+                    "id": "Brightness",
+                    "textColor": "none"
+                },
+                {
                     "displayMode": "alwaysShow",
                     "iconColor": "none",
                     "id": "Volume",
@@ -227,11 +214,21 @@
                     "textColor": "none"
                 },
                 {
-                    "applyToAllMonitors": false,
-                    "displayMode": "alwaysHide",
-                    "iconColor": "none",
-                    "id": "Brightness",
-                    "textColor": "none"
+                    "id": "plugin:niri-animation-picker"
+                },
+                {
+                    "defaultSettings": {
+                        "colorHistory": [
+                        ],
+                        "installedLangs": [
+                            "eng"
+                        ],
+                        "paletteColors": [
+                        ],
+                        "selectedOcrLang": "eng",
+                        "transAvailable": false
+                    },
+                    "id": "plugin:screen-toolkit"
                 },
                 {
                     "blacklist": [
@@ -385,29 +382,6 @@
                         "scale": 1.339282355295889,
                         "showBackground": true,
                         "x": 204,
-                        "y": 136
-                    },
-                    {
-                        "defaultSettings": {
-                            "completedCount": 0,
-                            "count": 0,
-                            "current_page_id": 0,
-                            "isExpanded": false,
-                            "pages": [
-                                {
-                                    "id": 0,
-                                    "name": "General"
-                                }
-                            ],
-                            "showBackground": true,
-                            "showCompleted": true,
-                            "todos": [
-                            ]
-                        },
-                        "id": "plugin:todo",
-                        "scale": 1.411576657976576,
-                        "showBackground": true,
-                        "x": 1224,
                         "y": 136
                     }
                 ]
