@@ -9,13 +9,24 @@ let
     hyprshot # screen shot
     wf-recorder # screen recording
     papirus-icon-theme
-    wl-clipboard-rs
     wl-mirror
     cava # Console-based Audio Visualizer for Alsa
     # rofi
     # waybar
     # waypaper
     # swww
+
+    # used by noctalia screen toolkit plugin
+    grim # screenshot cli tool
+    slurp # select region for screenshot or wf-recorder
+    wl-clipboard-rs # wayland clipboard tool
+    tesseract # OCR tool for screen toolkit plugin
+    imagemagick # for image processing
+    zbar # for QR code scanning
+    translate-shell # for translation
+    wf-recorder # for screen recording
+    ffmpeg # for video processing
+    gifski # for creating gifs
   ];
   work-tools = with pkgs; [
     bluetuith
