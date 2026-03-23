@@ -73,6 +73,10 @@
       inputs.home-manager.follows = "home-manager";
     };
     nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=v0.5.2";
+    fcitx5-vinput = {
+      url = "github:xifan2333/fcitx5-vinput";
+      flake = false;
+    };
   };
 
   # The `outputs` function will return all the build results of the flake.
@@ -107,6 +111,9 @@
             overlays = [
               inputs.nix-yazi-flavors.overlays.default
               inputs.nix-openclaw.overlays.default
+              (final: prev: {
+                fcitx5-vinput = final.callPackage ./pkgs/fcitx5-vinput.nix { inherit inputs; };
+              })
             ];
             config.allowUnfree = true;
           };
