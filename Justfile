@@ -31,13 +31,13 @@ deps:
 [group('rebuild')]
 [linux]
 switch:
-  sudo nixos-rebuild switch --flake . --show-trace
+  sudo nixos-rebuild switch --flake .#nixos --impure --show-trace
 
 # 构建并切换 NixOS 配置 (使用测试通道)
 [group('rebuild')]
 [linux]
 switch-test:
-  sudo nixos-rebuild test --flake .#nixos
+  sudo nixos-rebuild test --flake .#nixos --impure
 
 # 查看 NixOS generations
 [group('rebuild')]

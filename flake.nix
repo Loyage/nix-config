@@ -113,13 +113,16 @@
           modules = [ ./home/remote ];
         };
 
-      # 生成 NixOS 配置的函数
-      mkNixosSystem = hostName: hostConfig:
+      # 本机特定配置目录（gitignored，需要 --impure 构建）
+      # 新机器部署：cp -r hosts/local.example hosts/local && 编辑其中的文件
+      localHostDir = /home/loyage/nix-config/hosts/local;
+
+      mkNixosSystem =
         nixpkgs.lib.nixosSystem {
           inherit specialArgs;
-          system = hostConfig.system;
+          system = "x86_64-linux";
           pkgs = import inputs.nixpkgs-unstable {
-            system = hostConfig.system;
+            system = "x86_64-linux";
             overlays = [
               inputs.nix-yazi-flavors.overlays.default
               inputs.nix-openclaw.overlays.default
@@ -134,14 +137,9 @@
               nixpkgs = {
                 overlays = [ inputs.nix-yazi-flavors.overlays.default ];
               };
-              # 设置主机名
-              networking.hostName = hostConfig.hostname;
             }
             ./modules/base
             ./modules/linux
-            # 每个主机独立的硬件配置
-            ./hosts/${hostName}/hardware-configuration.nix
-            ./hosts/${hostName}/host-user.nix
 
             inputs.nix-flatpak.nixosModules.nix-flatpak
             home-manager.nixosModules.home-manager
@@ -154,7 +152,12 @@
                 users.${myvars.username} = import ./home/linux;
               };
             }
-          ];
+          ] ++ (
+            # 导入 hosts/local/ 中所有 .nix 文件（硬件配置、主机名等）
+            if builtins.pathExists localHostDir
+            then mylib.scanPaths localHostDir
+            else throw "hosts/local/ 不存在！请执行: cp -r hosts/local.example hosts/local 并编辑配置"
+          );
         };
     in
     {
@@ -205,8 +208,8 @@
         ];
       };
 
-      # NixOS 配置（多主机支持）
-      nixosConfigurations = lib.mapAttrs mkNixosSystem myvars.nixosHosts;
+      # NixOS 配置（单一配置，本机特定部分在 hosts/local/）
+      nixosConfigurations.nixos = mkNixosSystem;
 
       # 远程服务器 home-manager 配置（用于 Ubuntu/Debian 等非 NixOS 系统）
       # 用法：home-manager switch --flake .#remote
