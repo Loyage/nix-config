@@ -1,5 +1,6 @@
 { pkgs
 , lib
+, mylib
 , config
 , ...
 }:
@@ -18,7 +19,6 @@ let
     autojump
     zoxide
     which
-    oh-my-posh
     fastfetch
     tree
     fzf
@@ -27,13 +27,13 @@ let
     glow     # markdown previewer in terminal
     dust     # find large files
     duf      # disk usage
-    gnused
-    gnutar
-    gawk
     python3
     uv       # python package manager
     carapace # shell completion framework
     zellij   # terminal multiplexer
+    gnused
+    gnutar
+    gawk
   ];
 
   tui-tools = with pkgs; [
@@ -45,8 +45,6 @@ let
     lua
     luarocks
     cmake
-    stylua
-    lua-language-server
     (lib.lowPrio nodejs)
   ];
 in
@@ -71,12 +69,5 @@ in
       "zsh".source = mkLink "${confPath}/zsh";
     };
 
-  imports = [
-    ../../base/programs/eza.nix
-    ../../base/programs/ohmyposh.nix
-    ../../base/programs/tealdeer.nix
-    ./nvim.nix
-    ./yazi.nix
-    ./zsh.nix
-  ];
+  imports = mylib.scanPaths ./.;
 }

@@ -1,8 +1,5 @@
 { myvars, ... }: {
-  imports = [
-    ../base/git.nix
-    ./programs
-  ];
+  imports = [ ../terminal ];
 
   home = {
     inherit (myvars) username;
