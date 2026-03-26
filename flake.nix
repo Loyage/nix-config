@@ -101,6 +101,18 @@
       specialArgs =
         { inherit inputs myvars mylib; };
 
+      # 生成远程服务器 home-manager 配置的函数
+      mkRemoteHome = system:
+        home-manager.lib.homeManagerConfiguration {
+          pkgs = import inputs.nixpkgs-unstable {
+            inherit system;
+            overlays = [ inputs.nix-yazi-flavors.overlays.default ];
+            config.allowUnfree = true;
+          };
+          extraSpecialArgs = specialArgs;
+          modules = [ ./home/remote ];
+        };
+
       # 生成 NixOS 配置的函数
       mkNixosSystem = hostName: hostConfig:
         nixpkgs.lib.nixosSystem {
@@ -195,5 +207,13 @@
 
       # NixOS 配置（多主机支持）
       nixosConfigurations = lib.mapAttrs mkNixosSystem myvars.nixosHosts;
+
+      # 远程服务器 home-manager 配置（用于 Ubuntu/Debian 等非 NixOS 系统）
+      # 用法：home-manager switch --flake .#remote
+      #       home-manager switch --flake .#remote-aarch64
+      homeConfigurations = {
+        "remote" = mkRemoteHome "x86_64-linux";
+        "remote-aarch64" = mkRemoteHome "aarch64-linux";
+      };
     };
 }

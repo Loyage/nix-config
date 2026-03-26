@@ -118,7 +118,39 @@ home-clean:
   home-manager remove-generations old
 
 # ─────────────────────────────────────────────────────────────────────────────
-# 
+# 远程服务器开发环境（Ubuntu/Debian via SSH）
+# ─────────────────────────────────────────────────────────────────────────────
+
+# 首次部署：通过 nix run 安装 home-manager 并激活配置（x86_64）
+[group('remote')]
+remote-init:
+  nix run home-manager/master -- switch --flake .#remote --show-trace
+
+# 首次部署：aarch64 服务器（AWS Graviton、树莓派等）
+[group('remote')]
+remote-init-arm:
+  nix run home-manager/master -- switch --flake .#remote-aarch64 --show-trace
+
+# 更新远程配置（已安装 home-manager 后使用）
+[group('remote')]
+remote-switch:
+  home-manager switch --flake .#remote --show-trace
+
+# 更新远程配置（aarch64）
+[group('remote')]
+remote-switch-arm:
+  home-manager switch --flake .#remote-aarch64 --show-trace
+
+# 查看远程 home-manager generations
+[group('remote')]
+remote-generations:
+  home-manager generations
+
+# 清理远程旧 generations 并回收空间
+[group('remote')]
+remote-clean:
+  home-manager remove-generations old && nix-collect-garbage --delete-older-than 7d
+
 # ─────────────────────────────────────────────────────────────────────────────
 # 展示一个 nix flake 所提供的东西
 [linux]
