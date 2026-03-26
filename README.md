@@ -19,20 +19,16 @@
 ### NixOS
 
 ```bash
-# 构建并切换配置
 sudo nixos-rebuild switch --flake .
-
-# 或使用 just
+# 或
 just switch
 ```
 
 ### macOS
 
 ```bash
-# 构建并切换配置
 sudo darwin-rebuild switch --flake .
-
-# 或使用 just
+# 或
 just switch
 ```
 
@@ -51,57 +47,34 @@ just switch
 
 ### 首次部署
 
-**第一步：安装 Nix**
-
 ```bash
+# 1. 安装 Nix
 curl -L https://nixos.org/nix/install | sh
-# 重新加载 shell 或新开一个终端
-```
+# 重新加载 shell 或新开终端
 
-**第二步：克隆配置仓库**
-
-```bash
+# 2. 克隆配置仓库
 git clone <your-repo-url> ~/nix-config
-cd ~/nix-config
-```
 
-**第三步：激活 home-manager 配置**
+# 3. 激活 home-manager 配置
+#    x86_64 服务器（最常见）
+nix run home-manager/master -- switch --flake ~/nix-config#remote
+#    aarch64 服务器（AWS Graviton、树莓派等）
+nix run home-manager/master -- switch --flake ~/nix-config#remote-aarch64
 
-```bash
-# x86_64 服务器（最常见）
-nix run home-manager/master -- switch --flake .#remote
-
-# aarch64 服务器（如 AWS Graviton、树莓派）
-nix run home-manager/master -- switch --flake .#remote-aarch64
-```
-
-> 首次运行会下载所有依赖，耗时较长，请耐心等待。
-
-**第四步：切换到 zsh**
-
-```bash
+# 4. 切换默认 shell
 chsh -s $(which zsh)
 # 重新登录后生效
 ```
 
+> 首次运行会下载所有依赖，耗时较长，请耐心等待。
+
 ### 后续更新
 
 ```bash
-cd ~/nix-config
-git pull
-
-# 更新配置
+cd ~/nix-config && git pull
 home-manager switch --flake .#remote
-
-# 或使用 just（需要在远程服务器上安装 just）
+# 或
 just remote-switch
-```
-
-### 仅更新 flake 依赖
-
-```bash
-nix flake update
-home-manager switch --flake .#remote
 ```
 
 ---
@@ -118,10 +91,22 @@ nix-config/
 ├── config/                # 应用配置文件（nvim、zsh、lazygit 等）
 ├── modules/               # NixOS / darwin 系统模块
 ├── home/
-│   ├── base/              # 所有平台共享的 home-manager 配置
-│   ├── linux/             # NixOS 专用（桌面环境等）
+│   ├── terminal/          # 共享终端开发环境（所有平台调用）
+│   │   ├── git.nix
+│   │   └── programs/      # nvim、yazi、zsh、eza、ohmyposh 等
+│   ├── base/              # 桌面机器扩展（在 terminal 基础上加桌面工具）
+│   │   └── programs/      # ai-tools、gui-tools、剪贴板绑定等
+│   ├── linux/             # NixOS 专用（桌面环境、输入法等）
 │   ├── darwin/            # macOS 专用
-│   └── remote/            # 远程服务器专用（SSH 开发环境）
+│   └── remote/            # 远程服务器入口（直接调用 terminal）
 ├── hosts/                 # 各主机硬件配置
 └── pkgs/                  # 自定义 nix 包
+```
+
+### home 层级关系
+
+```
+remote  ──────────────────────→  terminal
+linux   →  base  ─────────────→  terminal
+darwin  →  base  ─────────────→  terminal
 ```
