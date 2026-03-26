@@ -11,6 +11,8 @@ let
     papirus-icon-theme
     wl-mirror
     cava # Console-based Audio Visualizer for Alsa
+    hardinfo2
+    lx-music-desktop
     # rofi
     # waybar
     # waypaper
