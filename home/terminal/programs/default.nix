@@ -34,11 +34,27 @@ let
     gnused
     gnutar
     gawk
+    cargo
+    aria2    # download manager
+    socat    # socket cat
+    nmap     # network exploration tool
+    gh       # github cli
+    github-copilot-cli
+    fh       # flakehub cli
+    chafa    # image to ANSI/Unicode character art
+    gomi     # rm to trash
+    vivid    # generator for LS_COLORS
+    statix   # lints and suggestions for nix
+    clash-meta
   ];
 
   tui-tools = with pkgs; [
     lazygit
     htop-vim
+    lazyssh
+    lazyjj
+    lazydocker
+    lazynpm
   ];
 
   dev-tools = with pkgs; [

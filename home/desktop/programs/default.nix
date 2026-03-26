@@ -1,24 +1,8 @@
 { pkgs
-, lib
 , config
 , ...
 }:
 let
-  extra-cli = with pkgs; [
-    cargo
-    aria2    # download manager
-    socat    # socket cat
-    nmap     # network exploration tool
-    gh       # github cli
-    github-copilot-cli
-    fh       # flakehub cli
-    chafa    # image to ANSI/Unicode character art
-    gomi     # rm to trash
-    vivid    # generator for LS_COLORS
-    statix   # lints and suggestions for nix
-    clash-meta
-  ];
-
   ai-tools = with pkgs; [
     opencode
     claude-code
@@ -26,23 +10,13 @@ let
     gemini-cli
   ];
 
-  extra-tui = with pkgs; [
-    lazyssh
-    lazyjj
-    lazydocker
-    lazynpm
-  ];
-
-  extra-dev = with pkgs; [
-    neovide
-  ];
-
   gui-tools = with pkgs; [
+    neovide
     zathura
   ];
 in
 {
-  home.packages = extra-cli ++ ai-tools ++ extra-tui ++ extra-dev ++ gui-tools;
+  home.packages = ai-tools ++ gui-tools;
 
   xdg.configFile =
     let
