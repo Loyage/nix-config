@@ -3,20 +3,13 @@
 , ...
 }:
 let
-  ai-tools = with pkgs; [
-    opencode
-    claude-code
-    codex
-    gemini-cli
-  ];
-
   gui-tools = with pkgs; [
     neovide
     zathura
   ];
 in
 {
-  home.packages = ai-tools ++ gui-tools;
+  home.packages = gui-tools;
 
   xdg.configFile =
     let
