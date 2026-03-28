@@ -1,5 +1,6 @@
 { pkgs
 , config
+, mylib
 , ...
 }:
 let
@@ -9,6 +10,8 @@ let
   ];
 in
 {
+  imports = mylib.scanPaths ./.;
+
   home.packages = gui-tools;
 
   xdg.configFile =
