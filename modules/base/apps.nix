@@ -20,6 +20,7 @@
     neovim
     yazi
     gcc
+    libiconv
     zsh
     just
     jq

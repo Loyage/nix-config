@@ -29,6 +29,7 @@ return {
     opts = {
       servers = {
         nil_ls = {
+          mason = false,
           settings = {
             ["nil"] = {
               formatting = {
@@ -40,12 +41,19 @@ return {
       },
     },
   },
-  -- Mason: 确保 nixpkgs-fmt 已安装
+  -- Mason: 移除 nil 和 nixpkgs-fmt 以避免编译错误，因为它们已由 Nix 管理
   {
     "mason-org/mason.nvim",
     opts = function(_, opts)
       opts.ensure_installed = opts.ensure_installed or {}
-      table.insert(opts.ensure_installed, "nixpkgs-fmt")
+
+      -- 过滤掉 nil 和 nixpkgs-fmt
+      if type(opts.ensure_installed) == "table" then
+        opts.ensure_installed = vim.tbl_filter(function(v)
+          return v ~= "nil" and v ~= "nixpkgs-fmt"
+        end, opts.ensure_installed)
+      end
+      return opts
     end,
   },
 }
