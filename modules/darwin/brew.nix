@@ -10,6 +10,7 @@ let
     "the-unarchiver"
     "iina" # media player
     "transmission" # bit torrent client
+    "obs"
   ];
   social-media = [
     "wechat"

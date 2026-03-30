@@ -45,7 +45,7 @@ just switch
 - **终端复用**：zellij
 - **常用工具**：bat、btop、fzf、ripgrep、zoxide、eza、dust、duf 等
 
-### 首次部署
+### 首次部署（有 Sudo 权限）
 
 ```bash
 # 1. 安装 Nix
@@ -60,10 +60,43 @@ git clone <your-repo-url> ~/nix-config
 nix run home-manager/master -- switch --flake ~/nix-config#remote
 #    aarch64 服务器（AWS Graviton、树莓派等）
 nix run home-manager/master -- switch --flake ~/nix-config#remote-aarch64
+```
 
-# 4. 切换默认 shell
+### 首次部署（无 Sudo 权限）
+
+如果你在远程服务器上没有 `sudo` 权限，无法在根目录创建 `/nix`，请使用 [nix-portable](https://github.com/DavHau/nix-portable)：
+
+```bash
+# 1. 下载 nix-portable
+curl -L https://github.com/DavHau/nix-portable/releases/latest/download/nix-portable-$(uname -m) > ~/nix-portable
+chmod +x ~/nix-portable
+
+# 2. 初始化环境（使用 nix-portable 代替 nix）
+#    x86_64 服务器
+./nix-portable nix run home-manager/master -- switch --flake ~/nix-config#remote
+#    aarch64 服务器
+./nix-portable nix run home-manager/master -- switch --flake ~/nix-config#remote-aarch64
+
+# 3. 后续使用
+# 你可以设置别名方便调用：alias nix="~/nix-portable nix"
+
+#### 常见问题：Operation not permitted
+如果在运行 `./nix-portable` 时报错 `setting up a private mount namespace: Operation not permitted`，说明服务器禁用了用户命名空间。请强制使用 proot 模式：
+```bash
+NP_RUNTIME=proot ./nix-portable <command>
+```
+```
+
+### 切换默认 Shell
+
+```bash
+# 有 sudo 权限
 chsh -s $(which zsh)
-# 重新登录后生效
+
+# 无 sudo 权限：在 ~/.bashrc 或 ~/.profile 中添加
+# if [ -x "$(command -v zsh)" ]; then
+#   exec zsh
+# fi
 ```
 
 > 首次运行会下载所有依赖，耗时较长，请耐心等待。
