@@ -45,7 +45,6 @@ let
     gomi # rm to trash
     vivid # generator for LS_COLORS
     statix # lints and suggestions for nix
-    clash-meta
   ];
 
   ai-tools = with pkgs; [
