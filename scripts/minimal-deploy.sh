@@ -6,26 +6,39 @@ GREEN='\033[0;32m'
 BLUE='\033[0;34m'
 NC='\033[0m'
 
-echo -e "${BLUE}==> 开始极简部署 (非 Nix 模式)${NC}"
+echo -e "${BLUE}==> 开始极简部署 (个人用户模式)${NC}"
 
-# 1. 尝试安装基础软件 (需要 sudo)
-install_packages() {
-    if command -v apt-get &> /dev/null; then
-        sudo apt-get update && sudo apt-get install -y zsh nvim git curl wget fzf ripgrep btop
-    elif command -v dnf &> /dev/null; then
-        sudo dnf install -y zsh neovim git curl wget fzf ripgrep btop
-    elif command -v yum &> /dev/null; then
-        sudo yum install -y zsh neovim git curl wget fzf ripgrep btop
-    else
-        echo -e "${RED}[!] 未找到兼容的包管理器或无 sudo 权限，请手动安装依赖。${NC}"
-    fi
+# 1. 自动选择包管理器
+install_manager() {
+    echo -e "${BLUE}检测到无 sudo 权限，建议安装个人包管理器:${NC}"
+    echo "1) Micromamba (推荐: 快速, 二进制安装, 简单)"
+    echo "2) Homebrew (推荐: 包最全, 社区活跃, 源码编译较多)"
+    echo "3) 跳过 (手动处理)"
+    read -p "请选择 (1/2/3): " choice
+    
+    case $choice in
+        1)
+            echo -e "${BLUE}正在安装 Micromamba...${NC}"
+            "${SHELL}" <(curl -L micro.mamba.pm/install.sh)
+            echo -e "${GREEN}请重新加载 Shell 后运行: micromamba install -c conda-forge neovim git zsh fzf ripgrep eza bat zoxide zellij${NC}"
+            ;;
+        2)
+            echo -e "${BLUE}正在安装 Homebrew 到 ~/.linuxbrew...${NC}"
+            git clone https://github.com/Homebrew/brew ~/.linuxbrew/Homebrew
+            mkdir -p ~/.linuxbrew/bin
+            ln -s ../Homebrew/bin/brew ~/.linuxbrew/bin/
+            eval "$(~/.linuxbrew/bin/brew shellenv)"
+            echo -e "${GREEN}Homebrew 已安装。建议运行: brew install nvim git zsh fzf ripgrep eza bat zoxide zellij${NC}"
+            ;;
+        *)
+            echo "跳过包管理器安装。"
+            ;;
+    esac
 }
 
-# 询问是否尝试安装
-read -p "是否尝试使用 sudo 安装基础软件? (y/n) " -n 1 -r
-echo
-if [[ $REPLY =~ ^[Yy]$ ]]; then
-    install_packages
+# 如果没有 sudo 权限
+if ! sudo -n true 2>/dev/null; then
+    install_manager
 fi
 
 # 2. 创建配置软链接
@@ -50,14 +63,5 @@ done
 echo -e "设置 .zshrc..."
 echo "source $TARGET_DIR/zsh/00-init.zsh" > "$HOME/.zshrc"
 
-# 3. 安装工具二进制 (针对无 sudo 用户)
-install_user_binaries() {
-    mkdir -p "$HOME/.local/bin"
-    echo -e "${BLUE}==> 建议手动从 GitHub 下载以下工具的静态二进制版本到 ~/.local/bin:${NC}"
-    echo -e "    - eza, bat, zoxide, oh-my-posh, yazi, zellij"
-}
-
-install_user_binaries
-
-echo -e "${GREEN}==> 部署完成！${NC}"
-echo -e "${BLUE}请手动运行 'chsh -s \$(which zsh)' 切换 shell (如果权限允许)${NC}"
+echo -e "${GREEN}==> 配置文件已就位！${NC}"
+echo -e "${BLUE}请确保你安装了相应的二进制文件，然后切换到 zsh 即可体验。${NC}"
