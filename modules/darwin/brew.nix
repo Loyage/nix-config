@@ -2,7 +2,6 @@
 let
   dev-tools = [
     "kitty" # terminal emulator
-    "visual-studio-code"
     "zen"
   ];
   utilities = [
@@ -11,7 +10,6 @@ let
     "the-unarchiver"
     "iina" # media player
     "transmission" # bit torrent client
-    "aerospace"
   ];
   social-media = [
     "wechat"
