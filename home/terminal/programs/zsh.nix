@@ -1,5 +1,9 @@
-{ pkgs, ... }: {
+{ pkgs
+, config
+, ...
+}: {
   programs.zsh = {
+    dotDir = config.home.homeDirectory;
     enable = true;
     initContent = ''
       for f in ~/.config/zsh/*; do

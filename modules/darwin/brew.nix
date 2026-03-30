@@ -22,6 +22,7 @@ let
   ];
   productivity = [
     "zotero"
+    "wpsoffice-cn"
   ];
 in
 {
