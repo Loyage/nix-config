@@ -39,7 +39,6 @@ let
     socat # socket cat
     nmap # network exploration tool
     gh # github cli
-    github-copilot-cli
     fh # flakehub cli
     chafa # image to ANSI/Unicode character art
     gomi # rm to trash
