@@ -23,6 +23,4 @@
       TimeoutStopSec = 10;
     };
   };
-
-  services.hypridle.enable = true;
 }

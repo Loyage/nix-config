@@ -24,7 +24,4 @@
       TimeoutStopSec = 10;
     };
   };
-
-  # hypridle: idle management daemon 
-  services.hypridle.enable = true;
 }
