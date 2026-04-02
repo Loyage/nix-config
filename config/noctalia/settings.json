@@ -63,7 +63,7 @@
         ],
         "mouseWheelAction": "none",
         "mouseWheelWrap": true,
-        "outerCorners": false,
+        "outerCorners": true,
         "position": "top",
         "reverseScroll": false,
         "rightClickAction": "controlCenter",
@@ -317,7 +317,7 @@
         "manualSunset": "18:30",
         "monitorForColors": "",
         "predefinedScheme": "Ayu",
-        "schedulingMode": "off",
+        "schedulingMode": "location",
         "useWallpaperColors": true
     },
     "controlCenter": {
@@ -544,7 +544,7 @@
         "screenOffCommand": "",
         "screenOffTimeout": 600,
         "suspendCommand": "",
-        "suspendTimeout": 1800
+        "suspendTimeout": 0
     },
     "location": {
         "analogClockInCalendar": false,
@@ -782,7 +782,7 @@
         "skipStartupTransition": false,
         "solidColor": "#1a1a2e",
         "sortOrder": "name",
-        "transitionDuration": 1500,
+        "transitionDuration": 3000,
         "transitionEdgeSmoothness": 0.05,
         "transitionType": [
             "fade",

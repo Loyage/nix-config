@@ -39,6 +39,7 @@ let
     wpsoffice-cn
     typora
     usbutils
+    zotero
   ];
   social-softs = with pkgs; [
     qq
