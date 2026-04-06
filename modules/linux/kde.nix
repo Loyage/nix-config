@@ -3,9 +3,6 @@
   # KDE Plasma 6 桌面环境
   services.desktopManager.plasma6.enable = true;
 
-  # 将 Plasma session 注册到 displayManager，让 greetd 能发现它
-  services.displayManager.sessionPackages = [ pkgs.kdePackages.plasma-workspace ];
-
   # KDE 应用程序
   environment.systemPackages = with pkgs; [
     # 系统工具

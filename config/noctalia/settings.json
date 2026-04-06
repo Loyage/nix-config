@@ -32,6 +32,7 @@
         ],
         "preferredPlayer": "",
         "spectrumFrameRate": 30,
+        "spectrumMirrored": true,
         "visualizerType": "linear",
         "volumeFeedback": false,
         "volumeFeedbackSoundFile": "",
@@ -49,7 +50,6 @@
         "density": "comfortable",
         "displayMode": "always_visible",
         "enableExclusionZoneInset": true,
-        "floating": false,
         "fontScale": 1,
         "frameRadius": 12,
         "frameThickness": 8,
@@ -139,6 +139,7 @@
                     "maxWidth": 145,
                     "scrollingMode": "hover",
                     "showIcon": true,
+                    "showText": true,
                     "textColor": "none",
                     "useFixedWidth": false
                 },
@@ -160,41 +161,6 @@
                 }
             ],
             "right": [
-                {
-                    "defaultSettings": {
-                        "completedCount": 0,
-                        "count": 0,
-                        "current_page_id": 0,
-                        "exportEmptySections": false,
-                        "exportFormat": "markdown",
-                        "exportPath": "~/Documents",
-                        "isExpanded": false,
-                        "pages": [
-                            {
-                                "id": 0,
-                                "name": "General"
-                            }
-                        ],
-                        "priorityColors": {
-                            "high": "#f44336",
-                            "low": "#9e9e9e",
-                            "medium": "#2196f3"
-                        },
-                        "showBackground": true,
-                        "showCompleted": true,
-                        "todos": [
-                        ],
-                        "useCustomColors": false
-                    },
-                    "id": "plugin:todo"
-                },
-                {
-                    "defaultSettings": {
-                        "hideBackground": false,
-                        "minimumThreshold": 10
-                    },
-                    "id": "plugin:catwalk"
-                },
                 {
                     "hideWhenZero": false,
                     "hideWhenZeroUnread": false,
@@ -243,28 +209,6 @@
                     "textColor": "none"
                 },
                 {
-                    "defaultSettings": {
-                        "animationsFolder": "~/.config/niri/animations",
-                        "iconColor": "none",
-                        "targetFile": "~/.config/niri/config.kdl"
-                    },
-                    "id": "plugin:niri-animation-picker"
-                },
-                {
-                    "defaultSettings": {
-                        "colorHistory": [
-                        ],
-                        "installedLangs": [
-                            "eng"
-                        ],
-                        "paletteColors": [
-                        ],
-                        "selectedOcrLang": "eng",
-                        "transAvailable": false
-                    },
-                    "id": "plugin:screen-toolkit"
-                },
-                {
                     "blacklist": [
                     ],
                     "chevronColor": "none",
@@ -283,6 +227,24 @@
                     "icon": "noctalia",
                     "id": "ControlCenter",
                     "useDistroLogo": true
+                },
+                {
+                    "id": "plugin:catwalk"
+                },
+                {
+                    "id": "plugin:screen-toolkit"
+                },
+                {
+                    "id": "plugin:niri-animation-picker"
+                },
+                {
+                    "id": "plugin:keybind-cheatsheet"
+                },
+                {
+                    "id": "plugin:todo"
+                },
+                {
+                    "id": "plugin:clipper"
                 }
             ]
         }
@@ -311,13 +273,14 @@
         ]
     },
     "colorSchemes": {
-        "darkMode": false,
+        "darkMode": true,
         "generationMethod": "tonal-spot",
         "manualSunrise": "06:30",
         "manualSunset": "18:30",
         "monitorForColors": "",
         "predefinedScheme": "Ayu",
         "schedulingMode": "location",
+        "syncGsettings": true,
         "useWallpaperColors": true
     },
     "controlCenter": {
@@ -518,6 +481,7 @@
         "showHibernateOnLockScreen": false,
         "showScreenCorners": true,
         "showSessionButtonsOnLockScreen": true,
+        "smoothScrollEnabled": true,
         "telemetryEnabled": false
     },
     "hooks": {
@@ -548,6 +512,7 @@
     },
     "location": {
         "analogClockInCalendar": false,
+        "autoLocate": false,
         "firstDayOfWeek": 1,
         "hideWeatherCityName": false,
         "hideWeatherTimezone": false,
@@ -558,10 +523,10 @@
         "use12hourFormat": false,
         "useFahrenheit": false,
         "weatherEnabled": true,
-        "weatherShowEffects": true
+        "weatherShowEffects": true,
+        "weatherTaliaMascotAlways": false
     },
     "network": {
-        "airplaneModeEnabled": false,
         "bluetoothAutoConnect": true,
         "bluetoothDetailsViewMode": "grid",
         "bluetoothHideUnnamedDevices": false,
@@ -569,8 +534,7 @@
         "bluetoothRssiPollingEnabled": false,
         "disableDiscoverability": false,
         "networkPanelView": "wifi",
-        "wifiDetailsViewMode": "grid",
-        "wifiEnabled": true
+        "wifiDetailsViewMode": "grid"
     },
     "nightLight": {
         "autoSchedule": true,
@@ -760,6 +724,7 @@
         "fillColor": "#000000",
         "fillMode": "crop",
         "hideWallpaperFilenames": false,
+        "linkLightAndDarkWallpapers": true,
         "monitorDirectories": [
             {
                 "directory": "/home/loyage/Pictures/Wallpapers",
@@ -792,6 +757,7 @@
             "pixelate",
             "honeycomb"
         ],
+        "useOriginalImages": false,
         "useSolidColor": false,
         "useWallhaven": false,
         "viewMode": "single",

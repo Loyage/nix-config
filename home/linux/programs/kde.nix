@@ -6,16 +6,16 @@
     enable = true;
     gtk2.configLocation = "${config.xdg.configHome}/gtk-2.0/gtkrc";
     theme = {
-      name = "WhiteSur-dark";
-      package = pkgs.whitesur-gtk-theme;
+      name = lib.mkForce "WhiteSur-dark";
+      package = lib.mkForce pkgs.whitesur-gtk-theme;
     };
     iconTheme = {
-      name = "WhiteSur-dark";
-      package = pkgs.whitesur-icon-theme;
+      name = lib.mkForce "WhiteSur-dark";
+      package = lib.mkForce pkgs.whitesur-icon-theme;
     };
     cursorTheme = {
-      name = "WhiteSur-cursors";
-      package = pkgs.whitesur-cursors;
+      name = lib.mkForce "WhiteSur-cursors";
+      package = lib.mkForce pkgs.whitesur-cursors;
       size = 24;
     };
   };
@@ -32,10 +32,10 @@
     workspace = {
       lookAndFeel = "com.github.vinceliuice.WhiteSur-dark";
       colorScheme = "WhiteSurDark";
-      iconTheme = "WhiteSur-dark";
+      iconTheme = lib.mkForce "WhiteSur-dark";
       widgetStyle = "kvantum-dark";
       cursor = {
-        theme = "WhiteSur-cursors";
+        theme = lib.mkForce "WhiteSur-cursors";
         size = 24;
       };
       # 壁纸幻灯片（目录需存在，否则使用默认壁纸）
