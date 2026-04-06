@@ -39,6 +39,11 @@ switch:
 switch-test:
   sudo nixos-rebuild test --flake .#nixos --impure
 
+[group('rebuild')]
+[linux]
+switch-proxy:
+  sudo ALL_PROXY=http://127.0.0.1:7897 darwin-rebuild switch --flake .#nixos --show-trace
+
 # 查看 NixOS generations
 [group('rebuild')]
 [linux]
@@ -60,6 +65,11 @@ switch:
 [macos]
 generations:
   nix-env -p /nix/var/nix/profiles/system --list-generations
+
+[group('rebuild')]
+[macos]
+switch-proxy:
+  sudo ALL_PROXY=http://127.0.0.1:7897 darwin-rebuild switch --flake . --show-trace
 
 # 清理旧的 Darwin generations
 [group('rebuild')]
