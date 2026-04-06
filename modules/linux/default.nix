@@ -20,4 +20,13 @@
       thunar-volman
     ];
   };
+
+  programs.nix-ld.enable = true;
+  programs.nix-ld.libraries = with pkgs; [
+    stdenv.cc.cc.lib # 解决 libstdc++.so.6 找不到的问题
+    zlib # numpy 经常需要
+    glib # opencv 需要
+    libGL # opencv 图像处理/窗口显示需要
+    libX11 # 图形界面支持
+  ];
 }

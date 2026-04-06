@@ -22,7 +22,10 @@ let
     grim # screenshot cli tool
     slurp # select region for screenshot or wf-recorder
     wl-clipboard-rs # wayland clipboard tool
-    tesseract # OCR tool for screen toolkit plugin
+    # tesseract # OCR tool for screen toolkit plugin
+    (tesseract.override {
+      enableLanguages = [ "chi_sim" "eng" ];
+    })
     imagemagick # for image processing
     zbar # for QR code scanning
     translate-shell # for translation
@@ -40,6 +43,7 @@ let
     typora
     usbutils
     zotero
+    conda
   ];
   social-softs = with pkgs; [
     qq
