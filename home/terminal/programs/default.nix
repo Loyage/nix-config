@@ -14,7 +14,6 @@ let
   ];
 
   cli-tools = with pkgs; [
-    btop
     autojump
     zoxide
     which
@@ -81,7 +80,6 @@ in
       confPath = "${config.home.homeDirectory}/nix-config/config";
     in
     {
-      "btop".source = mkLink "${confPath}/btop";
       "lazygit".source = mkLink "${confPath}/lazygit";
       "nvim".source = mkLink "${confPath}/nvim";
       "zellij".source = mkLink "${confPath}/zellij";
