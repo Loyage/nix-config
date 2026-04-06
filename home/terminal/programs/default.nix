@@ -27,7 +27,6 @@ let
     python3
     uv # python package manager
     carapace # shell completion framework
-    zellij # terminal multiplexer
     gnused
     gnutar
     gawk
@@ -82,7 +81,6 @@ in
     {
       "lazygit".source = mkLink "${confPath}/lazygit";
       "nvim".source = mkLink "${confPath}/nvim";
-      "zellij".source = mkLink "${confPath}/zellij";
       "zsh".source = mkLink "${confPath}/zsh";
     };
 
