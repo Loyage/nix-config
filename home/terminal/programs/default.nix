@@ -14,14 +14,12 @@ let
   ];
 
   cli-tools = with pkgs; [
-    bat
     btop
     autojump
     zoxide
     which
     fastfetch
     tree
-    fzf
     ripgrep
     file
     glow # markdown previewer in terminal

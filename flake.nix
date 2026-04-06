@@ -77,6 +77,7 @@
       url = "github:xifan2333/fcitx5-vinput";
       flake = false;
     };
+    catppuccin.url = "github:catppuccin/nix";
   };
 
   # The `outputs` function will return all the build results of the flake.
