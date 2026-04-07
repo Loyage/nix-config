@@ -47,7 +47,7 @@ let
   ];
   social-softs = with pkgs; [
     qq
-    wechat-uos
+    wechat
     netease-cloud-music-gtk
     obs-studio
     wemeet
