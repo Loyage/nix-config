@@ -50,7 +50,6 @@ let
   ];
 
   tui-tools = with pkgs; [
-    lazygit
     htop-vim
     lazyssh
     lazyjj
@@ -68,8 +67,11 @@ in
 {
   home.packages = archives ++ cli-tools ++ ai-tools ++ tui-tools ++ dev-tools;
 
-  programs.fzf.enable = true;
-  programs.bat.enable = true;
+  programs = {
+    fzf.enable = true;
+    bat.enable = true;
+    lazygit.enable = true;
+  };
 
   programs.skim = {
     enable = true;
@@ -82,7 +84,6 @@ in
       confPath = "${config.home.homeDirectory}/nix-config/config";
     in
     {
-      "lazygit".source = mkLink "${confPath}/lazygit";
       "nvim".source = mkLink "${confPath}/nvim";
       "zsh".source = mkLink "${confPath}/zsh";
     };

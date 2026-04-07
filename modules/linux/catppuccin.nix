@@ -4,5 +4,7 @@
     enable = true;
     flavor = "frappe";
     accent = "sapphire";
+
+    fcitx5.enableRounded = true;
   };
 }
