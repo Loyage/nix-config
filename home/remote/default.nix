@@ -1,5 +1,5 @@
 { myvars, ... }: {
-  imports = [ ../terminal ];
+  imports = [ ../tui-base ];
 
   home = {
     inherit (myvars) username;

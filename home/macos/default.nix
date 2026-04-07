@@ -8,7 +8,7 @@
   programs.home-manager.enable = true;
 
   imports = (mylib.scanPaths ./.) ++ [
-    ../terminal
-    ../desktop
+    ../tui-base
+    ../gui-base
   ];
 }

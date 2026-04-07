@@ -35,13 +35,12 @@ nix-config/
 ├── modules/
 │   ├── base/              # Cross-platform NixOS modules (apps.nix, etc.)
 │   ├── linux/             # Linux-only system modules (kde.nix, host-user.nix)
-│   └── darwin/            # macOS system modules
+│   └── macos/             # macOS system modules
 ├── home/
-│   ├── base/              # Shared HM config (nvim, zsh, yazi, etc.)
-│   ├── terminal/          # Terminal-only HM config (eza, ohmyposh, etc.)
-│   ├── desktop/           # Desktop HM config (yazi-clipboard, zsh-extra)
+│   ├── tui-base/          # Shared HM config (nvim, zsh, yazi, etc.)
+│   ├── gui-base/          # Desktop HM config (yazi-clipboard, zsh-extra)
 │   ├── linux/             # Linux-specific HM (fcitx5, kde, noctalia)
-│   ├── darwin/            # macOS-specific HM
+│   ├── macos/             # macOS-specific HM
 │   └── remote/            # Headless server HM (minimal toolset)
 ├── config/                # Mutable configs symlinked via mkOutOfStoreSymlink
 │   ├── niri/              # niri compositor (config.kdl, keybindings.kdl, etc.)
@@ -75,11 +74,10 @@ Common settings go in `modules/linux/host-user.nix`; host-specific overrides liv
 
 ### Home Manager Layers
 Home config is layered by capability scope:
-1. `home/base` — universal (all platforms, all contexts)
-2. `home/terminal` — terminal-capable (local + remote)
-3. `home/desktop` — GUI systems
-4. `home/linux` or `home/darwin` — platform-specific
-5. `home/remote` — headless servers (minimal)
+1. `home/tui-base` — universal (all platforms, all contexts)
+2. `home/gui-base` — GUI systems
+3. `home/linux` or `home/macos` — platform-specific
+4. `home/remote` — headless servers (minimal)
 
 ### Local Host Pattern
 `hosts/local.example/` is a template for personal/local hosts. Real `hosts/local/` is gitignored. Copy and adapt when setting up a new machine locally.

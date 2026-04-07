@@ -8,7 +8,7 @@
 |------|------|------------|
 | ThinkPad | NixOS x86_64 | `nixosConfigurations.thinkpad` |
 | Legion | NixOS x86_64 | `nixosConfigurations.legion` |
-| MacBook Air | macOS aarch64 | `darwinConfigurations.LoyagedeMacBook-Air` |
+| MacBook Air | macOS aarch64 | `macosConfigurations.LoyagedeMacBook-Air` |
 | 远程服务器 | Linux x86_64 | `homeConfigurations.remote` |
 | 远程服务器 (ARM) | Linux aarch64 | `homeConfigurations.remote-aarch64` |
 
@@ -122,16 +122,16 @@ nix-config/
 ├── vars/                  # 全局变量（用户名、主机列表等）
 ├── lib/                   # 辅助函数
 ├── config/                # 应用配置文件（nvim、zsh、lazygit 等）
-├── modules/               # NixOS / darwin 系统模块
+├── modules/               # NixOS / macos 系统模块
 ├── home/
-│   ├── terminal/          # 共享终端开发环境（所有平台调用）
+│   ├── tui-base/          # 共享终端开发环境（所有平台调用）
 │   │   ├── git.nix
 │   │   └── programs/      # nvim、yazi、zsh、eza、ohmyposh 等
-│   ├── base/              # 桌面机器扩展（在 terminal 基础上加桌面工具）
+│   ├── gui-base/          # 桌面机器扩展（在 tui-base 基础上加桌面工具）
 │   │   └── programs/      # ai-tools、gui-tools、剪贴板绑定等
 │   ├── linux/             # NixOS 专用（桌面环境、输入法等）
-│   ├── darwin/            # macOS 专用
-│   └── remote/            # 远程服务器入口（直接调用 terminal）
+│   ├── macos/             # macOS 专用
+│   └── remote/            # 远程服务器入口（直接调用 tui-base）
 ├── hosts/                 # 各主机硬件配置
 └── pkgs/                  # 自定义 nix 包
 ```
@@ -139,7 +139,7 @@ nix-config/
 ### home 层级关系
 
 ```
-remote  ──────────────────────→  terminal
-linux   →  base  ─────────────→  terminal
-darwin  →  base  ─────────────→  terminal
+remote  ──────────────────────→  tui-base
+linux   →  gui-base  ─────────────→  tui-base
+macos   →  gui-base  ─────────────→  tui-base
 ```

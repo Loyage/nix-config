@@ -155,7 +155,7 @@
     in
     {
       # macOS 配置
-      darwinConfigurations."${myvars.darwinHostname}" = nix-darwin.lib.darwinSystem {
+      macosConfigurations."${myvars.macosHostname}" = nix-darwin.lib.darwinSystem {
         inherit specialArgs;
         system = "aarch64-darwin";
         pkgs = import inputs.nixpkgs-unstable {
@@ -164,7 +164,7 @@
         };
         modules = [
           ./modules/base
-          ./modules/darwin
+          ./modules/macos
 
           home-manager.darwinModules.home-manager
           {
@@ -173,7 +173,7 @@
               useUserPackages = true;
               extraSpecialArgs = specialArgs;
               backupFileExtension = "home-manager.backup";
-              users.${myvars.username} = import ./home/darwin;
+              users.${myvars.username} = import ./home/macos;
             };
           }
 

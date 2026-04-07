@@ -1,5 +1,5 @@
 { ... }: {
-  # 桌面环境剪贴板绑定（在 terminal/programs/yazi.nix 的基础上追加）
+  # 桌面环境剪贴板绑定（在 tui-base/programs/yazi.nix 的基础上追加）
   programs.yazi.keymap.mgr.prepend_keymap = [
     # macOS: 复制文件内容到剪贴板
     {

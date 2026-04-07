@@ -51,16 +51,16 @@ generations:
   sudo nix-env -p /nix/var/nix/profiles/system --list-generations
 
 # ─────────────────────────────────────────────────────────────────────────────
-# Darwin (macOS) 构建和切换
+# macOS 构建和切换
 # ─────────────────────────────────────────────────────────────────────────────
 
-# 构建并切换 Darwin 配置
+# 构建并切换 macOS 配置
 [group('rebuild')]
 [macos]
 switch:
   sudo darwin-rebuild switch --flake . --show-trace
 
-# 查看 Darwin generations
+# 查看 macOS generations
 [group('rebuild')]
 [macos]
 generations:
@@ -71,7 +71,7 @@ generations:
 switch-proxy:
   sudo ALL_PROXY=http://127.0.0.1:7897 darwin-rebuild switch --flake . --show-trace
 
-# 清理旧的 Darwin generations
+# 清理旧的 macOS generations
 [group('rebuild')]
 [macos]
 gc:

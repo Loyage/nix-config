@@ -5,5 +5,5 @@
   useremail = "792058350@qq.com";
 
   # macOS 主机
-  darwinHostname = "LoyagedeMacBook-Air";
+  macosHostname = "LoyagedeMacBook-Air";
 }

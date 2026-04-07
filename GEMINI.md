@@ -13,9 +13,9 @@ This is a comprehensive, cross-platform Nix configuration project based on Nix F
 
 ### Hierarchy Logic
 ```text
-remote  ──────────────────────→  terminal
-linux   →  base  ─────────────→  terminal
-darwin  →  base  ─────────────→  terminal
+remote  ──────────────────────→  tui-base
+linux   →  gui-base  ─────────────→  tui-base
+macos   →  gui-base  ─────────────→  tui-base
 ```
 
 ### Key Directories
@@ -24,9 +24,9 @@ darwin  →  base  ─────────────→  terminal
 - `lib/`: Helper functions, including the automatic path scanner.
 - `modules/`: System-level modules for NixOS and nix-darwin.
 - `home/`: User-level Home Manager configurations.
-  - `terminal/`: Foundation for all environments (CLI tools, Shell, Editor).
-  - `base/`: GUI tools and common desktop configurations.
-  - `linux/` / `darwin/` / `remote/`: Platform-specific overlays.
+  - `tui-base/`: Foundation for all environments (CLI tools, Shell, Editor).
+  - `gui-base/`: GUI tools and common desktop configurations.
+  - `linux/` / `macos/` / `remote/`: Platform-specific overlays.
 - `config/`: Symlinked configuration files for tools like Neovim, Hyprland, Kitty, etc.
 - `pkgs/`: Custom Nix derivations and overlays.
 - `hosts/`: Hardware-specific configurations (e.g., `hardware-configuration.nix`).
@@ -37,7 +37,7 @@ Common operations are managed via `just` (see `Justfile`).
 
 ### Common Commands
 - **NixOS (Legion/ThinkPad):** `just switch` (rebuilds and switches the system configuration).
-- **macOS:** `just switch` (rebuilds and switches the darwin configuration).
+- **macOS:** `just switch` (rebuilds and switches the macOS configuration).
 - **Remote Servers:**
   - Initial: `just remote-init` (x86_64) or `just remote-init-arm` (aarch64).
   - Update: `just remote-switch` or `just remote-switch-arm`.

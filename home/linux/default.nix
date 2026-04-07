@@ -8,8 +8,8 @@
   programs.home-manager.enable = true;
 
   imports = (mylib.scanPaths ./.) ++ [
-    ../terminal
-    ../desktop
+    ../tui-base
+    ../gui-base
     inputs.nix-openclaw.homeManagerModules.openclaw
     inputs.plasma-manager.homeModules.plasma-manager
   ];
