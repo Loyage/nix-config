@@ -1,11 +1,15 @@
-{ ... }: {
-  catppuccin.enable = true;
-  catppuccin.flavor = "frappe";
-  catppuccin.accent = "blue";
+_: {
+  catppuccin = {
+    enable = true;
+    flavor = "frappe";
+    accent = "sapphire";
 
-  # Disable catppuccin for programs that have custom/symlinked themes to avoid conflicts
-  catppuccin.lazygit.enable = false;
-  catppuccin.nvim.enable = false;
+    # Disable for using softlinks
+    lazygit.enable = false;
+    nvim.enable = false;
+
+    fcitx5.enableRounded = true;
+  };
 
   programs.bat.enable = true;
   programs.fzf.enable = true;

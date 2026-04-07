@@ -2,11 +2,6 @@
   programs.yazi = {
     enable = true;
     shellWrapperName = "y";
-    theme = {
-      flavor = {
-        use = "catppuccin-mocha";
-      };
-    };
     plugins = {
       inherit (pkgs.yaziPlugins) full-border git chmod ouch;
     };
