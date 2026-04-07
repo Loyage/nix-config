@@ -2,9 +2,6 @@
   programs.yazi = {
     enable = true;
     shellWrapperName = "y";
-    flavors = {
-      inherit (pkgs.yaziFlavors) catppuccin-mocha;
-    };
     theme = {
       flavor = {
         use = "catppuccin-mocha";

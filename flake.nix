@@ -54,7 +54,6 @@
       url = "github:daipeihust/homebrew-tap";
       flake = false;
     };
-    nix-yazi-flavors.url = "github:aguirre-matteo/nix-yazi-flavors";
     zen-browser = {
       url = "github:youwen5/zen-browser-flake";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
@@ -107,7 +106,6 @@
         home-manager.lib.homeManagerConfiguration {
           pkgs = import inputs.nixpkgs-unstable {
             inherit system;
-            overlays = [ inputs.nix-yazi-flavors.overlays.default ];
             config.allowUnfree = true;
           };
           extraSpecialArgs = specialArgs;
@@ -125,7 +123,6 @@
           pkgs = import inputs.nixpkgs-unstable {
             system = "x86_64-linux";
             overlays = [
-              inputs.nix-yazi-flavors.overlays.default
               inputs.nix-openclaw.overlays.default
               (final: prev: {
                 fcitx5-vinput = final.callPackage ./pkgs/fcitx5-vinput.nix { inherit inputs; };
@@ -134,11 +131,6 @@
             config.allowUnfree = true;
           };
           modules = [
-            {
-              nixpkgs = {
-                overlays = [ inputs.nix-yazi-flavors.overlays.default ];
-              };
-            }
             ./modules/base
             ./modules/linux
 
@@ -168,9 +160,6 @@
         system = "aarch64-darwin";
         pkgs = import inputs.nixpkgs-unstable {
           system = "aarch64-darwin";
-          overlays = [
-            inputs.nix-yazi-flavors.overlays.default
-          ];
           config.allowUnfree = true;
         };
         modules = [
