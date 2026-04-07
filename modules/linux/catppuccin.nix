@@ -5,6 +5,6 @@
     flavor = "frappe";
     accent = "sapphire";
 
-    fcitx5.enableRounded = true;
+    fcitx5.enable = false;
   };
 }
