@@ -10,7 +10,4 @@ _: {
 
     fcitx5.enableRounded = true;
   };
-
-  programs.bat.enable = true;
-  programs.fzf.enable = true;
 }

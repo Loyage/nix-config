@@ -68,6 +68,9 @@ in
 {
   home.packages = archives ++ cli-tools ++ ai-tools ++ tui-tools ++ dev-tools;
 
+  programs.fzf.enable = true;
+  programs.bat.enable = true;
+
   programs.skim = {
     enable = true;
     enableZshIntegration = true;
