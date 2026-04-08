@@ -16,10 +16,10 @@ binds {
     Mod+Shift+Slash hotkey-overlay-title="keybind-cheatsheet" { spawn "noctalia-shell" "ipc" "call" "plugin:keybind-cheatsheet" "toggle"; }
     Mod+Shift+T hotkey-overlay-title="todo" { spawn "noctalia-shell" "ipc" "call" "plugin:todo" "togglePanel"; }
     // Utility shortcuts
-    Mod+C hotkey-overlay-title="calculator" { spawn "noctalia-shell" "ipc" "call" "launcher" "calculator"; }
     Mod+V hotkey-overlay-title="clipper" { spawn "noctalia-shell" "ipc" "call" "plugin:clipper" "toggle"; }
     Mod+Comma hotkey-overlay-title="settings" { spawn "noctalia-shell" "ipc" "call" "settings" "toggle"; }
     CTRL+Alt+1 hotkey-overlay-title="emoji" { spawn "noctalia-shell" "ipc" "call" "launcher" "emoji"; }
+    Mod+Shift+W hotkey-overlay-title="wallpaper" { spawn "noctalia-shell" "ipc" "call" "wallpaper" "random"; }
     // #"Locker""
     CTRL+Alt+L hotkey-overlay-title="lock" { spawn "noctalia-shell" "ipc" "call" "lockScreen" "lock"; }
     CTRL+Alt+S hotkey-overlay-title="suspend" { spawn "noctalia-shell" "ipc" "call" "sessionMenu" "lockAndSuspend"; }
