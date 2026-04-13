@@ -6,5 +6,6 @@ _: {
 
     # Disable for using softlinks
     nvim.enable = false;
+    fcitx5.enable = false;
   };
 }

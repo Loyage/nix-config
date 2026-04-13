@@ -62,6 +62,7 @@ let
   other-tools = with pkgs; [
     tree-sitter
     fzf # fuzzy finder for session selector
+    nix-output-monitor # monitor nix build output in real time
   ];
 in
 {
