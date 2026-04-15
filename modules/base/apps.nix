@@ -1,29 +1,24 @@
-{ pkgs, ... }: {
-  ##########################################################################
-  #
-  #  Install all apps and packages here.
-  #
-  #  NOTE: Your can find all available options in:
-  #    https://daiderd.com/nix-darwin/manual/index.html
-  #
-  ##########################################################################
-
+{ pkgs, inputs, ... }: {
   # Install packages from nix's official package repository.
-  #
-  # The packages installed here are available to all users, and are reproducible across machines, and are rollbackable.
-  # But on macOS, it's less stable than homebrew.
-  #
+  # These are available to all users and reproducible across machines.
   environment.systemPackages = with pkgs; [
+    # Core tools
     wget
     curl
     git
     neovim
     yazi
-    gcc
-    libiconv
     zsh
     just
     jq
+
+    # Development & System
+    gcc
+    libiconv
     home-manager
+
+    # Secret management
+    age
+    inputs.agenix.packages.${system}.default
   ];
 }

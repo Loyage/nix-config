@@ -77,6 +77,10 @@
       flake = false;
     };
     catppuccin.url = "github:catppuccin/nix";
+    agenix = {
+      url = "github:ryantm/agenix";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
   };
 
   # The `outputs` function will return all the build results of the flake.
@@ -90,6 +94,7 @@
     , nix-darwin
     , home-manager
     , nix-homebrew
+    , agenix
     , ...
     }:
     let
@@ -109,7 +114,10 @@
             config.allowUnfree = true;
           };
           extraSpecialArgs = specialArgs;
-          modules = [ ./home/remote ];
+          modules = [
+            ./home/remote
+            agenix.homeManagerModules.default
+          ];
         };
 
       # 本机特定配置目录（gitignored，需要 --impure 构建）
@@ -133,6 +141,7 @@
           modules = [
             ./modules/base
             ./modules/linux
+            agenix.nixosModules.default
 
             inputs.nix-flatpak.nixosModules.nix-flatpak
             home-manager.nixosModules.home-manager
@@ -165,6 +174,7 @@
         modules = [
           ./modules/base
           ./modules/macos
+          agenix.darwinModules.default
 
           home-manager.darwinModules.home-manager
           {
@@ -173,6 +183,7 @@
               useUserPackages = true;
               extraSpecialArgs = specialArgs;
               backupFileExtension = "home-manager.backup";
+              modules = [ agenix.homeManagerModules.default ];
               users.${myvars.username} = import ./home/macos;
             };
           }
