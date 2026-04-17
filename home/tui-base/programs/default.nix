@@ -24,13 +24,10 @@ let
     glow # markdown previewer in terminal
     dust # find large files
     duf # disk usage
-    python3
-    uv # python package manager
     carapace # shell completion framework
     gnused
     gnutar
     gawk
-    cargo
     aria2 # download manager
     socat # socket cat
     nmap # network exploration tool
@@ -57,12 +54,7 @@ let
     lazynpm
   ];
 
-  dev-tools = with pkgs; [
-    lua
-    luarocks
-    cmake
-    (lib.lowPrio nodejs)
-  ];
+  dev-tools = [ ];
 in
 {
   home.packages = archives ++ cli-tools ++ ai-tools ++ tui-tools ++ dev-tools;

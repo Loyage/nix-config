@@ -9,6 +9,7 @@
 
   imports = (mylib.scanPaths ./.) ++ [
     ../tui-base
+    ../tui-base/dev.nix
     ../gui-base
     inputs.nix-openclaw.homeManagerModules.openclaw
     inputs.plasma-manager.homeModules.plasma-manager

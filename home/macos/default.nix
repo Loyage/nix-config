@@ -9,6 +9,7 @@
 
   imports = (mylib.scanPaths ./.) ++ [
     ../tui-base
+    ../tui-base/dev.nix
     ../gui-base
   ];
 }
