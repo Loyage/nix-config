@@ -53,6 +53,7 @@ let
     lazyjj
     lazydocker
     lazynpm
+    clashtui
   ];
 
   dev-tools = [ ];
