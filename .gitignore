@@ -1,3 +1,2 @@
 # 本机特定配置（硬件、UUID 等），每台机器不同，不应上传
 hosts/local/
-hosts/remote/
