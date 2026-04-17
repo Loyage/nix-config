@@ -20,7 +20,6 @@ in
       confPath = "${config.home.homeDirectory}/nix-config/config";
     in
     {
-      "avater.png".source = mkLink "${confPath}/avater.png";
       "kitty".source = mkLink "${confPath}/kitty";
       "zathura".source = mkLink "${confPath}/zathura";
     };

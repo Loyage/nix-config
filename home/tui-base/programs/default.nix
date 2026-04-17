@@ -77,6 +77,7 @@ in
     in
     {
       "nvim".source = mkLink "${confPath}/nvim";
+      "avater.png".source = mkLink "${confPath}/avater.png";
       "zsh".source = mkLink "${confPath}/zsh";
     };
 
