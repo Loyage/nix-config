@@ -49,7 +49,7 @@ just switch
 
 ```bash
 # 1. 安装 Nix
-curl -L https://nixos.org/nix/install | sh
+sh <(curl --proto '=https' --tlsv1.2 -L https://nixos.org/nix/install) --daemon
 # 重新加载 shell 或新开终端
 
 # 2. 克隆配置仓库
