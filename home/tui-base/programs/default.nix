@@ -14,6 +14,7 @@ let
   ];
 
   cli-tools = with pkgs; [
+    just
     autojump
     zoxide
     which
