@@ -108,6 +108,9 @@
 
       # 生成远程服务器 home-manager 配置的函数
       mkRemoteHome = system:
+        let
+          remoteHostFile = ./hosts/remote/host-user.nix;
+        in
         home-manager.lib.homeManagerConfiguration {
           pkgs = import inputs.nixpkgs-unstable {
             inherit system;
@@ -117,7 +120,7 @@
           modules = [
             ./home/remote
             agenix.homeManagerModules.default
-          ];
+          ] ++ (if builtins.pathExists remoteHostFile then [ remoteHostFile ] else [ ]);
         };
 
       # 本机特定配置目录（gitignored，需要 --impure 构建）

@@ -1,9 +1,9 @@
-{ myvars, ... }: {
+{ myvars, lib, ... }: {
   imports = [ ../tui-base ];
 
   home = {
-    inherit (myvars) username;
-    homeDirectory = "/home/${myvars.username}";
+    username = lib.mkDefault myvars.username;
+    homeDirectory = lib.mkDefault "/home/${myvars.username}";
     stateVersion = "25.11";
   };
 
