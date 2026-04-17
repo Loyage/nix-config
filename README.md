@@ -60,6 +60,14 @@ git clone <your-repo-url> ~/nix-config
 nix run home-manager/master -- switch --flake ~/nix-config#remote
 #    aarch64 服务器（AWS Graviton、树莓派等）
 nix run home-manager/master -- switch --flake ~/nix-config#remote-aarch64
+
+# 可能遇到的问题：
+error: experimental Nix feature 'nix-command' is disabled; add '--extra-experimental-features nix-command' to enable it
+# 解决方案：给 `/etc/nix/nix.conf` 添加以下内容：
+experimental-features = nix-command flakes
+# 并重启 Nix 服务：
+sudo systemctl restart nix-daemon
+
 ```
 
 ### 首次部署（无 Sudo 权限）
@@ -85,6 +93,7 @@ chmod +x ~/nix-portable
 ```bash
 NP_RUNTIME=proot ./nix-portable <command>
 ```
+
 ```
 
 ### 切换默认 Shell
