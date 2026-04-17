@@ -62,11 +62,15 @@ nix run home-manager/master -- switch --flake ~/nix-config#remote
 nix run home-manager/master -- switch --flake ~/nix-config#remote-aarch64
 
 # 可能遇到的问题：
-error: experimental Nix feature 'nix-command' is disabled; add '--extra-experimental-features nix-command' to enable it
+1. error: experimental Nix feature 'nix-command' is disabled; add '--extra-experimental-features nix-command' to enable it
+2. warning: ignoring untrusted substituter 'xxxx', you are not a trusted user.
+Run `man nix.conf` for more information on the `substituters` configuration option.
 # 解决方案：给 `/etc/nix/nix.conf` 添加以下内容：
 experimental-features = nix-command flakes
+trusted-users = root <your-username>
 # 并重启 Nix 服务：
 sudo systemctl restart nix-daemon
+
 
 ```
 
