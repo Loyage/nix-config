@@ -167,7 +167,7 @@
     in
     {
       # macOS 配置
-      macosConfigurations."${myvars.macosHostname}" = nix-darwin.lib.darwinSystem {
+      darwinConfigurations."${myvars.macosHostname}" = nix-darwin.lib.darwinSystem {
         inherit specialArgs;
         system = "aarch64-darwin";
         pkgs = import inputs.nixpkgs-unstable {
@@ -186,7 +186,6 @@
               useUserPackages = true;
               extraSpecialArgs = specialArgs;
               backupFileExtension = "home-manager.backup";
-              modules = [ agenix.homeManagerModules.default ];
               users.${myvars.username} = import ./home/macos;
             };
           }
