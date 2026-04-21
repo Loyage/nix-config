@@ -1,8 +1,6 @@
 { pkgs
-, mylib
 , ...
 }: {
-  imports = mylib.scanPaths ./.;
   home.packages = with pkgs; [
     which
     ripgrep
@@ -13,5 +11,4 @@
     enable = true;
     enableZshIntegration = true;
   }; # interactive find tool
-
 }

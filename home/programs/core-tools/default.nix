@@ -11,11 +11,8 @@ let
     glow # markdown previewer in terminal
     aria2 # download manager
     socat # socket cat
-    gh # github cli
     fh # flakehub cli
     gomi # rm to trash
-    statix # lints and suggestions for nix
-    nix-output-monitor # monitor nix build output in real time
     clash-rs
     gnused
     gnutar

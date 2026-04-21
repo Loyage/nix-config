@@ -1,5 +1,4 @@
 { pkgs
-, config
 , myvars
 , ...
 }:
@@ -38,24 +37,8 @@ in
   powerManagement.enable = true;
   systemd.targets.hibernate.enable = true;
 
-  # 用户配置
-  users.users."${username}" = {
-    isNormalUser = true;
-    home = "/home/${username}";
-    description = username;
-    group = "loyage";
-    extraGroups = [ "wheel" "networkmanager" ];
-    shell = pkgs.zsh;
-  };
-  users.groups.loyage = { };
-  nix.settings.trusted-users = [ username ];
-
   # 网络管理
   networking.networkmanager.enable = true;
-
-  # 程序与桌面环境启用
-  programs.hyprland.enable = true;
-  programs.niri.enable = true;
 
   # 安全相关
   security.pam.services.greetd.enableGnomeKeyring = true;
@@ -78,52 +61,6 @@ in
         PasswordAuthentication = false;
         PubkeyAuthentication = true;
         PermitRootLogin = "no";
-      };
-    };
-    flatpak = {
-      enable = true;
-      update.auto.enable = true;
-      remotes = [
-        {
-          name = "flathub";
-          location = "https://mirror.sjtu.edu.cn/flathub/flathub.flatpakrepo";
-        }
-      ];
-      packages = [
-      ];
-    };
-    xserver.enable = true;
-
-    greetd = {
-      enable = true;
-      settings = {
-        default_session = {
-          user = username;
-          command = ''
-            ${pkgs.tuigreet}/bin/tuigreet \
-            --sessions ${config.services.displayManager.sessionData.desktops}/share/wayland-sessions:${config.services.displayManager.sessionData.desktops}/share/xsessions \
-            --time \
-            --asterisks \
-            --remember \
-            --remember-session \
-            --theme "border=magenta;text=cyan;prompt=green;time=red;action=blue;button=yellow;container=black;input=red"
-          '';
-        };
-      };
-    };
-  };
-
-  # 硬件与蓝牙
-  hardware.bluetooth = {
-    enable = true;
-    powerOnBoot = true;
-    settings = {
-      General = {
-        Experimental = true;
-        FastConnectable = true;
-      };
-      Policy = {
-        AutoEnable = true;
       };
     };
   };

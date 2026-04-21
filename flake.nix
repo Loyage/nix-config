@@ -118,7 +118,7 @@
           };
           extraSpecialArgs = specialArgs;
           modules = [
-            ./home/remote
+            ./home/remote-server.nix
             agenix.homeManagerModules.default
           ] ++ (if builtins.pathExists remoteHostFile then [ remoteHostFile ] else [ ]);
         };
@@ -144,6 +144,7 @@
           modules = [
             ./modules/base
             ./modules/linux
+            ./modules/optional/desktop
             agenix.nixosModules.default
 
             inputs.nix-flatpak.nixosModules.nix-flatpak
@@ -154,7 +155,7 @@
                 useUserPackages = true;
                 extraSpecialArgs = specialArgs;
                 backupFileExtension = "home-manager.backup";
-                users.${myvars.username} = import ./home/linux;
+                users.${myvars.username} = import ./home/nixos.nix;
               };
             }
           ] ++ (
@@ -178,7 +179,6 @@
           ./modules/base
           ./modules/macos
           agenix.darwinModules.default
-
           home-manager.darwinModules.home-manager
           {
             home-manager = {
@@ -186,7 +186,7 @@
               useUserPackages = true;
               extraSpecialArgs = specialArgs;
               backupFileExtension = "home-manager.backup";
-              users.${myvars.username} = import ./home/macos;
+              users.${myvars.username} = import ./home/mac.nix;
             };
           }
 

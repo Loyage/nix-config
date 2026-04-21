@@ -1,9 +1,7 @@
 { pkgs
-, mylib
 , ...
 }:
 {
-  imports = mylib.scanPaths ./.;
   home.packages = with pkgs;[
     wpsoffice-cn
     wemeet

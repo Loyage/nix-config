@@ -1,8 +1,6 @@
 { pkgs
-, mylib
 , ...
 }: {
-  imports = mylib.scanPaths ./.;
   home.packages = with pkgs; [
     zip
     unzip

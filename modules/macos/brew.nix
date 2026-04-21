@@ -1,4 +1,6 @@
-{ config, ... }:
+{ config
+, ...
+}:
 let
   dev-tools = [
     "kitty" # terminal emulator

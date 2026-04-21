@@ -1,4 +1,8 @@
-{ pkgs, config, lib, ... }:
+{ pkgs
+, config
+, lib
+, ...
+}:
 {
   # GTK 主题（通过 Home Manager gtk 模块）
   # force = true 防止 KDE 运行时生成的 GTK 配置与 HM 符号链接冲突

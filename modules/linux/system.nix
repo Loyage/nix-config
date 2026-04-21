@@ -1,4 +1,7 @@
-{ pkgs, myvars, ... }:
+{ pkgs
+, myvars
+, ...
+}:
 {
   system.stateVersion = "24.05"; # 请根据实际 NixOS 版本调整
 
