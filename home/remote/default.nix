@@ -1,6 +1,4 @@
 { myvars, lib, ... }: {
-  imports = [ ../tui-base ];
-
   home = {
     username = lib.mkDefault myvars.username;
     homeDirectory = lib.mkDefault "/home/${myvars.username}";
@@ -8,4 +6,8 @@
   };
 
   programs.home-manager.enable = true;
+
+  imports = [
+    ../programs/core-tools
+  ];
 }

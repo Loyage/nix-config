@@ -8,8 +8,16 @@
   programs.home-manager.enable = true;
 
   imports = (mylib.scanPaths ./.) ++ [
-    ../tui-base
-    ../tui-base/dev.nix
+    ../programs/core-tools
     ../gui-base
+  ];
+
+  # yazi on macOS: y 复制文件内容到剪贴板
+  programs.yazi.keymap.mgr.prepend_keymap = [
+    {
+      on = "y";
+      run = [ "shell 'cat \"$@\" | pbcopy'" ];
+      desc = "将文件内容复制到剪贴板 (macOS)";
+    }
   ];
 }

@@ -1,20 +1,31 @@
-{ lib
-, config
-, inputs
+{ inputs
 , pkgs
 , ...
 }:
 {
-  home.packages = [
-    pkgs.qt6Packages.qt6ct # for icon theme
-    pkgs.app2unit # Launch Desktop Entries (or arbitrary commands) as Systemd user units
-  ]
-  ++ (lib.optionals pkgs.stdenv.isx86_64 [
-    pkgs.gpu-screen-recorder # recoding screen
-  ]);
-
   imports = [
     inputs.noctalia.homeModules.default
+  ];
+
+  home.packages = with pkgs; [
+    pkgs.qt6Packages.qt6ct # for icon theme
+    pkgs.app2unit # Launch Desktop Entries (or arbitrary commands) as Systemd user units
+    gpu-screen-recorder # recoding screen
+
+    # used by noctalia screen toolkit plugin
+    grim # screenshot cli tool
+    slurp # select region for screenshot or wf-recorder
+    wl-clipboard-rs # wayland clipboard tool
+    # tesseract # OCR tool for screen toolkit plugin
+    (tesseract.override {
+      enableLanguages = [ "chi_sim" "eng" ];
+    })
+    imagemagick # for image processing
+    zbar # for QR code scanning
+    translate-shell # for translation
+    wf-recorder # for screen recording
+    ffmpeg # for video processing
+    gifski # for creating gifs
   ];
 
   home.sessionVariables = {

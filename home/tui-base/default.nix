@@ -1,9 +1,0 @@
-{ inputs, ... }: {
-  xdg.enable = true;
-
-  imports = [
-    ./git.nix
-    ./programs
-    inputs.catppuccin.homeModules.catppuccin
-  ];
-}

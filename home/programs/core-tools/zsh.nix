@@ -20,6 +20,9 @@
         "sudo"
         "autojump"
         "dirhistory"
+        "brew"
+        "conda"
+        "archlinux"
       ];
     };
     plugins = [
