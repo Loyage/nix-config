@@ -9,7 +9,7 @@
 
     # game
     wine
-    lutris
+    # lutris
     protonplus
   ];
 }
