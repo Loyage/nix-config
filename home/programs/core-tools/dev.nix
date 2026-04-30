@@ -4,7 +4,7 @@
 }: {
   home.packages = with pkgs; [
     python3
-    cargo
+    rustup
     lua
     luarocks
     nodejs
