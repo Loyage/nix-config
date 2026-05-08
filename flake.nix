@@ -4,7 +4,7 @@
   nixConfig = {
     substituters = [
       "https://mirror.tuna.tsinghua.edu.cn/nix-channels/store" # Tsinghua University Mirror
-      "https://mirror.sjtu.edu.cn/nix-channels/store" # Shanghai Jiao Tong University Mirror
+      # "https://mirror.sjtu.edu.cn/nix-channels/store" # Shanghai Jiao Tong University Mirror
       "https://cache.nixos.org" # Official NixOS Cache
       "https://nix-community.cachix.org" #Community Cachix Cache
     ];

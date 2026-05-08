@@ -56,9 +56,9 @@
         "hideOnOverview": false,
         "marginHorizontal": 0,
         "marginVertical": 0,
-        "middleClickAction": "none",
+        "middleClickAction": "launcherPanel",
         "middleClickCommand": "",
-        "middleClickFollowMouse": false,
+        "middleClickFollowMouse": true,
         "monitors": [
         ],
         "mouseWheelAction": "none",
