@@ -18,7 +18,7 @@ let
     "wechat"
     "qq"
     # "discord"
-    "telegram"
+    # "telegram"
   ];
   entertainment = [
     "neteasemusic"
