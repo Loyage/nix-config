@@ -22,7 +22,7 @@
         })
         fcitx5-gtk # gtk im module
         fcitx5-mellow-themes
-        fcitx5-vinput
+        # fcitx5-vinput
       ];
     };
   };

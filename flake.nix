@@ -135,9 +135,9 @@
             system = "x86_64-linux";
             overlays = [
               inputs.nix-openclaw.overlays.default
-              (final: prev: {
-                fcitx5-vinput = final.callPackage ./pkgs/fcitx5-vinput.nix { inherit inputs; };
-              })
+              # (final: prev: {
+              #   fcitx5-vinput = final.callPackage ./pkgs/fcitx5-vinput.nix { inherit inputs; };
+              # })
             ];
             config.allowUnfree = true;
           };
@@ -145,6 +145,7 @@
             ./modules/base
             ./modules/linux
             ./modules/optional/desktop
+            ./modules/optional/dev/python-dev.nix
             agenix.nixosModules.default
 
             inputs.nix-flatpak.nixosModules.nix-flatpak
