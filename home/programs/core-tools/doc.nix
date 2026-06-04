@@ -2,6 +2,7 @@
 , ...
 }: {
   home.packages = with pkgs; [
-    pandoc
+    pandoc # markdown to docx
+    mdbook # markdown to html
   ];
 }
