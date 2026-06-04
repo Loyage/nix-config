@@ -9,7 +9,7 @@ let
         # 基础开发工具
         uv
         conda
-        git
+        jupyter
         pkg-config
         stdenv.cc.cc
 
