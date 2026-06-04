@@ -5,6 +5,7 @@ let
   dev-tools = [
     "kitty" # terminal emulator
     "zen"
+    "typora"
     "codex-app"
   ];
   utilities = [
