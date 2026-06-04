@@ -5,6 +5,7 @@ let
   dev-tools = [
     "kitty" # terminal emulator
     "zen"
+    "codex-app"
   ];
   utilities = [
     "jordanbaird-ice" # menu bar management tool
