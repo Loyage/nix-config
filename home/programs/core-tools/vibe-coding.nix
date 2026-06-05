@@ -5,6 +5,6 @@
     opencode
     claude-code
     codex
-    gemini-cli
+    antigravity-cli
   ];
 }
