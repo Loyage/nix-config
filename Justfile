@@ -63,7 +63,7 @@ generations:
 [group('rebuild')]
 [macos]
 switch:
-  sudo darwin-rebuild switch --flake . --show-trace
+  sudo darwin-rebuild switch --flake . --show-trace --impure
 
 # 查看 macOS generations
 [group('rebuild')]
@@ -74,7 +74,7 @@ generations:
 [group('rebuild')]
 [macos]
 switch-proxy:
-  sudo ALL_PROXY=http://127.0.0.1:7897 darwin-rebuild switch --flake . --show-trace
+  sudo ALL_PROXY=http://127.0.0.1:7897 darwin-rebuild switch --flake . --show-trace --impure
 
 # 清理旧的 macOS generations
 [group('rebuild')]
