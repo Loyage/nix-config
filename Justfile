@@ -44,6 +44,11 @@ switch-test:
 switch-proxy:
   sudo ALL_PROXY=http://127.0.0.1:7897 nixos-rebuild switch --flake .#nixos --impure --show-trace
 
+[group('rebuild')]
+[linux]
+switch-boot:
+  sudo nixos-rebuild boot --flake .#nixos --impure
+
 # 查看 NixOS generations
 [group('rebuild')]
 [linux]
