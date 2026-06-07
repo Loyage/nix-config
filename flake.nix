@@ -71,7 +71,6 @@
       inputs.nixpkgs.follows = "home-manager";
       inputs.home-manager.follows = "home-manager";
     };
-    nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=v0.5.2";
     fcitx5-vinput = {
       url = "github:xifan2333/fcitx5-vinput";
       flake = false;
@@ -148,7 +147,6 @@
             ./modules/optional/dev/python-dev.nix
             agenix.nixosModules.default
 
-            inputs.nix-flatpak.nixosModules.nix-flatpak
             home-manager.nixosModules.home-manager
             {
               home-manager = {
