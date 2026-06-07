@@ -21,14 +21,7 @@ in
     settings = {
       default_session = {
         user = username;
-        command = ''
-          ${pkgs.tuigreet}/bin/tuigreet \
-          --sessions ${config.services.displayManager.sessionData.desktops}/share/wayland-sessions:${config.services.displayManager.sessionData.desktops}/share/xsessions \
-          --time \
-          --asterisks \
-          --remember \
-          --remember-session
-        '';
+        command = "${pkgs.tuigreet}/bin/tuigreet --sessions ${config.services.displayManager.sessionData.desktops}/share/wayland-sessions:${config.services.displayManager.sessionData.desktops}/share/xsessions --time --asterisks --remember --remember-session";
       };
     };
   };
