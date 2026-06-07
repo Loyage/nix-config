@@ -1,0 +1,13 @@
+{ pkgs
+, ...
+}:
+{
+  programs.clash-verge = {
+    enable = true;
+    package = pkgs.clash-verge-rev;
+    serviceMode = true;
+    tunMode = true;
+  };
+
+  networking.firewall.trustedInterfaces = [ "Mihomo" "Meta" ];
+}
