@@ -177,6 +177,7 @@
         modules = [
           ./modules/base
           ./modules/macos
+          ./modules/optional/dev/python-dev.nix
           agenix.darwinModules.default
           home-manager.darwinModules.home-manager
           {
