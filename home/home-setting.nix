@@ -18,7 +18,7 @@ in
 {
   home = {
     inherit (myvars) username;
-    homeDirectory = if pkgs.stdenv.isDarwin then "/Users/loyage" else "/home/loyage";
+    homeDirectory = if pkgs.stdenv.isDarwin then "/Users/${myvars.username}" else "/home/${myvars.username}";
     stateVersion = "25.11";
   };
 

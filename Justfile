@@ -149,12 +149,12 @@ remote-init-arm:
 # 更新远程配置（已安装 home-manager 后使用）
 [group('remote')]
 remote-switch:
-  home-manager switch --flake .#remote --show-trace
+  home-manager switch --flake .#remote --show-trace --impure
 
 # 更新远程配置（aarch64）
 [group('remote')]
 remote-switch-arm:
-  home-manager switch --flake .#remote-aarch64 --show-trace
+  home-manager switch --flake .#remote-aarch64 --show-trace --impure
 
 # 查看远程 home-manager generations
 [group('remote')]
