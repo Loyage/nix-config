@@ -11,6 +11,9 @@
               source $f
           fi
       done
+      if [ -f ~/.zshrc_custom ]; then
+          source ~/.zshrc_custom
+      fi
     '';
     oh-my-zsh = {
       enable = true;
