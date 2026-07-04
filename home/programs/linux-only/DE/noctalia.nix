@@ -35,35 +35,36 @@
   };
 
   # configure options
-  programs.noctalia-shell = {
+  programs.noctalia = {
     enable = true;
-    plugins = {
-      sources = [
-        {
-          enabled = true;
-          name = "Official Noctalia Plugins ";
-          url = " https://github.com/noctalia-dev/noctalia-plugins ";
-        }
-      ];
-      states = {
-        catwalk.enabled = true;
-        todo.enabled = true;
-        kaomoji-provider.enabled = true;
-        keybind-cheatsheet.enabled = true;
-        fancy-audiovisualizer.enabled = true;
-        clipper.enabled = true;
-        screen-toolkit.enabled = true;
-        niri-animation-picker.enabled = true;
-        version = 1;
-      };
+    settings = {
+      plugins = {
+        sources = [
+          {
+            enabled = true;
+            name = "Official Noctalia Plugins ";
+            url = " https://github.com/noctalia-dev/noctalia-plugins ";
+          }
+        ];
+        states = {
+          catwalk.enabled = true;
+          todo.enabled = true;
+          kaomoji-provider.enabled = true;
+          keybind-cheatsheet.enabled = true;
+          fancy-audiovisualizer.enabled = true;
+          clipper.enabled = true;
+          screen-toolkit.enabled = true;
+          niri-animation-picker.enabled = true;
+          version = 1;
+        };
 
-      pluginSettings = {
-        catwalk = {
-          minimumThreshold = 25;
-          hideBackground = true;
+        pluginSettings = {
+          catwalk = {
+            minimumThreshold = 25;
+            hideBackground = true;
+          };
         };
       };
     };
   };
 }
-
