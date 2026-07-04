@@ -7,7 +7,7 @@
 include "./keybindings.kdl"
 include "./windowrules.kdl"
 include "./spawn-at-startup.kdl"
-include "./noctalia-shell.kdl"
+include "./noctalia.kdl"
 
 // Input device configuration.
 // Find the full list of options on the wiki:

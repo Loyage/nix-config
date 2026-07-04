@@ -57,6 +57,7 @@ in
     upower.enable = true;
     openssh = {
       enable = true;
+      ports = [ 2222 ];
       settings = {
         PasswordAuthentication = false;
         PubkeyAuthentication = true;

@@ -38,33 +38,53 @@
   programs.noctalia = {
     enable = true;
     settings = {
-      plugins = {
-        sources = [
-          {
-            enabled = true;
-            name = "Official Noctalia Plugins ";
-            url = " https://github.com/noctalia-dev/noctalia-plugins ";
-          }
-        ];
-        states = {
-          catwalk.enabled = true;
-          todo.enabled = true;
-          kaomoji-provider.enabled = true;
-          keybind-cheatsheet.enabled = true;
-          fancy-audiovisualizer.enabled = true;
-          clipper.enabled = true;
-          screen-toolkit.enabled = true;
-          niri-animation-picker.enabled = true;
-          version = 1;
-        };
-
-        pluginSettings = {
-          catwalk = {
-            minimumThreshold = 25;
-            hideBackground = true;
-          };
+      shell = {
+        avatar_path = "/home/loyage/nix-config/config/avater.png";
+        lang = "zh-Hans";
+        font_family = "Maple Mono NF CN";
+        panel.launcher_position = "bottom_center";
+        screen_corners = {
+          enabled = true;
+          size = 40;
         };
       };
+      wallpaper = {
+        automation.enabled = true;
+        transition_on_startup = true;
+      };
+      theme = {
+        builtin = "Catppuccin";
+        mode = "auto";
+        source = "wallpaper";
+      };
+
+      #     plugins = {
+      #       sources = [
+      #         {
+      #           enabled = true;
+      #           name = "Official Noctalia Plugins ";
+      #           url = " https://github.com/noctalia-dev/noctalia-plugins ";
+      #         }
+      #       ];
+      #       states = {
+      #         catwalk.enabled = true;
+      #         todo.enabled = true;
+      #         kaomoji-provider.enabled = true;
+      #         keybind-cheatsheet.enabled = true;
+      #         fancy-audiovisualizer.enabled = true;
+      #         clipper.enabled = true;
+      #         screen-toolkit.enabled = true;
+      #         niri-animation-picker.enabled = true;
+      #         version = 1;
+      #       };
+      #
+      #       pluginSettings = {
+      #         catwalk = {
+      #           minimumThreshold = 25;
+      #           hideBackground = true;
+      #         };
+      #       };
+      #     };
     };
   };
 }
