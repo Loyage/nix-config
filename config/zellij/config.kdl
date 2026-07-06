@@ -4,6 +4,7 @@ ui {
     }
 }
 
+advanced_mouse_actions false
 
 keybinds clear-defaults=true {
     locked {
