@@ -7,6 +7,7 @@
     };
     # 仅包含修改过的配置，默认配置不再重复写入
     extraConfig = ''
+      advanced_mouse_actions false
       keybinds clear-defaults=true {
           locked {
               bind "Ctrl g" { SwitchToMode "normal"; }

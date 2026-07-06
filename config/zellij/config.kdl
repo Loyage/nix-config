@@ -4,8 +4,6 @@ ui {
     }
 }
 
-advanced_mouse_actions false
-
 keybinds clear-defaults=true {
     locked {
         bind "Ctrl g" { SwitchToMode "normal"; }
