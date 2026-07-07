@@ -8,5 +8,6 @@
     autojump
     zoxide
     carapace # shell completion framework
+    lazyssh
   ];
 }
