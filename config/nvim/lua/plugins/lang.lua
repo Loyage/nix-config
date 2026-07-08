@@ -14,7 +14,13 @@ return {
         ["*"] = {
           keys = {
             { "<leader>clr", "<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>", desc = "Remove workspace" },
-            { "<leader>cli", "<cmd>LspInfo<cr>", desc = "LspInfo" },
+            {
+              "<leader>cli",
+              function()
+                Snacks.picker.lsp_config()
+              end,
+              desc = "Lsp Info",
+            },
             { "<leader>cla", "<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>", desc = "Add workspace" },
             {
               "<leader>cll",
