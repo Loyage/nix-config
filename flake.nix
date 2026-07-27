@@ -134,6 +134,28 @@
             system = "x86_64-linux";
             overlays = [
               inputs.nix-openclaw.overlays.default
+              (final: prev: {
+                pnpm_11 = prev.pnpm_11.overrideAttrs (old: {
+                  nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [
+                    final.makeWrapper
+                  ];
+
+                  postInstall = (old.postInstall or "") + ''
+                    wrapProgram $out/bin/pnpm \
+                      --set-default pnpm_config_minimum_release_age 0
+                    wrapProgram $out/bin/pnpx \
+                      --set-default pnpm_config_minimum_release_age 0
+                  '';
+                });
+
+                qq = prev.qq.overrideAttrs (_old: {
+                  version = "3.2.31-2026-07-20";
+                  src = final.fetchurl {
+                    url = "https://qqdl.gtimg.cn/qqfile/QQNT/9.9.32/release/c390e792/QQ_3.2.31_260710_amd64_01.deb";
+                    hash = "sha256-AvZ3/rHOAe0pOjx3YeXdhb15k29X3KpM21MXiuMOPW0=";
+                  };
+                });
+              })
               # (final: prev: {
               #   fcitx5-vinput = final.callPackage ./pkgs/fcitx5-vinput.nix { inherit inputs; };
               # })
