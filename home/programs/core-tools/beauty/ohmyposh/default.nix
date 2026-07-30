@@ -4,6 +4,7 @@
 }: {
   programs.oh-my-posh = {
     enable = true;
+    enableBashIntegration = false;
     enableZshIntegration = false;
     configFile = ./EDM115-newline.omp.json;
   };

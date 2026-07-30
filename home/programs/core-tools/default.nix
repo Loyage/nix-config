@@ -33,6 +33,7 @@ in
     {
       "nvim".source = mkLink "${confPath}/nvim";
       "avater.png".source = mkLink "${confPath}/avater.png";
+      "bash".source = mkLink "${confPath}/bash";
       "zsh".source = mkLink "${confPath}/zsh";
       "kitty".source = mkLink "${confPath}/kitty";
       "zathura".source = mkLink "${confPath}/zathura";
