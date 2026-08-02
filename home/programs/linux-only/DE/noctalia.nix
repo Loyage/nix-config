@@ -58,6 +58,7 @@
         source = "wallpaper";
       };
       idle = {
+        pre_action_fade_seconds = 5;
         behavior = {
           lock = {
             action = "lock";
