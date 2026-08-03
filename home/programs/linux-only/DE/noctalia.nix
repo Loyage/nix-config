@@ -123,7 +123,7 @@
       bar.mybar = {
         background_opacity = 0.4;
         center = [ "clock" "caffeine" ];
-        start = [ "launcher" "wallpaper" "workspaces" "group:g1" ];
+        start = [ "launcher" "wallpaper" "nix-monitor" "workspaces" "group:g1" ];
         thickness = 40;
         capsule_group = [
           {
@@ -135,6 +135,26 @@
             padding = 6.0;
           }
         ];
+      };
+      plugins = {
+        auto_update = false;
+        enabled = [ "avivbintangaringga/nix-monitor" ];
+        source = [
+          {
+            kind = "git";
+            location = "https://github.com/noctalia-dev/official-plugins";
+            name = "official";
+          }
+          {
+            kind = "git";
+            location = "https://github.com/noctalia-dev/community-plugins";
+            name = "community";
+          }
+        ];
+      };
+      widget.nix-monitor = {
+        show_text = false;
+        type = "avivbintangaringga/nix-monitor:nix-monitor";
       };
 
       #     plugins = {
