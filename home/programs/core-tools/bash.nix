@@ -1,11 +1,16 @@
 { lib
 , config
+, pkgs
 , ...
 }:
 let
   cfg = config.programs.oh-my-posh;
 in
 {
+  home.packages = with pkgs; [
+    blesh
+  ];
+
   programs.bash = {
     enable = true;
     initExtra = lib.mkMerge [
@@ -24,6 +29,14 @@ in
             source ~/.bashrc_custom
         fi
       ''
+      (lib.mkOrder 1500 ''
+        if [[ $- == *i* && -f ${pkgs.blesh}/share/blesh/ble.sh ]]; then
+            source ${pkgs.blesh}/share/blesh/ble.sh
+            bleopt complete_auto_complete=1
+            bleopt complete_menu_complete=1
+            bleopt complete_menu_filter=1
+        fi
+      '')
     ];
   };
 }
