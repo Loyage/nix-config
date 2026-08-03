@@ -122,7 +122,7 @@
       bar.order = [ "mybar" ];
       bar.mybar = {
         background_opacity = 0.4;
-        center = [ "clock" "theme_mode" "caffeine" ];
+        center = [ "clock" "caffeine" ];
         start = [ "launcher" "wallpaper" "workspaces" "group:g1" ];
         thickness = 40;
         capsule_group = [
@@ -131,7 +131,7 @@
             enabled = true;
             fill = "surface_variant";
             members = [ "cpu" "ram" "temp" ];
-            opacity = 1.0;
+            opacity = 0.4;
             padding = 6.0;
           }
         ];
