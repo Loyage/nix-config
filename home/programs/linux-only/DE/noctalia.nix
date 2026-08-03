@@ -39,6 +39,7 @@
     enable = true;
     settings = {
       shell = {
+        password_style = "random";
         avatar_path = "/home/loyage/nix-config/config/avater.png";
         lang = "zh-Hans";
         font_family = "Maple Mono NF CN";
@@ -118,6 +119,23 @@
           variant = "destructive";
         }
       ];
+      bar.order = [ "mybar" ];
+      bar.mybar = {
+        background_opacity = 0.4;
+        center = [ "clock" "theme_mode" "caffeine" ];
+        start = [ "launcher" "wallpaper" "workspaces" "group:g1" ];
+        thickness = 40;
+        capsule_group = [
+          {
+            id = "g1";
+            enabled = true;
+            fill = "surface_variant";
+            members = [ "cpu" "ram" "temp" ];
+            opacity = 1.0;
+            padding = 6.0;
+          }
+        ];
+      };
 
       #     plugins = {
       #       sources = [
