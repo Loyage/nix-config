@@ -121,10 +121,31 @@
       ];
       bar.order = [ "mybar" ];
       bar.mybar = {
-        background_opacity = 0.4;
-        center = [ "clock" "caffeine" ];
-        start = [ "launcher" "wallpaper" "nix-monitor" "workspaces" "group:g1" ];
         thickness = 40;
+        background_opacity = 0.4;
+        start = [
+          "launcher"
+          "wallpaper"
+          "nix-monitor"
+          "workspaces"
+          "group:g1"
+        ];
+        center = [
+          "clock"
+          "caffeine"
+        ];
+        end = [
+          "media"
+          "tray"
+          "notifications"
+          "clipboard"
+          "network"
+          "bluetooth"
+          "volume"
+          "brightness"
+          "battery"
+          "session"
+        ];
         capsule_group = [
           {
             id = "g1";
@@ -152,11 +173,18 @@
           }
         ];
       };
-      widget.nix-monitor = {
-        show_text = false;
-        type = "avivbintangaringga/nix-monitor:nix-monitor";
+      widget = {
+        nix-monitor = {
+          show_text = false;
+          type = "avivbintangaringga/nix-monitor:nix-monitor";
+        };
+        media = {
+          hide_when_no_media = true;
+        };
+        notifications = {
+          hide_when_no_unread = true;
+        };
       };
-
       #     plugins = {
       #       sources = [
       #         {
