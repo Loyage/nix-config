@@ -2,6 +2,19 @@
 , ...
 }:
 let
+  trustedTaps = [
+    "daipeihust/homebrew-tap"
+  ];
+
+  mkTap = tap:
+    if builtins.elem tap trustedTaps then
+      {
+        name = tap;
+        trusted = true;
+      }
+    else
+      tap;
+
   dev-tools = [
     "kitty" # terminal emulator
     "zen"
@@ -42,6 +55,6 @@ in
     onActivation.autoUpdate = true;
     onActivation.upgrade = true;
     onActivation.cleanup = "zap";
-    taps = builtins.attrNames config.nix-homebrew.taps;
+    taps = builtins.map mkTap (builtins.attrNames config.nix-homebrew.taps);
   };
 }
