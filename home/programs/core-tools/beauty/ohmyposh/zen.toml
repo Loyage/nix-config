@@ -20,6 +20,7 @@ final_space = true
   [[blocks.segments]]
     template = '{{ .Path }}'
     foreground = 'blue'
+    foreground_templates = ['{{ if .Env.SSH_CONNECTION }}#ff5555{{ end }}']
     background = 'transparent'
     type = 'path'
     style = 'plain'

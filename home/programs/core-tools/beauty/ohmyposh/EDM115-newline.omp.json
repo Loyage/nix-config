@@ -46,6 +46,9 @@
           "template": "{{ .UserName }}",
           "foreground": "p:text-fore",
           "background": "#282a36",
+          "background_templates": [
+            "{{ if .SSHSession }}#284a36{{ end }}"
+          ],
           "type": "session",
           "style": "diamond"
         },
