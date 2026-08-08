@@ -119,6 +119,13 @@
           variant = "destructive";
         }
       ];
+      dock = {
+        enabled = true;
+        reserve_space = false;
+        smart_auto_hide = true;
+        icon_size = 36;
+        launcher_position = "start";
+      };
       bar.order = [ "mybar" ];
       bar.mybar = {
         thickness = 40;
