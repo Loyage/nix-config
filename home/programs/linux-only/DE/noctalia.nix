@@ -38,6 +38,7 @@
   programs.noctalia = {
     enable = true;
     settings = {
+      location.auto_locate = true;
       shell = {
         password_style = "random";
         avatar_path = "/home/loyage/nix-config/config/avater.png";
@@ -47,6 +48,10 @@
         screen_corners = {
           enabled = true;
           size = 40;
+        };
+        panel = {
+          session_position = "center";
+          transparency_mode = "soft";
         };
       };
       wallpaper = {
