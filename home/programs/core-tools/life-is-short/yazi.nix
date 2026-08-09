@@ -1,15 +1,26 @@
-{ pkgs, ... }: {
+{ pkgs
+, lib
+, ...
+}: {
   programs.yazi = {
     enable = true;
     shellWrapperName = "y";
-    plugins = {
-      inherit (pkgs.yaziPlugins) full-border git chmod ouch;
+    plugins = with pkgs.yaziPlugins; {
+      git = {
+        package = git;
+        setup = true;
+      };
+      full-border = {
+        package = full-border;
+        setup = true;
+        settings = {
+          type = lib.mkLuaInline "ui.Border.ROUNDED";
+        };
+      };
+      chmod.package = chmod;
+      ouch.package = ouch; # archives
     };
     initLua = ''
-      require("git"):setup()
-      require("full-border"):setup({
-        type = ui.Border.ROUNDED,
-      })
       -- 显示链接目标
       Status:children_add(function(self)
         local h = self._current.hovered
