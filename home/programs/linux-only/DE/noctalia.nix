@@ -145,6 +145,7 @@
         center = [
           "clock"
           "caffeine"
+          "screen-toolkit"
         ];
         end = [
           "media"
@@ -171,7 +172,7 @@
       };
       plugins = {
         auto_update = false;
-        enabled = [ "avivbintangaringga/nix-monitor" ];
+        enabled = [ "avivbintangaringga/nix-monitor" "alexander/screen-toolkit" ];
         source = [
           {
             kind = "git";
@@ -195,6 +196,9 @@
         };
         notifications = {
           hide_when_no_unread = true;
+        };
+        screen-toolkit = {
+          type = "alexander/screen-toolkit:widget";
         };
       };
       #     plugins = {
