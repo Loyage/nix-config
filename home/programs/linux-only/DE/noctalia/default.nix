@@ -11,6 +11,7 @@
     ./idle.nix
     ./bar.nix
     ./widgets.nix
+    ./plugins.nix
   ];
 
   programs.noctalia = {
