@@ -139,12 +139,12 @@ home-clean:
 # 首次部署：通过 nix run 安装 home-manager 并激活配置（x86_64）
 [group('remote')]
 remote-init:
-  nix run home-manager/master -- switch --flake .#remote --show-trace -b backup
+  nix run home-manager/master -- switch --flake .#remote --show-trace --impure -b backup
 
 # 首次部署：aarch64 服务器（AWS Graviton、树莓派等）
 [group('remote')]
 remote-init-arm:
-  nix run home-manager/master -- switch --flake .#remote-aarch64 --show-trace -b backup
+  nix run home-manager/master -- switch --flake .#remote-aarch64 --show-trace --impure -b backup
 
 # 更新远程配置（已安装 home-manager 后使用）
 [group('remote')]

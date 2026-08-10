@@ -108,7 +108,7 @@
       # 生成远程服务器 home-manager 配置的函数
       mkRemoteHome = system:
         let
-          remoteHostFile = ./hosts/remote/host-user.nix;
+          remoteHostFile = builtins.getEnv "PWD" + "/hosts/remote/host-user.nix";
         in
         home-manager.lib.homeManagerConfiguration {
           pkgs = import inputs.nixpkgs-unstable {
@@ -119,7 +119,7 @@
           modules = [
             ./home/remote-server.nix
             agenix.homeManagerModules.default
-          ] ++ (if builtins.pathExists remoteHostFile then [ remoteHostFile ] else [ ]);
+          ] ++ (if builtins.pathExists remoteHostFile then [ (import remoteHostFile) ] else [ ]);
         };
 
       # 本机特定配置目录（gitignored，需要 --impure 构建）

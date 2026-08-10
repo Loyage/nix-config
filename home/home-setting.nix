@@ -5,14 +5,15 @@
 , ...
 }:
 let
-  skillsDir = "${config.home.homeDirectory}/nix-config/config/skills";
+  skillsSourceDir = ../config/skills;
+  skillsTargetDir = "${config.home.homeDirectory}/nix-config/config/skills";
   mkSkillLink = skillPath:
     let
       skillName = builtins.baseNameOf skillPath;
     in
     {
       name = ".agents/skills/${skillName}";
-      value.source = config.lib.file.mkOutOfStoreSymlink "${skillsDir}/${skillName}";
+      value.source = config.lib.file.mkOutOfStoreSymlink "${skillsTargetDir}/${skillName}";
     };
 in
 {
@@ -22,7 +23,7 @@ in
     stateVersion = "25.11";
   };
 
-  home.file = builtins.listToAttrs (builtins.map mkSkillLink (mylib.scanPaths skillsDir));
+  home.file = builtins.listToAttrs (builtins.map mkSkillLink (mylib.scanPaths skillsSourceDir));
 
   programs.home-manager.enable = true;
 }
