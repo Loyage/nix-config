@@ -19,6 +19,7 @@
       };
       chmod.package = chmod;
       ouch.package = ouch; # archives
+      rsync.package = rsync;
     };
     initLua = ''
       -- 显示链接目标
@@ -42,6 +43,11 @@
           on = [ "C" ];
           run = "plugin ouch";
           desc = "Compress with ouch";
+        }
+        {
+          on = [ "R" ];
+          run = "plugin rsync -- --remember";
+          desc = "Copy files using rsync (remember target)";
         }
       ];
     };
