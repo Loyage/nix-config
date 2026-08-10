@@ -227,7 +227,7 @@
       "launch-file-manager" = {
         name = "Launch File Manager";
         key = "Meta+E";
-        command = "dolphin";
+        command = "kitty -e yazi";
       };
     };
 

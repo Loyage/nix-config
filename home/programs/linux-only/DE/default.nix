@@ -1,4 +1,5 @@
-{ pkgs
+{ lib
+, pkgs
 , config
 , mylib
 , ...
@@ -27,6 +28,14 @@ in
     in
     {
       "niri".source = mkLink "${confPath}/niri";
+      "xdg-desktop-portal-termfilechooser/config".text = ''
+        [filechooser]
+        env=TERMCMD='${lib.getExe pkgs.kitty}'
+        cmd='${pkgs.xdg-desktop-portal-termfilechooser}/share/xdg-desktop-portal-termfilechooser/yazi-wrapper.sh'
+        default_dir=$HOME/Downloads
+        open_mode=suggested
+        save_mode=last
+      '';
     };
 
   # 默认浏览器设置为 Zen Browser（影响 xdg-open 等）
@@ -34,6 +43,7 @@ in
     enable = true;
     defaultApplications = {
       "text/html" = "zen.desktop";
+      "inode/directory" = "yazi.desktop";
       "x-scheme-handler/http" = "zen.desktop";
       "x-scheme-handler/https" = "zen.desktop";
       "x-scheme-handler/about" = "zen.desktop";
