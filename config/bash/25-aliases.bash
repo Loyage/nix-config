@@ -69,7 +69,6 @@ alias fcd='cd   "$(find . -type d | fzf --border --preview="eza -la {}")"'
 # nvidia-smi
 alias smi='watch -n 2 -d nvidia-smi'
 
-
 # -----------------------------------------------------
 # Because of laziness
 # -----------------------------------------------------
@@ -108,15 +107,15 @@ fi
 
 # 快速创建 ssh 密钥
 gensshkey() {
-    if [ -z "$1" ]; then
-        echo "Usage:"
-        echo "  ssh-ck server-<server_name>   # Generate key for connecting to a specific server"
-        echo "  ssh-ck github-<github_account> # Generate key for connecting to a GitHub account"
-        return 1  # Exit with an error code to indicate incorrect usage
-    fi
+  if [ -z "$1" ]; then
+    echo "Usage:"
+    echo "  ssh-ck server-<server_name>   # Generate key for connecting to a specific server"
+    echo "  ssh-ck github-<github_account> # Generate key for connecting to a GitHub account"
+    return 1 # Exit with an error code to indicate incorrect usage
+  fi
 
-    user_host=$(whoami)@$(hostname)
-    ssh-keygen -f "$HOME/.ssh/$1" -t rsa -N '' -C "$user_host to $1"
+  user_host=$(whoami)@$(hostname)
+  ssh-keygen -f "$HOME/.ssh/$1" -t rsa -N '' -C "$user_host to $1"
 }
 
 # fastfetch

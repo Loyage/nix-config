@@ -37,9 +37,7 @@ in
       "zsh".source = mkLink "${confPath}/zsh";
       "kitty".source = mkLink "${confPath}/kitty";
       "zathura".source = mkLink "${confPath}/zathura";
-      "opencode/opencode.jsonc" = {
-        source = mkLink "${confPath}/opencode/opencode.jsonc";
-        force = true;
-      };
+      "opencode/opencode.jsonc".source = mkLink "${confPath}/opencode/opencode.jsonc";
+      "opencode/tui.jsonc".source = mkLink "${confPath}/opencode/tui.jsonc";
     };
 }
