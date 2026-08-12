@@ -17,8 +17,8 @@
   };
 
   inputs = {
-    nixpkgs-master.url = "github:nixos/nixpkgs/master";
-    nixpkgs-stable-darwin.url = "github:nixos/nixpkgs/nixpkgs-25.05-darwin";
+    # nixpkgs-master.url = "github:nixos/nixpkgs/master";
+    # nixpkgs-stable-darwin.url = "github:nixos/nixpkgs/nixpkgs-25.05-darwin";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
 
     nix-homebrew.url = "github:zhaofengli-wip/nix-homebrew";
