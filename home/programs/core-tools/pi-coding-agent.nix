@@ -1,6 +1,5 @@
-{
-  inputs,
-  ...
+{ inputs
+, ...
 }:
 {
   programs.pi-coding-agent = {
@@ -29,5 +28,11 @@
         "${inputs.pi-sidebar}"
       ];
     };
+  };
+
+  home.sessionVariables = {
+    PI_SIDEBAR_WIDTH = "40"; # 内容列宽调宽一档，方便看完整文件路径
+    PI_SIDEBAR_GIT_LINES = "15"; # 详细模式多显示几行变更文件
+    PI_SIDEBAR_FULL_HEIGHT = "1"; # 1=全高固定窗口模式（非浮动）
   };
 }
