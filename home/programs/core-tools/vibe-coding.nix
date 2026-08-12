@@ -6,5 +6,6 @@
     claude-code
     codex
     antigravity-cli
+    pi-coding-agent
   ];
 }
