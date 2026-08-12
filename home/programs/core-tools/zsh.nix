@@ -1,7 +1,9 @@
-{ pkgs
-, config
-, ...
-}: {
+{
+  pkgs,
+  config,
+  ...
+}:
+{
   programs.zsh = {
     dotDir = config.home.homeDirectory;
     enable = true;

@@ -2,4 +2,3 @@
 {
   imports = mylib.scanPaths ./.;
 }
-

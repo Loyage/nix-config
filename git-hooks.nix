@@ -12,9 +12,13 @@ git-hooks.lib.${system}.run {
     # Nix 格式化（RFC 风格，与 nixpkgs 一致）
     nixfmt-rfc-style.enable = true;
     # 检测未使用的 Nix 绑定
-    deadnix.enable = true;
+    deadnix = {
+      enable = true;
+      # Nix 模块惯用写法：{ pkgs, myvars, ... } 中未用参数不算死代码
+      settings.noLambdaPatternNames = true;
+    };
     # 删除行尾空白
-    trailing-whitespace.enable = true;
+    trim-trailing-whitespace.enable = true;
     # 确保文件以换行结尾
     end-of-file-fixer.enable = true;
   };

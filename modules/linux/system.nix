@@ -1,6 +1,7 @@
-{ pkgs
-, myvars
-, ...
+{
+  pkgs,
+  myvars,
+  ...
 }:
 {
   system.stateVersion = "24.05"; # 请根据实际 NixOS 版本调整
@@ -38,7 +39,10 @@
       {
         users = [ myvars.username ];
         commands = [
-          { command = "ALL"; options = [ "NOPASSWD" ]; } # Allow all commands without a password
+          {
+            command = "ALL";
+            options = [ "NOPASSWD" ];
+          } # Allow all commands without a password
         ];
       }
     ];

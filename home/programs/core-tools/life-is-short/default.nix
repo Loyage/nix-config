@@ -1,7 +1,9 @@
-{ pkgs
-, mylib
-, ...
-}: {
+{
+  pkgs,
+  mylib,
+  ...
+}:
+{
   imports = mylib.scanPaths ./.;
   home.packages = with pkgs; [
     just

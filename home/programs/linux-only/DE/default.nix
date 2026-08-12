@@ -1,8 +1,9 @@
-{ lib
-, pkgs
-, config
-, mylib
-, ...
+{
+  lib,
+  pkgs,
+  config,
+  mylib,
+  ...
 }:
 let
   hypr-tools = with pkgs; [

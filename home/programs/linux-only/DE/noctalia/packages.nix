@@ -8,7 +8,10 @@
     slurp
     wl-clipboard-rs
     (tesseract.override {
-      enableLanguages = [ "chi_sim" "eng" ];
+      enableLanguages = [
+        "chi_sim"
+        "eng"
+      ];
     })
     imagemagick
     zbar

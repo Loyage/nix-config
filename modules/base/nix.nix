@@ -1,6 +1,7 @@
-{ pkgs
-, myvars
-, ...
+{
+  pkgs,
+  myvars,
+  ...
 }:
 {
   nix = {

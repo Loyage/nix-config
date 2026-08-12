@@ -1,6 +1,8 @@
-{ myvars
-, ...
-}: {
+{
+  myvars,
+  ...
+}:
+{
   programs = {
     gh.enable = true; # GitHub CLI
     lazygit.enable = true; # git TUI tool

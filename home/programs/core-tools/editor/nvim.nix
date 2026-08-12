@@ -1,6 +1,8 @@
-{ pkgs
-, ...
-}: {
+{
+  pkgs,
+  ...
+}:
+{
   # 禁用 Home Manager 的 Neovim 模块以避免配置文件冲突
   programs.neovim.enable = false;
 

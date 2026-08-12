@@ -1,6 +1,8 @@
-{ inputs
-, ...
-}: {
+{
+  inputs,
+  ...
+}:
+{
   imports = [
     ./home-setting.nix
     ./programs/core-tools

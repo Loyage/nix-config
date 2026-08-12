@@ -1,7 +1,8 @@
-{ pkgs
-, config
-, myvars
-, ...
+{
+  pkgs,
+  config,
+  myvars,
+  ...
 }:
 let
   inherit (myvars) username;

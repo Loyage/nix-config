@@ -55,7 +55,7 @@ When adding a new Nix file to a directory that is processed by `mylib.scanPaths 
 Always prefer using variables from `vars/` (e.g., `myvars.username`) instead of hardcoding strings to ensure consistency across all platforms.
 
 ### 3. Home Manager Configuration
-Most user-specific software and configurations should be placed in `home/`. 
+Most user-specific software and configurations should be placed in `home/`.
 - Use `home.packages` for simple binary installations.
 - Use specific modules (e.g., `programs.zsh`) for complex configurations.
 - Use `config.lib.file.mkOutOfStoreSymlink` for linking configurations that need to be mutable or are part of the `config/` directory.

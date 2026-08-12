@@ -1,6 +1,8 @@
-{ pkgs
-, ...
-}: {
+{
+  pkgs,
+  ...
+}:
+{
   home.packages = with pkgs; [
     statix # lints and suggestions for nix
     nix-output-monitor # monitor nix build output in real time

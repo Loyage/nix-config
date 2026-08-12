@@ -1,7 +1,8 @@
-{ pkgs
-, mylib
-, config
-, ...
+{
+  pkgs,
+  mylib,
+  config,
+  ...
 }:
 let
   tools = with pkgs; [

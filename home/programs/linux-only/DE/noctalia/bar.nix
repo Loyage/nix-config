@@ -35,7 +35,11 @@
             id = "g1";
             enabled = true;
             fill = "surface_variant";
-            members = [ "cpu" "ram" "temp" ];
+            members = [
+              "cpu"
+              "ram"
+              "temp"
+            ];
             opacity = 0.4;
             padding = 6.0;
           }

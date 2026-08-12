@@ -1,6 +1,7 @@
-{ lib
-, pkgs
-, ...
+{
+  lib,
+  pkgs,
+  ...
 }:
 let
   commonPackages = with pkgs; [
@@ -32,16 +33,20 @@ let
     expat
   ];
 
-  linuxPackages = commonPackages ++ (with pkgs; [
-    conda
-    stdenv.cc.cc
-    libxcrypt-legacy # 某些旧版 Conda 环境需要
-  ]);
+  linuxPackages =
+    commonPackages
+    ++ (with pkgs; [
+      conda
+      stdenv.cc.cc
+      libxcrypt-legacy # 某些旧版 Conda 环境需要
+    ]);
 
-  darwinPackages = commonPackages ++ (with pkgs; [
-    clang
-    libiconv
-  ]);
+  darwinPackages =
+    commonPackages
+    ++ (with pkgs; [
+      clang
+      libiconv
+    ]);
 
   pythonFHS = pkgs.buildFHSEnv {
     name = "python-dev";

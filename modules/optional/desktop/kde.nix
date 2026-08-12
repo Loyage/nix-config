@@ -60,8 +60,8 @@
   # home.sessionVariables 只写入 ~/.profile，greetd 启动的图形会话不会 source 它
   environment.sessionVariables = {
     GTK_IM_MODULE = "fcitx";
-    QT_IM_MODULE  = "fcitx";
-    XMODIFIERS    = "@im=fcitx";
+    QT_IM_MODULE = "fcitx";
+    XMODIFIERS = "@im=fcitx";
     GLFW_IM_MODULE = "fcitx5"; # kitty 使用 GLFW，需要此变量
   };
 }

@@ -1,7 +1,9 @@
-{ pkgs
-, lib
-, ...
-}: {
+{
+  pkgs,
+  lib,
+  ...
+}:
+{
   programs.yazi = {
     enable = true;
     shellWrapperName = "y";
@@ -35,7 +37,10 @@
     keymap = {
       mgr.prepend_keymap = [
         {
-          on = [ "c" "m" ];
+          on = [
+            "c"
+            "m"
+          ];
           run = "plugin chmod";
           desc = "Chmod on selected files";
         }
@@ -53,7 +58,11 @@
     };
     settings = {
       mgr = {
-        ratio = [ 1 3 3 ];
+        ratio = [
+          1
+          3
+          3
+        ];
         show_hidden = true;
         sort_by = "natural";
         line_mode = "size";

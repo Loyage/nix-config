@@ -1,7 +1,8 @@
-{ pkgs
-, config
-, lib
-, ...
+{
+  pkgs,
+  config,
+  lib,
+  ...
 }:
 {
   # GTK 主题（通过 Home Manager gtk 模块）
@@ -175,8 +176,14 @@
         "Window to Desktop 7" = "Meta+Shift+7";
         "Window to Desktop 8" = "Meta+Shift+8";
         "Window to Desktop 9" = "Meta+Shift+9";
-        "Switch One Desktop Down" = [ "Meta+Page_Down" "Meta+U" ];
-        "Switch One Desktop Up" = [ "Meta+Page_Up" "Meta+I" ];
+        "Switch One Desktop Down" = [
+          "Meta+Page_Down"
+          "Meta+U"
+        ];
+        "Switch One Desktop Up" = [
+          "Meta+Page_Up"
+          "Meta+I"
+        ];
         "Overview" = "Meta+`";
         "Window Grow Horizontal" = "Meta+Equal";
         "Window Shrink Horizontal" = "Meta+Minus";

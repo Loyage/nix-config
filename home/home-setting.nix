@@ -1,13 +1,15 @@
-{ pkgs
-, config
-, mylib
-, myvars
-, ...
+{
+  pkgs,
+  config,
+  mylib,
+  myvars,
+  ...
 }:
 let
   skillsSourceDir = ../config/skills;
   skillsTargetDir = "${config.home.homeDirectory}/nix-config/config/skills";
-  mkSkillLink = skillPath:
+  mkSkillLink =
+    skillPath:
     let
       skillName = builtins.baseNameOf skillPath;
     in
@@ -19,7 +21,8 @@ in
 {
   home = {
     inherit (myvars) username;
-    homeDirectory = if pkgs.stdenv.isDarwin then "/Users/${myvars.username}" else "/home/${myvars.username}";
+    homeDirectory =
+      if pkgs.stdenv.isDarwin then "/Users/${myvars.username}" else "/home/${myvars.username}";
     stateVersion = "25.11";
   };
 

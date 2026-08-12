@@ -1,6 +1,7 @@
-{ pkgs
-, myvars
-, ...
+{
+  pkgs,
+  myvars,
+  ...
 }:
 let
   inherit (myvars) username;
@@ -11,7 +12,10 @@ in
     home = "/home/${username}";
     description = username;
     group = "loyage";
-    extraGroups = [ "wheel" "networkmanager" ];
+    extraGroups = [
+      "wheel"
+      "networkmanager"
+    ];
     shell = pkgs.zsh;
   };
   users.groups.loyage = { };

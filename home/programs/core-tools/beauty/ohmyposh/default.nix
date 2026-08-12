@@ -1,7 +1,9 @@
-{ lib
-, config
-, ...
-}: {
+{
+  lib,
+  config,
+  ...
+}:
+{
   programs.oh-my-posh = {
     enable = true;
     enableBashIntegration = false;

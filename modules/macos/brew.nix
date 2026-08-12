@@ -1,12 +1,14 @@
-{ config
-, ...
+{
+  config,
+  ...
 }:
 let
   trustedTaps = [
     "daipeihust/homebrew-tap"
   ];
 
-  mkTap = tap:
+  mkTap =
+    tap:
     if builtins.elem tap trustedTaps then
       {
         name = tap;

@@ -96,4 +96,3 @@ source <(fzf --zsh)
 # Set-up LANG
 # -----------------------------------------------------
 export LANG=zh_CN.UTF-8
-

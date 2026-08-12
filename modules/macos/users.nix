@@ -1,5 +1,6 @@
-{ myvars
-, ...
+{
+  myvars,
+  ...
 }:
 let
   inherit (myvars) username macosHostname;

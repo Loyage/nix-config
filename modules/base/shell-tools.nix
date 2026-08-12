@@ -1,7 +1,9 @@
-{ pkgs
-, inputs
-, ...
-}: {
+{
+  pkgs,
+  inputs,
+  ...
+}:
+{
   environment.variables.EDITOR = "nvim --clean";
   environment.systemPackages = with pkgs; [
     git
