@@ -1,11 +1,11 @@
 # https://github.com/NixOS/nixpkgs/blob/master/lib/attrsets.nix
 { lib, ... }:
 {
-  # Generate an attribute set from a list.
+  # Generate an attribute set from a list of names and a function.
   #
-  #   lib.genAttrs [ "foo" "bar" ] (name: "x_" + name)
+  #   genAttrs [ "foo" "bar" ] (name: "x_" + name)
   #     => { foo = "x_foo"; bar = "x_bar"; }
-  listToAttrs = lib.genAttrs;
+  genAttrs = lib.genAttrs;
 
   # Update only the values of the given attribute set.
   #
