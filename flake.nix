@@ -90,6 +90,11 @@
       url = "github:jrimmer/pi-sidebar";
       flake = false;
     };
+    pi-codex-goal = {
+      # 纯 TS 无 npm 依赖（要求 Pi >= 0.84.0 / Node 24），pin 到与 npm 0.2.0 对应的 tag。
+      url = "github:fitchmultz/pi-codex-goal/v0.2.0";
+      flake = false;
+    };
   };
 
   # The `outputs` function will return all the build results of the flake.
