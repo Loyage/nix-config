@@ -41,6 +41,30 @@
         "npm:pi-web-access@0.22.0"
         "npm:pi-vision-proxy@1.7.1"
       ];
+
+      # 自定义模型注册，写入 ~/.pi/agent/models.json。
+      # moonshot (Kimi K3) 用作 pi-vision-proxy 识图模型（配合 PI_VISION_PROXY_MODEL）。
+      # API key 待提供：填 provider.apiKey（明文，建议用 sops）或 pi 内 /login 存 auth.json。
+      models = {
+        providers.moonshot = {
+          baseUrl = "https://api.moonshot.ai/v1";
+          api = "openai-completions";
+          models = [
+            {
+              id = "kimi-k3";
+              name = "Kimi K3";
+              reasoning = true; # K3 始终在 thinking 模式运行
+              input = [ "text" "image" ];
+              cost = {
+                input = 3.0;
+                output = 15.0;
+                cacheRead = 0.3;
+              };
+              contextWindow = 1000000; # 1M token 上下文
+            }
+          ];
+        };
+      };
     };
   };
 
@@ -48,5 +72,8 @@
     PI_SIDEBAR_WIDTH = "40"; # 内容列宽调宽一档，方便看完整文件路径
     PI_SIDEBAR_GIT_LINES = "15"; # 详细模式多显示几行变更文件
     PI_SIDEBAR_FULL_HEIGHT = "1"; # 1=全高固定窗口模式（非浮动）
+
+    # 识图模型：moonshot/kimi-k3（pi-vision-proxy 环境变量覆盖，优先级高于 slash 命令配置）
+    PI_VISION_PROXY_MODEL = "moonshot/kimi-k3";
   };
 }

@@ -3,3 +3,7 @@ hosts/local/
 
 # git-hooks.nix 生成的配置文件
 .pre-commit-config.yaml
+
+# nix build / nixos-rebuild 产生的构建产物 symlink
+result
+result-*
