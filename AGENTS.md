@@ -20,7 +20,7 @@ Same `just switch` on macOS runs `darwin-rebuild switch --flake . --impure`; rec
 
 ## Must know
 
-- **`--impure` is required for every build/switch.** `flake.nix` uses `builtins.getEnv` (`mkRemoteHome` reads `PWD` for `hosts/remote/host-user.nix`) and the absolute path `/home/loyage/nix-config/hosts/local`. Without `--impure`, `getEnv` returns `""` and remote host overrides silently vanish.
+- **`--impure` 已非必需（除 remote 部署）**。`flake.nix` 不再使用 `builtins.getEnv`（`mkRemoteHome` 通过 `self` 引用已跟踪的 `hosts/remote/host-user.nix`）；NixOS/macOS 命令已移除 `--impure`。仅 `hosts/remote/host-user.nix` 仍用 `getEnv "USER"/"HOME"`，且带 `mkIf` 非空守卫（纯模式下返回 "" 时优雅降级到 home-manager 默认值），因此 remote 部署建议保留 `--impure` 以获取真实用户信息。
 - **`hosts/local/` is gitignored and mandatory.** To set up a machine: `cp -r hosts/local.example hosts/local`, then edit `host-user.nix` (hostname, GRUB dual-boot UUIDs, resume device). `flake.nix` `throw`s during eval if it's missing. This is where the NixOS hostname comes from — it is not set anywhere in the flake.
 - **`config/` dirs are symlinked at build time** with `config.lib.file.mkOutOfStoreSymlink` from `${HOME}/nix-config/config` (hardcoded in `home/programs/core-tools/default.nix`, `home/programs/linux-only/DE/default.nix`, `home/home-setting.nix`, fcitx5). The repo must be checked out at `~/nix-config` on every target machine or those symlinks break.
 - **`mylib.scanPaths` auto-imports** every `.nix` file and subdirectory of a dir, excluding `default.nix` (see `lib/default.nix`). Adding `home/programs/<layer>/<name>.nix` or a module file picks it up automatically; import order is alphabetical.

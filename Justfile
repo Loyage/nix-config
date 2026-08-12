@@ -31,23 +31,23 @@ deps:
 [group('rebuild')]
 [linux]
 switch:
-  sudo nixos-rebuild switch --flake .#nixos --impure --show-trace
+  sudo nixos-rebuild switch --flake .#nixos --show-trace
 
 # 构建并切换 NixOS 配置 (使用测试通道)
 [group('rebuild')]
 [linux]
 switch-test:
-  sudo nixos-rebuild test --flake .#nixos --impure
+  sudo nixos-rebuild test --flake .#nixos
 
 [group('rebuild')]
 [linux]
 switch-proxy:
-  sudo ALL_PROXY=http://127.0.0.1:7897 nixos-rebuild switch --flake .#nixos --impure --show-trace
+  sudo ALL_PROXY=http://127.0.0.1:7897 nixos-rebuild switch --flake .#nixos --show-trace
 
 [group('rebuild')]
 [linux]
 switch-boot:
-  sudo nixos-rebuild boot --flake .#nixos --impure
+  sudo nixos-rebuild boot --flake .#nixos
 
 # 查看 NixOS generations
 [group('rebuild')]
@@ -63,7 +63,7 @@ generations:
 [group('rebuild')]
 [macos]
 switch:
-  sudo darwin-rebuild switch --flake . --show-trace --impure
+  sudo darwin-rebuild switch --flake . --show-trace
 
 # 查看 macOS generations
 [group('rebuild')]
@@ -74,7 +74,7 @@ generations:
 [group('rebuild')]
 [macos]
 switch-proxy:
-  sudo ALL_PROXY=http://127.0.0.1:7897 darwin-rebuild switch --flake . --show-trace --impure
+  sudo ALL_PROXY=http://127.0.0.1:7897 darwin-rebuild switch --flake . --show-trace
 
 # 清理旧的 macOS generations
 [group('rebuild')]

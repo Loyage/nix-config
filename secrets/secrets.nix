@@ -1,5 +1,5 @@
 let
-  myvars = import ../vars {};
+  myvars = import ../vars;
   keys = myvars.publicKeys;
 in
 {

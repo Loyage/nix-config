@@ -99,7 +99,7 @@
     let
       inherit (inputs.nixpkgs) lib;
       mylib = import ./lib { inherit lib; };
-      myvars = import ./vars {};
+      myvars = import ./vars;
 
       # specialArgs 内的参数可以在各个模块中访问到，只需要你添加到函数输入变量中即可
       specialArgs =
@@ -108,7 +108,8 @@
       # 生成远程服务器 home-manager 配置的函数
       mkRemoteHome = system:
         let
-          remoteHostFile = builtins.getEnv "PWD" + "/hosts/remote/host-user.nix";
+          # host-user.nix 已跟踪在 git 中，可通过 self 直接引用（无需 getEnv PWD）
+          remoteHostFile = self + "/hosts/remote/host-user.nix";
         in
         home-manager.lib.homeManagerConfiguration {
           pkgs = import inputs.nixpkgs-unstable {
