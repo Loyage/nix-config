@@ -174,13 +174,8 @@
             };
           }
         ]
-        ++ (
-          # 导入 hosts/local/ 中所有 .nix 文件（硬件配置、主机名等）
-          if builtins.pathExists localHostDir then
-            mylib.scanPaths localHostDir
-          else
-            throw "hosts/local/ 不存在！请执行: cp -r hosts/local.example hosts/local 并编辑配置"
-        );
+        # 导入 hosts/local/ 中所有 .nix 文件（硬件配置、主机名等）
+        ++ mylib.scanPaths localHostDir;
       };
     in
     {
@@ -241,8 +236,8 @@
         ];
       };
 
-      # NixOS 配置（单一配置，本机特定部分在 hosts/local/）
-      nixosConfigurations.nixos = mkNixosSystem;
+      # NixOS 配置（仅当 hosts/local/ 存在时定义，否则 nix flake check 在非 Linux 机器上会失败）
+      nixosConfigurations = if builtins.pathExists localHostDir then { nixos = mkNixosSystem; } else { };
 
       # 远程服务器 home-manager 配置（用于 Ubuntu/Debian 等非 NixOS 系统）
       # 用法：home-manager switch --flake .#remote

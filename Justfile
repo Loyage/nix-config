@@ -31,22 +31,26 @@ deps:
 [group('rebuild')]
 [linux]
 switch:
+  test -d hosts/local || (echo "hosts/local/ 不存在！请执行: cp -r hosts/local.example hosts/local" && exit 1)
   sudo nixos-rebuild switch --flake .#nixos --show-trace
 
 # 构建并切换 NixOS 配置 (使用测试通道)
 [group('rebuild')]
 [linux]
 switch-test:
+  test -d hosts/local || (echo "hosts/local/ 不存在！请执行: cp -r hosts/local.example hosts/local" && exit 1)
   sudo nixos-rebuild test --flake .#nixos
 
 [group('rebuild')]
 [linux]
 switch-proxy:
+  test -d hosts/local || (echo "hosts/local/ 不存在！请执行: cp -r hosts/local.example hosts/local" && exit 1)
   sudo ALL_PROXY=http://127.0.0.1:7897 nixos-rebuild switch --flake .#nixos --show-trace
 
 [group('rebuild')]
 [linux]
 switch-boot:
+  test -d hosts/local || (echo "hosts/local/ 不存在！请执行: cp -r hosts/local.example hosts/local" && exit 1)
   sudo nixos-rebuild boot --flake .#nixos
 
 # 查看 NixOS generations
@@ -113,6 +117,13 @@ optimize:
 [macos]
 lint:
   nix develop -c pre-commit run --all-files
+
+# 运行 nix flake check（评估所有配置 + 构建并运行 pre-commit 检查）
+[group('clean')]
+[linux]
+[macos]
+check:
+  nix flake check
 
 # 安装 git pre-commit hooks（进入 devShell 时也会自动安装）
 [group('clean')]

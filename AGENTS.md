@@ -5,7 +5,7 @@ Cross-platform Nix Flake config: NixOS (x86_64-linux), nix-darwin (aarch64-darwi
 ## Commands (full list in Justfile)
 
 ```bash
-just switch                # NixOS: sudo nixos-rebuild switch --flake .#nixos --impure --show-trace
+just switch                # NixOS: sudo nixos-rebuild switch --flake .#nixos --show-trace
 just switch-test           # apply config without changing boot entry
 just switch-boot           # apply on next boot only
 just up                    # nix flake update --commit-lock-file (commits "flake.lock: Update")
@@ -15,6 +15,7 @@ just remote-init           # first-time server deploy (x86_64); remote-init-arm 
 just remote-switch         # reapply server config after HM installed
 just gc / just optimize    # cleanup
 just lint                  # run pre-commit hooks on all files
+just check                 # nix flake check (all configs + pre-commit checks)
 just hooks-install         # install git pre-commit hooks
 ```
 
@@ -23,7 +24,7 @@ Same `just switch` on macOS runs `darwin-rebuild switch --flake . --impure`; rec
 ## Must know
 
 - **`--impure` 已非必需（除 remote 部署）**。`flake.nix` 不再使用 `builtins.getEnv`（`mkRemoteHome` 通过 `self` 引用已跟踪的 `hosts/remote/host-user.nix`）；NixOS/macOS 命令已移除 `--impure`。仅 `hosts/remote/host-user.nix` 仍用 `getEnv "USER"/"HOME"`，且带 `mkIf` 非空守卫（纯模式下返回 "" 时优雅降级到 home-manager 默认值），因此 remote 部署建议保留 `--impure` 以获取真实用户信息。
-- **`hosts/local/` is gitignored and mandatory.** To set up a machine: `cp -r hosts/local.example hosts/local`, then edit `host-user.nix` (hostname, GRUB dual-boot UUIDs, resume device). `flake.nix` `throw`s during eval if it's missing. This is where the NixOS hostname comes from — it is not set anywhere in the flake.
+- **`hosts/local/` is gitignored and mandatory.** To set up a machine: `cp -r hosts/local.example hosts/local`, then edit `host-user.nix` (hostname, GRUB dual-boot UUIDs, resume device). `nixosConfigurations.nixos` is only defined when this dir exists (so `nix flake check` passes on non-Linux machines); the Justfile `switch*` recipes check for it and print a friendly error. This is where the NixOS hostname comes from — it is not set anywhere in the flake.
 - **`config/` dirs are symlinked at build time** with `config.lib.file.mkOutOfStoreSymlink` from `${HOME}/nix-config/config` (hardcoded in `home/programs/core-tools/default.nix`, `home/programs/linux-only/DE/default.nix`, `home/home-setting.nix`, fcitx5). The repo must be checked out at `~/nix-config` on every target machine or those symlinks break.
 - **`mylib.scanPaths` auto-imports** every `.nix` file and subdirectory of a dir, excluding `default.nix` (see `lib/default.nix`). Adding `home/programs/<layer>/<name>.nix` or a module file picks it up automatically; import order is alphabetical.
 - **`specialArgs`** = `{ inputs, myvars, mylib }` is injected into every module. Prefer `myvars` (username `loyage`, keys, hostnames in `vars/default.nix`) over hardcoded values.
@@ -44,8 +45,8 @@ Same `just switch` on macOS runs `darwin-rebuild switch --flake . --impure`; rec
 
 - Hooks defined in `git-hooks.nix`, exposed via `checks.<system>.pre-commit-check` and `devShells.<system>.default`.
 - `just lint` runs all hooks on all files (`nix develop -c pre-commit run --all-files`).
+- `just check` runs `nix flake check` (evaluates all configs + builds/runs the pre-commit check). `nixosConfigurations` is only defined when `hosts/local/` exists, so `just check` passes on both macOS and NixOS.
 - `just hooks-install` installs the git hook (also auto-installed when entering `nix develop`).
-- `nix flake check` works on the NixOS machine (needs `hosts/local/`); on macOS it fails at `nixosConfigurations` because `hosts/local/` is Linux-only — use `just lint` there instead.
 
 ## Gotchas
 
