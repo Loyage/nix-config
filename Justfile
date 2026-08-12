@@ -31,9 +31,6 @@ deps:
 [group('rebuild')]
 [linux]
 switch:
-  test -d hosts/local || (echo "hosts/local/ 不存在！请执行: cp -r hosts/local.example hosts/local" && exit 1)
-  # --impure 必需：hosts/local 被 gitignore，纯模式下 flake 源码快照看不到该目录，
-  # builtins.pathExists 恒为 false，导致 nixosConfigurations 为空。
   sudo nixos-rebuild switch --flake .#nixos --impure --show-trace
 
 # 构建并切换 NixOS 配置 (使用测试通道)
