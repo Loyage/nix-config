@@ -1,4 +1,3 @@
-{ lib }:
 {
   # 用户信息（所有主机共享）
   username = "loyage";

@@ -1,6 +1,5 @@
 let
-  # Import variables from vars/default.nix
-  myvars = import ../vars { lib = (import <nixpkgs> {}).lib; };
+  myvars = import ../vars {};
   keys = myvars.publicKeys;
 in
 {

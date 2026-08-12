@@ -99,7 +99,7 @@
     let
       inherit (inputs.nixpkgs) lib;
       mylib = import ./lib { inherit lib; };
-      myvars = import ./vars { inherit lib; };
+      myvars = import ./vars {};
 
       # specialArgs 内的参数可以在各个模块中访问到，只需要你添加到函数输入变量中即可
       specialArgs =
