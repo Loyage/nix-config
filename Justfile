@@ -32,26 +32,28 @@ deps:
 [linux]
 switch:
   test -d hosts/local || (echo "hosts/local/ 不存在！请执行: cp -r hosts/local.example hosts/local" && exit 1)
-  sudo nixos-rebuild switch --flake .#nixos --show-trace
+  # --impure 必需：hosts/local 被 gitignore，纯模式下 flake 源码快照看不到该目录，
+  # builtins.pathExists 恒为 false，导致 nixosConfigurations 为空。
+  sudo nixos-rebuild switch --flake .#nixos --impure --show-trace
 
 # 构建并切换 NixOS 配置 (使用测试通道)
 [group('rebuild')]
 [linux]
 switch-test:
   test -d hosts/local || (echo "hosts/local/ 不存在！请执行: cp -r hosts/local.example hosts/local" && exit 1)
-  sudo nixos-rebuild test --flake .#nixos
+  sudo nixos-rebuild test --flake .#nixos --impure
 
 [group('rebuild')]
 [linux]
 switch-proxy:
   test -d hosts/local || (echo "hosts/local/ 不存在！请执行: cp -r hosts/local.example hosts/local" && exit 1)
-  sudo ALL_PROXY=http://127.0.0.1:7897 nixos-rebuild switch --flake .#nixos --show-trace
+  sudo ALL_PROXY=http://127.0.0.1:7897 nixos-rebuild switch --flake .#nixos --impure --show-trace
 
 [group('rebuild')]
 [linux]
 switch-boot:
   test -d hosts/local || (echo "hosts/local/ 不存在！请执行: cp -r hosts/local.example hosts/local" && exit 1)
-  sudo nixos-rebuild boot --flake .#nixos
+  sudo nixos-rebuild boot --flake .#nixos --impure
 
 # 查看 NixOS generations
 [group('rebuild')]
