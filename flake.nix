@@ -6,7 +6,7 @@
       "https://mirror.tuna.tsinghua.edu.cn/nix-channels/store" # Tsinghua University Mirror
       # "https://mirror.sjtu.edu.cn/nix-channels/store" # Shanghai Jiao Tong University Mirror
       "https://cache.nixos.org" # Official NixOS Cache
-      "https://nix-community.cachix.org" #Community Cachix Cache
+      "https://nix-community.cachix.org" # Community Cachix Cache
     ];
     trusted-public-keys = [
       # nix community's cache server public key
@@ -80,6 +80,10 @@
       url = "github:ryantm/agenix";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
+    git-hooks = {
+      url = "github:cachix/git-hooks.nix";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
   };
 
   # The `outputs` function will return all the build results of the flake.
@@ -88,25 +92,41 @@
   # However, `self` is an exception, this special parameter points to the `outputs` itself (self-reference)
   # The `@` syntax here is used to alias the attribute set of the inputs's parameter, making it convenient to use inside the function.
   outputs =
-    inputs @ { self
-    , nixpkgs
-    , nix-darwin
-    , home-manager
-    , nix-homebrew
-    , agenix
-    , ...
+    inputs@{
+      self,
+      nixpkgs,
+      nix-darwin,
+      home-manager,
+      nix-homebrew,
+      agenix,
+      git-hooks,
+      ...
     }:
     let
       inherit (inputs.nixpkgs) lib;
       mylib = import ./lib { inherit lib; };
       myvars = import ./vars;
 
+      systems = [
+        "x86_64-linux"
+        "aarch64-darwin"
+      ];
+      forAllSystems =
+        f:
+        builtins.listToAttrs (
+          map (system: {
+            name = system;
+            value = f system;
+          }) systems
+        );
+      preCommit = import ./git-hooks.nix { inherit self git-hooks; };
+
       # specialArgs 内的参数可以在各个模块中访问到，只需要你添加到函数输入变量中即可
-      specialArgs =
-        { inherit inputs myvars mylib; };
+      specialArgs = { inherit inputs myvars mylib; };
 
       # 生成远程服务器 home-manager 配置的函数
-      mkRemoteHome = system:
+      mkRemoteHome =
+        system:
         let
           # host-user.nix 已跟踪在 git 中，可通过 self 直接引用（无需 getEnv PWD）
           remoteHostFile = self + "/hosts/remote/host-user.nix";
@@ -120,48 +140,62 @@
           modules = [
             ./home/remote-server.nix
             agenix.homeManagerModules.default
-          ] ++ (if builtins.pathExists remoteHostFile then [ (import remoteHostFile) ] else [ ]);
+          ]
+          ++ (if builtins.pathExists remoteHostFile then [ (import remoteHostFile) ] else [ ]);
         };
 
       # 本机特定配置目录（gitignored，需要 --impure 构建）
       # 新机器部署：cp -r hosts/local.example hosts/local && 编辑其中的文件
       localHostDir = /home/loyage/nix-config/hosts/local;
 
-      mkNixosSystem =
-        nixpkgs.lib.nixosSystem {
-          inherit specialArgs;
+      mkNixosSystem = nixpkgs.lib.nixosSystem {
+        inherit specialArgs;
+        system = "x86_64-linux";
+        pkgs = import inputs.nixpkgs-unstable {
           system = "x86_64-linux";
-          pkgs = import inputs.nixpkgs-unstable {
-            system = "x86_64-linux";
-            overlays = import ./overlays inputs;
-            config.allowUnfree = true;
-          };
-          modules = [
-            ./modules/base
-            ./modules/linux
-            ./modules/optional/desktop
-            ./modules/optional/dev/python-dev.nix
-            agenix.nixosModules.default
-
-            home-manager.nixosModules.home-manager
-            {
-              home-manager = {
-                useGlobalPkgs = true;
-                useUserPackages = true;
-                extraSpecialArgs = specialArgs;
-                backupFileExtension = "home-manager.backup";
-                users.${myvars.username} = import ./home/nixos.nix;
-              };
-            }
-          ] ++ (
-            # 导入 hosts/local/ 中所有 .nix 文件（硬件配置、主机名等）
-            if builtins.pathExists localHostDir
-            then mylib.scanPaths localHostDir
-            else throw "hosts/local/ 不存在！请执行: cp -r hosts/local.example hosts/local 并编辑配置"
-          );
+          overlays = import ./overlays inputs;
+          config.allowUnfree = true;
         };
+        modules = [
+          ./modules/base
+          ./modules/linux
+          ./modules/optional/desktop
+          ./modules/optional/dev/python-dev.nix
+          agenix.nixosModules.default
+
+          home-manager.nixosModules.home-manager
+          {
+            home-manager = {
+              useGlobalPkgs = true;
+              useUserPackages = true;
+              extraSpecialArgs = specialArgs;
+              backupFileExtension = "home-manager.backup";
+              users.${myvars.username} = import ./home/nixos.nix;
+            };
+          }
+        ]
+        ++ (
+          # 导入 hosts/local/ 中所有 .nix 文件（硬件配置、主机名等）
+          if builtins.pathExists localHostDir then
+            mylib.scanPaths localHostDir
+          else
+            throw "hosts/local/ 不存在！请执行: cp -r hosts/local.example hosts/local 并编辑配置"
+        );
+      };
     in
     {
+      # pre-commit hooks 检查（nix flake check 会构建并运行）
+      checks = forAllSystems (system: {
+        pre-commit-check = preCommit system;
+      });
+
+      # 开发 shell：进入后自动安装 git pre-commit hooks
+      devShells = forAllSystems (system: {
+        default = inputs.nixpkgs-unstable.legacyPackages.${system}.mkShell {
+          shellHook = (preCommit system).shellHook;
+        };
+      });
+
       # macOS 配置
       darwinConfigurations."${myvars.macosHostname}" = nix-darwin.lib.darwinSystem {
         inherit specialArgs;

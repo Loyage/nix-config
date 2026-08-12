@@ -106,7 +106,21 @@ storage:
 [macos]
 optimize:
   nix-store --optimize
-  
+
+# 运行 pre-commit hooks（格式化 + 检查全部文件）
+[group('clean')]
+[linux]
+[macos]
+lint:
+  nix develop -c pre-commit run --all-files
+
+# 安装 git pre-commit hooks（进入 devShell 时也会自动安装）
+[group('clean')]
+[linux]
+[macos]
+hooks-install:
+  nix develop -c pre-commit install
+
 # ─────────────────────────────────────────────────────────────────────────────
 # Home Manager
 # ─────────────────────────────────────────────────────────────────────────────

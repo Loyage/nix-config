@@ -14,6 +14,8 @@ just home-switch           # home-manager switch --flake . --show-trace
 just remote-init           # first-time server deploy (x86_64); remote-init-arm for aarch64
 just remote-switch         # reapply server config after HM installed
 just gc / just optimize    # cleanup
+just lint                  # run pre-commit hooks on all files
+just hooks-install         # install git pre-commit hooks
 ```
 
 Same `just switch` on macOS runs `darwin-rebuild switch --flake . --impure`; recipes are gated by `[linux]`/`[macos]` attributes.
@@ -34,8 +36,16 @@ Same `just switch` on macOS runs `darwin-rebuild switch --flake . --impure`; rec
 - `home/programs/linux-only` — NixOS-only HM (DE/niri/noctalia, fcitx5, etc.), subdirs scanPath'd too
 - `home/{nixos,mac,remote-server}.nix` — per-platform HM entrypoints
 - `hosts/local{,example}/`, `hosts/remote/` — machine-specific overrides
-- `secrets/` — agenix encrypted `.age` files; public keys in `vars/default.nix`. Note: `secrets/secrets.nix` imports `(import <nixpkgs> {}).lib`, not the flake, so re-encrypt (`agenix -r`) needs the nixpkgs channel.
+- `secrets/` — agenix encrypted `.age` files; public keys in `vars/default.nix`. `secrets/secrets.nix` is pure (imports `../vars` directly, no `<nixpkgs>` channel), so `agenix -r` works without a nixpkgs channel.
 - `pkgs/` — custom derivations (currently only `fcitx5-vinput.nix`, commented out in overlays)
+- `git-hooks.nix` — pre-commit hooks config (nixfmt-rfc-style, deadnix, trim-trailing-whitespace, end-of-file-fixer)
+
+## Pre-commit hooks
+
+- Hooks defined in `git-hooks.nix`, exposed via `checks.<system>.pre-commit-check` and `devShells.<system>.default`.
+- `just lint` runs all hooks on all files (`nix develop -c pre-commit run --all-files`).
+- `just hooks-install` installs the git hook (also auto-installed when entering `nix develop`).
+- `nix flake check` works on the NixOS machine (needs `hosts/local/`); on macOS it fails at `nixosConfigurations` because `hosts/local/` is Linux-only — use `just lint` there instead.
 
 ## Gotchas
 

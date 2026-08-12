@@ -1,10 +1,8 @@
-{ pkgs
-, myvars
-, ...
+{
+  pkgs,
+  myvars,
+  ...
 }:
-let
-  inherit (myvars) username;
-in
 {
   # 基础系统设置
   time.timeZone = "Asia/Shanghai";
