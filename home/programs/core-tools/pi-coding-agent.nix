@@ -29,6 +29,10 @@
         showTerminalProgress = true;
       };
 
+      # 绕过用户全局 ~/.npmrc 的 min-release-age=7（只拒绝 7 天内的新版本），
+      # 否则 pi-web-access@0.22.0 等刚发布的插件会 npm install ETARGET。
+      npmCommand = [ "npm" "--min-release-age=0" ];
+
       # 插件声明：本地 store 路径（flake input，无 npm 依赖）或 npm 源（有依赖，pi 运行期安装）。
       # pi 启动时按 pi-package 规则从这些源收集 extensions/skills。
       packages = [
