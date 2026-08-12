@@ -84,6 +84,12 @@
       url = "github:cachix/git-hooks.nix";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
+    pi-sidebar = {
+      # 注意：@oldsuns/@esso0428 fork 的 compositor.ts 使用 doRender monkey-patch，
+      # 与 pi 0.84.x 的 Proxy 包装不兼容（栈溢出）。原版使用官方 ctx.ui.custom() API。
+      url = "github:jrimmer/pi-sidebar";
+      flake = false;
+    };
   };
 
   # The `outputs` function will return all the build results of the flake.
