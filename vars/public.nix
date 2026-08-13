@@ -18,6 +18,8 @@
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAII5mat02toeqIPmh6hJuWqI0PU2+1N0GxZ5uvxHoZVMQ loyage@thinkpad"
     # MacBook Air (macOS) — ~/.ssh/id_ed25519
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGjwRoaSbb5uRHL2Fr7jIh5XlwVw0tFNX2MOLswyD2Bq loyage@LoyagedeMacBook-Air"
+    # NixOS thinkpad 本机（hostname: nixos）— ~/.ssh/id_ed25519
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBOMetoPGnwCyaaLrTu1e03t0zfJFBtorpauDUwEsFfD loyage@nixos"
   ];
 
   # 本机 authorized_keys（允许哪些公钥 SSH 登录，公钥非机密）
