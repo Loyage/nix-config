@@ -1,5 +1,6 @@
 { inputs
 , pkgs
+, lib
 , ...
 }:
 {
@@ -47,9 +48,12 @@
       # deepseek 是内置 provider：只 override apiKey，内置模型（deepseek-v4-*）保留。
       # apiKey 用 pi 的 "!command" 语法在请求时执行 `cat` 读取 agenix 解密后的机密
       # （/run/agenix/deepseek-api-key，解密自 secrets/deepseek-api-key.age）。
+      # ⚠️ remote 服务器（standalone home-manager）的解密路径不同
+      # （${XDG_RUNTIME_DIR}/agenix/...），由 home/remote-server.nix 覆盖此值。
       models = {
         providers.deepseek = {
-          apiKey = "!cat /run/agenix/deepseek-api-key";
+          # mkDefault：NixOS/macOS 用系统级路径；remote 在 home/remote-server.nix 覆盖
+          apiKey = lib.mkDefault "!cat /run/agenix/deepseek-api-key";
         };
 
         providers.moonshot = {
