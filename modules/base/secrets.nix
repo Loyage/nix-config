@@ -19,4 +19,12 @@
     mode = "0400";
     owner = myvars.username;
   };
+
+  age.secrets.git-crypt-key = {
+    # git-crypt 对称 key，解锁 vars/private.nix（含公网 IP）
+    # 用法：git-crypt unlock /run/agenix/git-crypt-key
+    file = ../../secrets/git-crypt-key.age;
+    mode = "0400";
+    owner = myvars.username;
+  };
 }

@@ -14,6 +14,7 @@ let
     socat # socket cat
     fh # flakehub cli
     gomi # rm to trash
+    git-crypt # 仓库级文件透明加密（vars/private.nix 等私有数据）
     clash-rs
     gnused
     gnutar
