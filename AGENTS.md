@@ -27,7 +27,7 @@ Same `just switch` on macOS runs `darwin-rebuild switch --flake . --impure`; rec
 - **`hosts/local/` is gitignored and mandatory.** To set up a machine: `cp -r hosts/local.example hosts/local`, then edit `host-user.nix` (hostname, GRUB dual-boot UUIDs, resume device). `nixosConfigurations.nixos` is only defined when this dir exists (so `nix flake check` passes on non-Linux machines); the Justfile `switch*` recipes check for it and print a friendly error. This is where the NixOS hostname comes from — it is not set anywhere in the flake.
 - **`config/` dirs are symlinked at build time** with `config.lib.file.mkOutOfStoreSymlink` from `${HOME}/nix-config/config` (hardcoded in `home/programs/core-tools/default.nix`, `home/programs/linux-only/DE/default.nix`, `home/home-setting.nix`, fcitx5). The repo must be checked out at `~/nix-config` on every target machine or those symlinks break.
 - **`mylib.scanPaths` auto-imports** every `.nix` file and subdirectory of a dir, excluding `default.nix` (see `lib/default.nix`). Adding `home/programs/<layer>/<name>.nix` or a module file picks it up automatically; import order is alphabetical.
-- **`specialArgs`** = `{ inputs, myvars, mylib }` is injected into every module. Prefer `myvars` (username `loyage`, keys, hostnames in `vars/default.nix`) over hardcoded values.
+- **`specialArgs`** = `{ inputs, myvars, mylib }` is injected into every module. Prefer `myvars` (username `loyage`, keys, hostnames) over hardcoded values. `vars/` is split: `vars/public.nix`（用户名/公钥等公开数据）+ `vars/private.nix`（含 ssh 公网 IP，**git-crypt 加密**，克隆后需 `git-crypt unlock` 才能 eval）。
 
 ## Structure
 
@@ -37,7 +37,7 @@ Same `just switch` on macOS runs `darwin-rebuild switch --flake . --impure`; rec
 - `home/programs/linux-only` — NixOS-only HM (DE/niri/noctalia, fcitx5, etc.), subdirs scanPath'd too
 - `home/{nixos,mac,remote-server}.nix` — per-platform HM entrypoints
 - `hosts/local{,example}/`, `hosts/remote/` — machine-specific overrides
-- `secrets/` — agenix encrypted `.age` files; public keys in `vars/default.nix`. `secrets/secrets.nix` is pure (imports `../vars` directly, no `<nixpkgs>` channel), so `agenix -r` works without a nixpkgs channel.
+- `secrets/` — agenix encrypted `.age` files; public keys in `vars/public.nix`. `secrets/secrets.nix` is pure (imports `../vars` directly, no `<nixpkgs>` channel), so `agenix -r` works without a nixpkgs channel. `secrets/git-crypt-key.age` is the agenix-encrypted git-crypt key for unlocking `vars/private.nix`.
 - `pkgs/` — custom derivations (currently only `fcitx5-vinput.nix`, commented out in overlays)
 - `git-hooks.nix` — pre-commit hooks config (nixfmt-rfc-style, deadnix, trim-trailing-whitespace, end-of-file-fixer)
 

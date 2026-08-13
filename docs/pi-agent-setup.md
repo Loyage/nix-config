@@ -1,7 +1,7 @@
 # 多机器使用 pi agent（deepseek API key via agenix）
 
 本仓库用 **agenix** 加密存储 pi agent 的 deepseek API key，任何一台新机器只需
-把自己的 ed25519 公钥加进 `vars/default.nix`，部署后即可直接使用 pi。
+把自己的 ed25519 公钥加进 `vars/public.nix`，部署后即可直接使用 pi。
 
 ---
 
@@ -48,13 +48,13 @@ ssh-keygen -t ed25519 -N "" -f ~/.ssh/id_ed25519 -C "$(whoami)@$(hostname)"
 - `-N ""` 必须为空密码：agenix 由 systemd/activation 非交互解密，带密码的私钥无法使用
 - **不要**复制别台机器的私钥过来；每台机器用自己的密钥对
 
-### 2. 把公钥加进 `vars/default.nix`
+### 2. 把公钥加进 `vars/public.nix`
 
 ```bash
 cat ~/.ssh/id_ed25519.pub
 ```
 
-编辑 `vars/default.nix`，把输出的公钥追加到 `publicKeys` 列表：
+编辑 `vars/public.nix`，把输出的公钥追加到 `publicKeys` 列表：
 
 ```nix
 publicKeys = [
@@ -81,10 +81,31 @@ agenix -r    # 系统已装 agenix CLI（或 nix run .#agenix -- -r）
 
 ```bash
 cd ~/nix-config
-git add vars/default.nix secrets/*.age
+git add vars/public.nix secrets/*.age
+# 若新机器也需解密 vars/private.nix（含 ssh 公网 IP），同时在 thinkpad 上：
+# cd secrets && agenix -r   （git-crypt-key.age 会随 publicKeys 重新加密）
 git commit -m "feat(secrets): add <机器名> ed25519 key for agenix"
 git push
 ```
+
+### 4.5 新机器解锁 git-crypt（关键！）
+
+仓库公开，`vars/private.nix`（公网 IP 等）用 **git-crypt** 加密，clone 后是密文，
+必须先解锁才能构建配置：
+
+```bash
+# 获取 keyfile（任选其一）：
+scp thinkpad:/tmp/git-crypt.key ./
+#   或本机 agenix 解密：agenix -d git-crypt-key.age > git-crypt.key（在 secrets/ 目录）
+#   或从密码管理器取出
+
+git-crypt unlock git-crypt.key   # 一次性，之后 git pull 自动维持解密
+rm git-crypt.key                 # 用完即删
+```
+
+> git-crypt key 由 agenix 加密备份在 `secrets/git-crypt-key.age`（本机解密路径
+> `/run/agenix/git-crypt-key`），换新机器时从 thinkpad 导出即可：
+> `git-crypt export-key /tmp/git-crypt.key`。
 
 ### 5. 新机器拉取并部署
 
@@ -192,4 +213,5 @@ git add secrets/db-password.age && just switch
 
 - `secrets/*.age`：加密文件，**可以**提交 git
 - `~/.pi/agent/auth.json`：本机运行时文件（600），包含 `!cat` 命令但不含明文 key，不入库
-- `vars/default.nix` 的 `publicKeys`：公钥，公开无妨
+- `vars/public.nix` 的 `publicKeys`：公钥，公开无妨
+- `vars/private.nix`（含 ssh 公网 IP）：git-crypt 加密，克隆后需解锁
