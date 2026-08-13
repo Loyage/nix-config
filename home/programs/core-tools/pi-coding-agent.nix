@@ -44,11 +44,18 @@
 
       # 自定义模型注册，写入 ~/.pi/agent/models.json。
       # moonshot (Kimi K3) 用作 pi-vision-proxy 识图模型（配合 PI_VISION_PROXY_MODEL）。
-      # API key 待提供：填 provider.apiKey（明文，建议用 sops）或 pi 内 /login 存 auth.json。
+      # deepseek 是内置 provider：只 override apiKey，内置模型（deepseek-v4-*）保留。
+      # apiKey 用 pi 的 "!command" 语法在请求时执行 `cat` 读取 agenix 解密后的机密
+      # （/run/agenix/deepseek-api-key，解密自 secrets/deepseek-api-key.age）。
       models = {
+        providers.deepseek = {
+          apiKey = "!cat /run/agenix/deepseek-api-key";
+        };
+
         providers.moonshot = {
           baseUrl = "https://api.moonshot.ai/v1";
           api = "openai-completions";
+          # kimi-k3 的 API key：pi 内 /login moonshot 存到 auth.json（当前未配置）
           models = [
             {
               id = "kimi-k3";

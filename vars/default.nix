@@ -8,7 +8,10 @@
   macosHostname = "LoyagedeMacBook-Air";
 
   # SSH 公钥（用于 agenix 加密）
+  # ⚠️ 注意：age/agenix 只支持 ed25519 公钥（ssh-rsa 会解密失败），
+  # 每台需要解密机密的主机都要把它的 ed25519 公钥加进这个列表。
   publicKeys = [
-    "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDIAXuxU51HU+F/LtXawz/e4mirwRaLECQsOClxO/hKEXlBqk85YqUcnvFmM/2lMnxLxi63u7Ng/8NT/ZWizZQM+eGslIC7qc8GcEsMpnfv+AHTSk0qpSwhI+CC3r0M0EidA886s7VxUrPwNOFE+rLBk+JdHZR+eHFWDImsYAYMyj98XctdvAkgydjPcTw58RbgkgoLUnDJJ7d33q8o6JDuF014nmfRn7BjBNRXSt/gimILe9tDyUKpu7C+yAlX1jSgmgmLdgGtnT7j5T5blUoUouuxmVeYG+haEiygvZGVmUMFnvQTIbE7mvk4mjkorXHpjxGXGtGfnPAw11ZtX4NODacXArATemJPPDDHgn1QfsPEDaZGBOvolcOdKdlyf2wWOevHgFBN1yJiYoiIPYzRUwJSdb4LU0QPcwBWqL4XGpkby2pkzPV+U56QPafTnHPt+afmHaMOkNBRL9n7q72BxD3Oq9y8e8gyjQ2QEKg1rN9EUFpolkFke3HItycJRLE= loyage@legion"
+    # 本机 thinkpad (NixOS) — ~/.ssh/id_ed25519
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAII5mat02toeqIPmh6hJuWqI0PU2+1N0GxZ5uvxHoZVMQ loyage@thinkpad"
   ];
 }

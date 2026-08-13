@@ -12,10 +12,11 @@
   ];
 
   # You can define secrets here or in other modules.
-  # age.secrets.example = {
-  #   file = ../../secrets/example.age;
-  #   path = "/tmp/example-secret"; # where the secret will be decrypted to
-  #   mode = "0400";
-  #   owner = myvars.username;
-  # };
+  age.secrets.deepseek-api-key = {
+    # pi agent 的 deepseek API key（加密自 secrets/deepseek-api-key.age）
+    file = ../../secrets/deepseek-api-key.age;
+    # 默认 path 为 /run/agenix/deepseek-api-key（symlink → /run/agenix.d/deepseek-api-key）
+    mode = "0400";
+    owner = myvars.username;
+  };
 }
