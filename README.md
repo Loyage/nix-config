@@ -3,7 +3,7 @@
 基于 Nix Flake 的跨平台配置管理，支持 NixOS、macOS (nix-darwin) 和远程 Linux 服务器 (home-manager standalone)。
 
 > 📖 相关文档：
-> - [多机器使用 pi agent（deepseek API key via agenix）](docs/pi-agent-setup.md)
+> - [新机器部署指南（AI Agent 可执行）](docs/new-machine-setup.md) — 新机器完整上线流程（含 git-crypt / agenix）
 
 ## 支持的平台
 
