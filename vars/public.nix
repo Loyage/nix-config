@@ -4,6 +4,11 @@
 
   # 用户信息（所有主机共享）
   username = "loyage";
+
+  # DeepSeek Harness（dev preview 个人测试工具）总开关：
+  # 开启后各机器 home-switch 时自动克隆+构建 ~/deepseek-harness；
+  # 关掉后重新 switch 会自动删除 ~/deepseek-harness 与 ~/.dsh（见 home/programs/core-tools/deepseek-harness.nix）
+  enableDeepseekHarness = true;
   userFullName = "Loyage Mao";
   useremail = "792058350@qq.com";
 
