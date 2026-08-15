@@ -1,7 +1,16 @@
-_: {
+{
+  pkgs,
+  ...
+}:
+{
   imports = [
     ./home-setting.nix
     ./programs/core-tools
+  ];
+
+  # Maple Mono NF CN：neovide / kitty 使用的字体，home-manager 会同步到 ~/Library/Fonts/HomeManager
+  home.packages = with pkgs; [
+    maple-mono.NF-CN
   ];
 
   # yazi on macOS: y 复制文件路径，Y 复制文件内容到剪贴板
