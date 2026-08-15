@@ -1,7 +1,7 @@
 # DeepSeek Harness (dsh) —— 个人测试模块
 #
 # ⚠️ 项目处于早期阶段（dev preview），上游 API/结构随时可能变化，因此本模块采用
-# 「激活期克隆 + 构建」的轻量策略，而不是把整个 JS monorepo 编进 nix store：
+# 「后台克隆 + 构建」的轻量策略，而不是把整个 JS monorepo 编进 nix store：
 #   - 换 pin、上游变动都不需要改 hash / 依赖树，只影响 ~/deepseek-harness 一份本地 checkout
 #   - 关掉开关即可整机清除（激活脚本删除 ~/deepseek-harness 与 ~/.dsh）
 #
@@ -9,12 +9,18 @@
 #   - 全局开关：vars/public.nix 里 enableDeepseekHarness = true/false（所有机器生效）
 #   - 单机覆盖：任意机器配置里设 programs.deepseekHarness.enable（优先级高于默认值）
 #   - 更新：改 programs.deepseekHarness.gitRev（默认固定 commit；改成 "master" 可追踪最新），
-#     然后重新 home-switch / just switch，激活脚本会自动 fetch、checkout、重打补丁、按需重建
+#     然后重新 home-switch / just switch，后台 dsh-setup.service 会自动 fetch、checkout、
+#     重打补丁、按需重建（查看进度：journalctl --user -u dsh-setup -f）
 #   - 启动：~/dsh-lab/dsh-web.sh start（或 startAtBoot = true 开机自启）
 #
 # 已知事项：
 #   - git clone / pnpm install 需要网络；GitHub 不通的机器请配 programs.deepseekHarness.proxy
 #     （如 "http://127.0.0.1:7897"），npm registry 走 ~/.npmrc 或默认源
+#   - 上游要求 pnpm >= 11.7.0（packageManager 字段）；flake overlay 已 pin pnpm_11 到 11.7.0，
+#     因为 11.2.x 解析 pnpm-workspace.yaml 的 allowBuilds 里 file: 协议条目会抛
+#     ERR_PNPM_INVALID_VERSION_UNION
+#   - 安装/更新在 systemd user 服务 dsh-setup 里后台跑（Type=oneshot，TimeoutStartSec=0），
+#     switch 不会被阻塞，也不会因首次 clone/install 超过 5 分钟激活超时被杀
 #   - 上游 rc.5 缺两条 tsconfig paths（directory-picker 两个 client 包），由同目录
 #     dsh-tsconfig.patch 在激活期自动打上；上游修复后会自动跳过
 #   - HMR 服务要求 node 带 --expose-internals（不能走 NODE_OPTIONS），
@@ -183,7 +189,7 @@ in
     enable = lib.mkOption {
       type = types.bool;
       default = myvars.enableDeepseekHarness or false;
-      description = "启用 DeepSeek Harness（激活期克隆+构建；关闭即删除 ~/deepseek-harness 与 ~/.dsh）";
+      description = "启用 DeepSeek Harness（后台服务克隆+构建；关闭即删除 ~/deepseek-harness 与 ~/.dsh）";
     };
     startAtBoot = lib.mkOption {
       type = types.bool;
@@ -227,13 +233,45 @@ in
         executable = true;
       };
 
-      home.activation.deepseekHarness = lib.hm.dag.entryAfter [ "writeBoundary" ] (toString setupScript);
+      # 安装/更新：后台 oneshot 服务，激活只触发不阻塞。
+      # （首次 clone + pnpm install + build 远超 systemd 5 分钟激活超时，同步跑会被杀）
+      systemd.user.services.dsh-setup = lib.mkIf pkgs.stdenv.isLinux {
+        Unit = {
+          Description = "DeepSeek Harness 安装/更新（后台）";
+          After = [ "network-online.target" ];
+          Wants = [ "network-online.target" ];
+        };
+        Service = {
+          Type = "oneshot";
+          TimeoutStartSec = 0; # 不限时
+          ExecStart = toString setupScript;
+        };
+        Install.WantedBy = [ "default.target" ]; # 登录时也会跑（marker 幂等）
+      };
+
+      home.activation.deepseekHarness = lib.hm.dag.entryAfter [ "writeBoundary" ] (
+        if pkgs.stdenv.isLinux then
+          ''
+            systemctl --user start --no-block dsh-setup.service 2>/dev/null || \
+              echo "dsh: 未能后台触发安装（登录后 dsh-setup.service 会自动运行）"
+            echo "dsh: 已后台触发安装/更新，查看进度: journalctl --user -u dsh-setup -f"
+          ''
+        else
+          ''
+            echo "dsh: 后台触发安装/更新（日志: ${logFile}）"
+            (nohup ${setupScript} >>"${logFile}" 2>&1 &)
+          ''
+      );
 
       # Linux: systemd user 服务（startAtBoot 才开机自启，否则用 dsh-web.sh 手动启停）
       systemd.user.services.dsh-web = lib.mkIf pkgs.stdenv.isLinux {
         Unit = {
           Description = "DeepSeek Harness Web UI";
-          After = [ "network-online.target" ];
+          After = [
+            "network-online.target"
+            "dsh-setup.service"
+          ];
+          Wants = [ "dsh-setup.service" ];
         };
         Service = {
           Type = "simple";
@@ -261,7 +299,13 @@ in
     # 关闭开关：激活时清除所有痕迹
     (lib.mkIf (!cfg.enable) {
       home.activation.deepseekHarness = lib.hm.dag.entryAfter [ "writeBoundary" ] (
-        toString cleanupScript
+        if pkgs.stdenv.isLinux then
+          ''
+            systemctl --user stop dsh-setup.service dsh-web.service 2>/dev/null || true
+          ''
+          + toString cleanupScript
+        else
+          toString cleanupScript
       );
     })
   ];

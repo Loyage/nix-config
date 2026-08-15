@@ -31,26 +31,26 @@ deps:
 [group('rebuild')]
 [linux]
 switch:
-  sudo nixos-rebuild switch --flake .#nixos --impure --show-trace
+  sudo nixos-rebuild switch --flake .#nixos --impure --show-trace --print-build-logs
 
 # 构建并切换 NixOS 配置 (使用测试通道)
 [group('rebuild')]
 [linux]
 switch-test:
   test -d hosts/local || (echo "hosts/local/ 不存在！请执行: cp -r hosts/local.example hosts/local" && exit 1)
-  sudo nixos-rebuild test --flake .#nixos --impure
+  sudo nixos-rebuild test --flake .#nixos --impure --print-build-logs
 
 [group('rebuild')]
 [linux]
 switch-proxy:
   test -d hosts/local || (echo "hosts/local/ 不存在！请执行: cp -r hosts/local.example hosts/local" && exit 1)
-  sudo ALL_PROXY=http://127.0.0.1:7897 nixos-rebuild switch --flake .#nixos --impure --show-trace
+  sudo ALL_PROXY=http://127.0.0.1:7897 nixos-rebuild switch --flake .#nixos --impure --show-trace --print-build-logs
 
 [group('rebuild')]
 [linux]
 switch-boot:
   test -d hosts/local || (echo "hosts/local/ 不存在！请执行: cp -r hosts/local.example hosts/local" && exit 1)
-  sudo nixos-rebuild boot --flake .#nixos --impure
+  sudo nixos-rebuild boot --flake .#nixos --impure --print-build-logs
 
 # 查看 NixOS generations
 [group('rebuild')]

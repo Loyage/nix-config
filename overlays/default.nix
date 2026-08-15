@@ -2,7 +2,31 @@ inputs: [
   inputs.nix-openclaw.overlays.default
 
   (final: prev: {
+    # 上游 deepseek-harness 的 packageManager 要求 pnpm@11.7.0；11.2.x 解析
+    # allowBuilds 里的 file: 协议 key 会抛 ERR_PNPM_INVALID_VERSION_UNION，
+    # 11.7.0 起才支持 depPath 形式的条目，故 pin 到 11.7.0。
     pnpm_11 = prev.pnpm_11.overrideAttrs (old: {
+      version = "11.7.0";
+      src = final.fetchurl {
+        url = "https://registry.npmjs.org/pnpm/-/pnpm-11.7.0.tgz";
+        hash = "sha256-3q+n7JihIYtqBHKJuS++I5XB4i00lbtxFlMBMhjuFe4=";
+      };
+
+      # nixpkgs 的 installCheck 硬编码了版本号，需同步
+      installCheckPhase = ''
+        runHook preInstallCheck
+        tmp="$(mktemp -d)"
+        mkdir -p "$tmp/home" "$tmp/project"
+        printf '{"packageManager":"pnpm@11.99.99"}\n' > "$tmp/project/package.json"
+        (
+          cd "$tmp/project"
+          version="$(HOME="$tmp/home" $out/bin/pnpm --version)"
+          test "$version" = "11.7.0"
+        )
+        rm -rf "$tmp"
+        runHook postInstallCheck
+      '';
+
       nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [
         final.makeWrapper
       ];
