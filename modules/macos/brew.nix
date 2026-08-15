@@ -18,9 +18,9 @@ let
       tap;
 
   dev-tools = [
-    "kitty" # terminal emulator
+    # "kitty"
+    # "typora"
     "zen"
-    "typora"
     "codex-app"
   ];
   utilities = [
@@ -29,11 +29,11 @@ let
     "the-unarchiver"
     "iina" # media player
     "transmission" # bit torrent client
-    "obs"
+    # "obs"
   ];
   social-media = [
-    "wechat"
-    "qq"
+    # "wechat"
+    # "qq"
     # "discord"
     # "telegram"
   ];
@@ -41,8 +41,8 @@ let
     "neteasemusic"
   ];
   productivity = [
-    "zotero"
-    "wpsoffice-cn"
+    # "zotero"
+    # "wpsoffice-cn"
   ];
 in
 {

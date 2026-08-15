@@ -6,9 +6,6 @@
 {
   imports = mylib.scanPaths ./.;
   home.packages = with pkgs; [
-    firefox
-    hardinfo2
-    bluetuith
-    usbutils
+    kitty
   ];
 }
