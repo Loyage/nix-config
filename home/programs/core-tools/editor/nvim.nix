@@ -17,7 +17,8 @@
     stylua
     lua-language-server
     nil
-    nixpkgs-fmt
+    # 与 pre-commit hook 同款 formatter（nixfmt == nixfmt-rfc-style）
+    nixfmt
   ];
 
   # 手动设置默认编辑器环境变量
