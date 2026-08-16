@@ -5,9 +5,12 @@
 #   - 换 pin、上游变动都不需要改 hash / 依赖树，只影响 ~/deepseek-harness 一份本地 checkout
 #   - 关掉开关即可整机清除（激活脚本删除 ~/deepseek-harness 与 ~/.dsh）
 #
-# 用法：
-#   - 全局开关：vars/public.nix 里 enableDeepseekHarness = true/false（所有机器生效）
-#   - 单机覆盖：任意机器配置里设 programs.deepseekHarness.enable（优先级高于默认值）
+# 用法（默认关闭，按主机显式开启）：
+#   - 在目标主机的配置里设 programs.deepseekHarness.enable = true：
+#       NixOS 本机 → hosts/local/host-user.nix（当前只有 legion 开启）
+#       远程服务器 → hosts/remote/ 下对应主机配置
+#       macOS      → home/mac.nix
+#   - 其余主机保持默认 false，既不克隆也不构建，switch 时自动清理旧痕迹
 #   - 更新：改 programs.deepseekHarness.gitRev（默认固定 commit；改成 "master" 可追踪最新），
 #     然后重新 home-switch / just switch，后台 dsh-setup.service 会自动 fetch、checkout、
 #     重打补丁、按需重建（查看进度：journalctl --user -u dsh-setup -f）
@@ -30,7 +33,6 @@
   config,
   pkgs,
   lib,
-  myvars,
   ...
 }:
 
@@ -188,8 +190,8 @@ in
   options.programs.deepseekHarness = {
     enable = lib.mkOption {
       type = types.bool;
-      default = myvars.enableDeepseekHarness or false;
-      description = "启用 DeepSeek Harness（后台服务克隆+构建；关闭即删除 ~/deepseek-harness 与 ~/.dsh）";
+      default = false;
+      description = "启用 DeepSeek Harness（后台服务克隆+构建；关闭即删除 ~/deepseek-harness 与 ~/.dsh）。默认关闭，只在目标主机（如 legion）显式开启";
     };
     startAtBoot = lib.mkOption {
       type = types.bool;

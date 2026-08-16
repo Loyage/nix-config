@@ -15,6 +15,11 @@
 | 远程服务器 | Linux x86_64 | `homeConfigurations.remote` |
 | 远程服务器 (ARM) | Linux aarch64 | `homeConfigurations.remote-aarch64` |
 
+> **DeepSeek Harness（dsh）默认全机关闭**，只在 legion 一台主机上构建
+> （`hosts/local/host-user.nix` 里 `programs.deepseekHarness.enable = true`，见
+> `home/programs/core-tools/deepseek-harness.nix`）。其他机器 switch 时不会克隆/构建，
+> 并会自动清理 `~/deepseek-harness` 与 `~/.dsh`。
+
 ---
 
 ## 本地机器
