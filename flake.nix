@@ -100,7 +100,7 @@
       # ⚠️ 上传 GitHub 后务必改为：url = "github:<你的用户名>/deepseek-harness-flake";
       #    然后 nix flake lock --update-input deepseek-harness-flake
       # （用绝对路径：相对 path: 会在纯模式下被解析到 /nix/store 而报错）
-      url = "path:/home/loyage/deepseek-harness-flake";
+      url = "github:Loyage/deepseek-harness-flake";
     };
   };
 

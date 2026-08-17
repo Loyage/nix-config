@@ -118,14 +118,17 @@
         "nixpkgs": "nixpkgs_2"
       },
       "locked": {
-        "lastModified": 1786948189,
-        "narHash": "sha256-Vd3RIScuyf+9kEXLh1e0f207E9/w1iYN2Fp2G6yXJ+M=",
-        "path": "/home/loyage/deepseek-harness-flake",
-        "type": "path"
+        "lastModified": 1786948480,
+        "narHash": "sha256-oKFOCTPYH39SvNTS3gqk3ODL/jUgliyYFXwJ5am3+BQ=",
+        "owner": "Loyage",
+        "repo": "deepseek-harness-flake",
+        "rev": "f888a34d5cba306976cddb1b8f0bb9e75627fa7d",
+        "type": "github"
       },
       "original": {
-        "path": "/home/loyage/deepseek-harness-flake",
-        "type": "path"
+        "owner": "Loyage",
+        "repo": "deepseek-harness-flake",
+        "type": "github"
       }
     },
     "fcitx5-vinput": {
