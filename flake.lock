@@ -112,17 +112,35 @@
         "type": "github"
       }
     },
+    "deepseek-harness": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1786621126,
+        "narHash": "sha256-ZPGCNoPXVjP76Tm/tFPDX2X95cd83M4iHLmVP5dR+Ps=",
+        "owner": "deepseek-ai",
+        "repo": "deepseek-harness",
+        "rev": "47f943859bef60e4160492346772ded9b24f765a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "deepseek-ai",
+        "repo": "deepseek-harness",
+        "rev": "47f943859bef60e4160492346772ded9b24f765a",
+        "type": "github"
+      }
+    },
     "deepseek-harness-flake": {
       "inputs": {
+        "deepseek-harness": "deepseek-harness",
         "home-manager": "home-manager_2",
         "nixpkgs": "nixpkgs_2"
       },
       "locked": {
-        "lastModified": 1786948480,
-        "narHash": "sha256-oKFOCTPYH39SvNTS3gqk3ODL/jUgliyYFXwJ5am3+BQ=",
+        "lastModified": 1786974021,
+        "narHash": "sha256-maOdeh4DmRz8vwdkCzt1LQk2XKkJVyBqkPQMMif8erg=",
         "owner": "Loyage",
         "repo": "deepseek-harness-flake",
-        "rev": "f888a34d5cba306976cddb1b8f0bb9e75627fa7d",
+        "rev": "5e43b2c63aef5b31bcfe1e749d0a00d1d6ba4360",
         "type": "github"
       },
       "original": {
