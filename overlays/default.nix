@@ -1,6 +1,4 @@
 inputs: [
-  inputs.nix-openclaw.overlays.default
-
   (final: prev: {
     qq = prev.qq.overrideAttrs (_old: {
       version = "3.2.31-2026-07-20";
