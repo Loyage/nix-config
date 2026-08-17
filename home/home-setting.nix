@@ -26,7 +26,10 @@ in
     stateVersion = "25.11";
   };
 
-  home.file = builtins.listToAttrs (builtins.map mkSkillLink (mylib.scanPaths skillsSourceDir));
+  home.file = builtins.listToAttrs (builtins.map mkSkillLink (mylib.scanPaths skillsSourceDir)) // {
+    # Pi Agent 全局指令文件
+    ".pi/agent/AGENTS.md".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nix-config/config/pi/AGENTS.md";
+  };
 
   programs.home-manager.enable = true;
 }
