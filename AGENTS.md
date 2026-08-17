@@ -52,6 +52,6 @@ Same `just switch` on macOS runs `darwin-rebuild switch --flake . --impure`; rec
 
 - **新建的文件必须 `git add` 之后才会被 build 过程看到。** Flake 构建只读取 git 跟踪的文件（flake source tree = git-tracked files），`nixos-rebuild`/`home-manager` 以及 `mylib.scanPaths`、`mkOutOfStoreSymlink` 都会静默忽略未跟踪的新文件。改了新模块/新文件后 `just switch` 没生效，先 `git status` 检查是否已 `git add`。
 - No automated tests. Validation flow: `just switch-test`, verify manually, then `just switch`.
-- `flake.nix` overlays pin custom `qq` / `wechat` / `pnpm_11` builds with exact hashes — update the hash when bumping versions.
+- `flake.nix` overlays pin custom `qq` / `wechat` builds with exact hashes — update the hash when bumping versions. (deepseek-harness 的 `pnpm_11` pin 已随模块迁出到独立 flake `../deepseek-harness-flake` 的 `lib/pnpm.nix`，不在此处维护。)
 - Remote `hosts/remote/host-user.nix` forces `home.username`/`home.homeDirectory` from `USER`/`HOME` env, so run remote commands as the target user.
 - Commit messages are short and descriptive; recent history uses `feat/fix(<scope>)` prefixes, lockfile bumps read `flake.lock: Update` (from `just up`), and occasional Chinese messages are intentional.

@@ -7,7 +7,8 @@
 
   # DeepSeek Harness（dev preview 个人测试工具）默认关闭：
   # 只在目标主机（如 legion）的 hosts/local/host-user.nix 里显式
-  # programs.deepseekHarness.enable = true（见 home/programs/core-tools/deepseek-harness.nix）
+  # programs.deepseekHarness.enable = true（模块来自独立 flake：
+  # ../deepseek-harness-flake，见 flake.nix 的 deepseek-harness-flake input）
   userFullName = "Loyage Mao";
   useremail = "792058350@qq.com";
 

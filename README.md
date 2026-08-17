@@ -16,8 +16,9 @@
 | 远程服务器 (ARM) | Linux aarch64 | `homeConfigurations.remote-aarch64` |
 
 > **DeepSeek Harness（dsh）默认全机关闭**，只在 legion 一台主机上构建
-> （`hosts/local/host-user.nix` 里 `programs.deepseekHarness.enable = true`，见
-> `home/programs/core-tools/deepseek-harness.nix`）。其他机器 switch 时不会克隆/构建，
+> （`hosts/local/host-user.nix` 里 `programs.deepseekHarness.enable = true`）。
+> 模块已独立为单独 flake：`../deepseek-harness-flake`（上传 GitHub 后改
+> `flake.nix` 里 `deepseek-harness-flake` input 的 URL）。其他机器 switch 时不会克隆/构建，
 > 并会自动清理 `~/deepseek-harness` 与 `~/.dsh`。
 
 ---

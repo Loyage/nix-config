@@ -95,6 +95,13 @@
       url = "github:fitchmultz/pi-codex-goal/v0.2.0";
       flake = false;
     };
+    deepseek-harness-flake = {
+      # DeepSeek Harness（dsh）home-manager 模块，独立 flake（~ 下单独 git 仓库）
+      # ⚠️ 上传 GitHub 后务必改为：url = "github:<你的用户名>/deepseek-harness-flake";
+      #    然后 nix flake lock --update-input deepseek-harness-flake
+      # （用绝对路径：相对 path: 会在纯模式下被解析到 /nix/store 而报错）
+      url = "path:/home/loyage/deepseek-harness-flake";
+    };
   };
 
   # The `outputs` function will return all the build results of the flake.

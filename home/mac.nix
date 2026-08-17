@@ -1,11 +1,13 @@
 {
   pkgs,
+  inputs,
   ...
 }:
 {
   imports = [
     ./home-setting.nix
     ./programs/core-tools
+    inputs.deepseek-harness-flake.homeModules.default
   ];
 
   # Maple Mono NF CN：neovide / kitty 使用的字体，home-manager 会同步到 ~/Library/Fonts/HomeManager
