@@ -22,8 +22,8 @@
       lastChangelogVersion = "0.84.0";
 
       theme = "dark";
-      defaultProvider = "deepseek";
-      defaultModel = "deepseek-v4-flash";
+      defaultProvider = "xiaomi";
+      defaultModel = "mimo-v2.5";
       defaultThinkingLevel = "high";
 
       terminal = {
@@ -57,6 +57,10 @@
         };
 
         providers.mimo = {
+          apiKey = lib.mkDefault "!cat /run/agenix/mimo-api-key";
+        };
+
+        providers.xiaomi = {
           apiKey = lib.mkDefault "!cat /run/agenix/mimo-api-key";
         };
 
