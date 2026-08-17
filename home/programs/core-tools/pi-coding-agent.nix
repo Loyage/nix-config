@@ -56,6 +56,10 @@
           apiKey = lib.mkDefault "!cat /run/agenix/deepseek-api-key";
         };
 
+        providers.mimo = {
+          apiKey = lib.mkDefault "!cat /run/agenix/mimo-api-key";
+        };
+
         providers.moonshot = {
           baseUrl = "https://api.moonshot.ai/v1";
           api = "openai-completions";

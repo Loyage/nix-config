@@ -20,6 +20,13 @@
     owner = myvars.username;
   };
 
+  age.secrets.mimo-api-key = {
+    # pi agent 的 mimo API key（加密自 secrets/mimo-api-key.age）
+    file = ../../secrets/mimo-api-key.age;
+    mode = "0400";
+    owner = myvars.username;
+  };
+
   age.secrets.git-crypt-key = {
     # git-crypt 对称 key，解锁 vars/private.nix（含公网 IP）
     # 用法：git-crypt unlock /run/agenix/git-crypt-key
