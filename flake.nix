@@ -62,6 +62,10 @@
       url = "github:noctalia-dev/noctalia";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
+    hibiki = {
+      url = "github:linuxmobile/hibiki";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
     nix-openclaw = {
       url = "github:openclaw/nix-openclaw";
       inputs.nixpkgs.follows = "nixpkgs-unstable";

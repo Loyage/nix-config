@@ -30,6 +30,7 @@ binds {
     Mod+Shift+Return { spawn "kitty" "--class=kitty-half"; }
     CTRL+Mod+Period { spawn "kitty" "-e" "btop"; }
     Mod+B { spawn "zen"; }
+    Mod+Shift+K hotkey-overlay-title="keystroke-visualizer" { spawn "hibiki"; }
 
     // Use spawn-sh to run a shell command. Do this if you need pipes, multiple commands, etc.
     // Note: the entire command goes as a single argument. It's passed verbatim to `sh -c`.

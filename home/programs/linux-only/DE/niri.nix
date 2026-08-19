@@ -1,11 +1,13 @@
 {
   pkgs,
+  inputs,
   ...
 }:
 {
   home.packages = with pkgs; [
     # Niri v25.08 will create X11 sockets on disk, export $DISPLAY, and spawn `xwayland-satellite` on-demand when an X11 client connects
     xwayland-satellite
+    inputs.hibiki.packages.${pkgs.stdenv.hostPlatform.system}.default
   ];
 
   systemd.user.services.niri-flake-polkit = {
