@@ -1,7 +1,8 @@
-{ inputs
-, pkgs
-, lib
-, ...
+{
+  inputs,
+  pkgs,
+  lib,
+  ...
 }:
 {
   programs.pi-coding-agent = {
@@ -32,7 +33,10 @@
 
       # 绕过用户全局 ~/.npmrc 的 min-release-age=7（只拒绝 7 天内的新版本），
       # 否则 pi-web-access@0.22.0 等刚发布的插件会 npm install ETARGET。
-      npmCommand = [ "npm" "--min-release-age=0" ];
+      npmCommand = [
+        "npm"
+        "--min-release-age=0"
+      ];
 
       # 插件声明：本地 store 路径（flake input，无 npm 依赖）或 npm 源（有依赖，pi 运行期安装）。
       # pi 启动时按 pi-package 规则从这些源收集 extensions/skills。
@@ -43,46 +47,48 @@
         "npm:pi-vision-proxy@1.7.1"
       ];
 
-      # 自定义模型注册，写入 ~/.pi/agent/models.json。
-      # moonshot (Kimi K3) 用作 pi-vision-proxy 识图模型（配合 PI_VISION_PROXY_MODEL）。
-      # deepseek 是内置 provider：只 override apiKey，内置模型（deepseek-v4-*）保留。
-      # apiKey 用 pi 的 "!command" 语法在请求时执行 `cat` 读取 agenix 解密后的机密
-      # （/run/agenix/deepseek-api-key，解密自 secrets/deepseek-api-key.age）。
-      # ⚠️ remote 服务器（standalone home-manager）的解密路径不同
-      # （${XDG_RUNTIME_DIR}/agenix/...），由 home/remote-server.nix 覆盖此值。
-      models = {
-        providers.deepseek = {
-          # mkDefault：NixOS/macOS 用系统级路径；remote 在 home/remote-server.nix 覆盖
-          apiKey = lib.mkDefault "!cat /run/agenix/deepseek-api-key";
-        };
+    };
 
-        providers.mimo = {
-          apiKey = lib.mkDefault "!cat /run/agenix/mimo-api-key";
-        };
+    # 自定义模型注册：必须用模块的顶层 `models` option，写入 ~/.pi/agent/models.json。
+    # ⚠️ 不能放进 `settings`——pi 只从 models.json 读自定义 provider/apiKey，
+    # settings.json 里的同名键会被静默忽略。
+    # deepseek / xiaomi 都是 pi 内置 provider：只 override apiKey，内置模型（
+    # deepseek-v4-*、mimo-v2.5 等）保留；apiKey 用 "!command" 语法在请求时执行
+    # `cat` 读取 agenix 解密后的机密（/run/agenix/...，解密自 secrets/*.age）。
+    # ⚠️ remote 服务器（standalone home-manager）的解密路径不同
+    # （${XDG_RUNTIME_DIR}/agenix/...），由 home/remote-server.nix 覆盖此值。
+    models = {
+      providers.deepseek = {
+        # mkDefault：NixOS/macOS 用系统级路径；remote 在 home/remote-server.nix 覆盖
+        apiKey = lib.mkDefault "!cat /run/agenix/deepseek-api-key";
+      };
 
-        providers.xiaomi = {
-          apiKey = lib.mkDefault "!cat /run/agenix/mimo-api-key";
-        };
+      providers.xiaomi = {
+        apiKey = lib.mkDefault "!cat /run/agenix/mimo-api-key";
+      };
 
-        providers.moonshot = {
-          baseUrl = "https://api.moonshot.ai/v1";
-          api = "openai-completions";
-          # kimi-k3 的 API key：pi 内 /login moonshot 存到 auth.json（当前未配置）
-          models = [
-            {
-              id = "kimi-k3";
-              name = "Kimi K3";
-              reasoning = true; # K3 始终在 thinking 模式运行
-              input = [ "text" "image" ];
-              cost = {
-                input = 3.0;
-                output = 15.0;
-                cacheRead = 0.3;
-              };
-              contextWindow = 1000000; # 1M token 上下文
-            }
-          ];
-        };
+      providers.moonshot = {
+        baseUrl = "https://api.moonshot.ai/v1";
+        api = "openai-completions";
+        # kimi-k3 的 API key：pi 内 /login moonshot 存到 auth.json（当前未配置）
+        models = [
+          {
+            id = "kimi-k3";
+            name = "Kimi K3";
+            reasoning = true; # K3 始终在 thinking 模式运行
+            input = [
+              "text"
+              "image"
+            ];
+            cost = {
+              input = 3.0;
+              output = 15.0;
+              cacheRead = 0.3;
+              cacheWrite = 0.0; # Moonshot 缓存未命中按 input 价计费，无单独写缓存费率
+            };
+            contextWindow = 1000000; # 1M token 上下文
+          }
+        ];
       };
     };
   };

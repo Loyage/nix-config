@@ -21,9 +21,9 @@
   };
 
   # remote 上覆盖 pi 的 apiKey 路径，指向 home-manager 实际解密位置
-  programs.pi-coding-agent.settings.models.providers.deepseek.apiKey =
+  programs.pi-coding-agent.models.providers.deepseek.apiKey =
     "!cat ${config.age.secrets.deepseek-api-key.path}";
 
-  programs.pi-coding-agent.settings.models.providers.mimo.apiKey =
+  programs.pi-coding-agent.models.providers.xiaomi.apiKey =
     "!cat ${config.age.secrets.mimo-api-key.path}";
 }
