@@ -115,17 +115,17 @@
     "deepseek-harness": {
       "flake": false,
       "locked": {
-        "lastModified": 1786621126,
-        "narHash": "sha256-ZPGCNoPXVjP76Tm/tFPDX2X95cd83M4iHLmVP5dR+Ps=",
+        "lastModified": 1787313817,
+        "narHash": "sha256-rrjXoyccTxKIbZ00Z4Vy7EA9tGZ15WUqLBFnZSgw1YE=",
         "owner": "deepseek-ai",
         "repo": "deepseek-harness",
-        "rev": "47f943859bef60e4160492346772ded9b24f765a",
+        "rev": "b150a551b8d465e31e418e1b2eaf5e79bbb7d28e",
         "type": "github"
       },
       "original": {
         "owner": "deepseek-ai",
+        "ref": "b150a551b8",
         "repo": "deepseek-harness",
-        "rev": "47f943859bef60e4160492346772ded9b24f765a",
         "type": "github"
       }
     },
@@ -136,11 +136,11 @@
         "nixpkgs": "nixpkgs_2"
       },
       "locked": {
-        "lastModified": 1786974021,
-        "narHash": "sha256-maOdeh4DmRz8vwdkCzt1LQk2XKkJVyBqkPQMMif8erg=",
+        "lastModified": 1787380934,
+        "narHash": "sha256-8zP4BEL1nYusWeIsYtaXQnAFRdmwiIyjO47FcAEEeFI=",
         "owner": "Loyage",
         "repo": "deepseek-harness-flake",
-        "rev": "5e43b2c63aef5b31bcfe1e749d0a00d1d6ba4360",
+        "rev": "c46387e0f151d0e3b9db130c2e0ac12eb6864591",
         "type": "github"
       },
       "original": {
