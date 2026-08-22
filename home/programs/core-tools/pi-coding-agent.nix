@@ -9,8 +9,8 @@
     enable = true;
 
     # pi 安装的插件所需的额外命令（如 npm、git 等）会追加到 pi 的 PATH。
-    # npm 源插件（pi-web-access / pi-vision-proxy）首次加载时需 npm install；
-    # ffmpeg/yt-dlp 是 web-access 视频提取与 vision-proxy 视频分析所需。
+    # npm 源插件（pi-web-access）首次加载时需 npm install；
+    # ffmpeg/yt-dlp 是 web-access 视频提取所需。
     extraPackages = [
       pkgs.nodejs # 提供 npm，pi 安装 npm 源插件时使用
       pkgs.git
@@ -44,7 +44,6 @@
         "${inputs.pi-sidebar}"
         "${inputs.pi-codex-goal}"
         "npm:pi-web-access@0.22.0"
-        "npm:pi-vision-proxy@1.7.1"
       ];
 
     };
@@ -66,30 +65,6 @@
       providers.xiaomi = {
         apiKey = lib.mkDefault "!cat /run/agenix/mimo-api-key";
       };
-
-      providers.moonshot = {
-        baseUrl = "https://api.moonshot.ai/v1";
-        api = "openai-completions";
-        # kimi-k3 的 API key：pi 内 /login moonshot 存到 auth.json（当前未配置）
-        models = [
-          {
-            id = "kimi-k3";
-            name = "Kimi K3";
-            reasoning = true; # K3 始终在 thinking 模式运行
-            input = [
-              "text"
-              "image"
-            ];
-            cost = {
-              input = 3.0;
-              output = 15.0;
-              cacheRead = 0.3;
-              cacheWrite = 0.0; # Moonshot 缓存未命中按 input 价计费，无单独写缓存费率
-            };
-            contextWindow = 1000000; # 1M token 上下文
-          }
-        ];
-      };
     };
   };
 
@@ -97,8 +72,5 @@
     PI_SIDEBAR_WIDTH = "40"; # 内容列宽调宽一档，方便看完整文件路径
     PI_SIDEBAR_GIT_LINES = "15"; # 详细模式多显示几行变更文件
     PI_SIDEBAR_FULL_HEIGHT = "1"; # 1=全高固定窗口模式（非浮动）
-
-    # 识图模型：moonshot/kimi-k3（pi-vision-proxy 环境变量覆盖，优先级高于 slash 命令配置）
-    PI_VISION_PROXY_MODEL = "moonshot/kimi-k3";
   };
 }
