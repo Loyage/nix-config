@@ -20,5 +20,8 @@
         "alexander/screen-toolkit"
       ];
     };
+
+    # Per-plugin settings -> [plugin_settings."author/plugin"] in config.toml
+    plugin_settings."alexander/screen-toolkit".selected-ocr-lang = "chi_sim+eng";
   };
 }
