@@ -18,9 +18,11 @@
   ];
 
   # SSH 从 kitty 登录时 TERM=xterm-kitty；macOS 自带的 ncurses
-  # 不会自动搜索 Nix 安装的 kitty terminfo，放入用户默认搜索路径。
-  home.file.".terminfo/x/xterm-kitty".source = "${pkgs.kitty}/lib/kitty/terminfo/x/xterm-kitty";
-  home.sessionVariables.TERMINFO_DIRS = "${config.home.homeDirectory}/.terminfo:${pkgs.kitty}/lib/kitty/terminfo:";
+  # 需要在 78/ 目录中查找该 terminfo（x 的十六进制目录名）。
+  # kitty 在 Darwin 的 terminfo 位于 app bundle 内，不是 lib/kitty/terminfo。
+  home.file.".terminfo/78/xterm-kitty".source =
+    "${pkgs.kitty}/Applications/kitty.app/Contents/Resources/kitty/terminfo/78/xterm-kitty";
+  home.sessionVariables.TERMINFO_DIRS = "${config.home.homeDirectory}/.terminfo:${pkgs.kitty}/Applications/kitty.app/Contents/Resources/kitty/terminfo:/usr/share/terminfo";
 
   # yazi on macOS: y 复制文件路径，Y 复制文件内容到剪贴板
   programs.yazi.keymap.mgr.prepend_keymap = [

@@ -15,7 +15,10 @@
   programs.zsh.enable = true;
 
   # SSH 从 kitty 登录时 TERM=xterm-kitty；确保登录环境初始化前就能找到定义。
-  environment.variables.TERMINFO_DIRS = "${pkgs.kitty}/lib/kitty/terminfo:";
+  environment.variables.TERMINFO_DIRS = [
+    "${pkgs.kitty}/Applications/kitty.app/Contents/Resources/kitty/terminfo"
+    "/usr/share/terminfo"
+  ];
   # Add ability to used TouchID for sudo authentication
   security.pam.services.sudo_local.touchIdAuth = true;
 
