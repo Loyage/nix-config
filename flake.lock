@@ -598,22 +598,6 @@
         "type": "github"
       }
     },
-    "pi-sidebar": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1780219197,
-        "narHash": "sha256-GZYgwHRFUBfB+tlY/yeDe7zW3FnLhjDIUECXFpMjmpY=",
-        "owner": "jrimmer",
-        "repo": "pi-sidebar",
-        "rev": "be97bc66833d119216166b97e6901b8d38df5e03",
-        "type": "github"
-      },
-      "original": {
-        "owner": "jrimmer",
-        "repo": "pi-sidebar",
-        "type": "github"
-      }
-    },
     "plasma-manager": {
       "inputs": {
         "home-manager": [
@@ -686,7 +670,6 @@
         "nixpkgs-unstable": "nixpkgs-unstable",
         "noctalia": "noctalia",
         "pi-codex-goal": "pi-codex-goal",
-        "pi-sidebar": "pi-sidebar",
         "plasma-manager": "plasma-manager",
         "zen-browser": "zen-browser"
       }

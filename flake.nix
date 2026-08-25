@@ -88,12 +88,6 @@
       url = "github:cachix/git-hooks.nix";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
-    pi-sidebar = {
-      # 注意：@oldsuns/@esso0428 fork 的 compositor.ts 使用 doRender monkey-patch，
-      # 与 pi 0.84.x 的 Proxy 包装不兼容（栈溢出）。原版使用官方 ctx.ui.custom() API。
-      url = "github:jrimmer/pi-sidebar";
-      flake = false;
-    };
     pi-codex-goal = {
       # 纯 TS 无 npm 依赖（要求 Pi >= 0.84.0 / Node 24），pin 到与 npm 0.2.0 对应的 tag。
       url = "github:fitchmultz/pi-codex-goal/v0.2.0";

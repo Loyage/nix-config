@@ -41,7 +41,7 @@ in
       "zathura".source = mkLink "${confPath}/zathura";
       "opencode/opencode.jsonc".source = mkLink "${confPath}/opencode/opencode.jsonc";
       "opencode/tui.jsonc".source = mkLink "${confPath}/opencode/tui.jsonc";
-      # pi-web-access 配置（curate 快捷键改到 ctrl+shift+r，避免与 pi-sidebar 的 ctrl+shift+s 冲突）
+      # pi-web-access 配置
       "pi/web-search.json".source = mkLink "${confPath}/pi/web-search.json";
     };
 }

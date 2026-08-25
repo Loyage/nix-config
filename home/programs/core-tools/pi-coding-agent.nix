@@ -43,7 +43,6 @@
       # - 依赖 npm 运行时安装的插件使用 npm 源：由 npm 处理依赖，维护方式更贴近上游发布方式。
       # pi 启动时按 pi-package 规则从这些源收集 extensions/skills。
       packages = [
-        "${inputs.pi-sidebar}"
         "${inputs.pi-codex-goal}"
         "${inputs.academic-research-skills}"
         "npm:pi-web-access@0.22.0"
@@ -78,9 +77,4 @@
     };
   };
 
-  home.sessionVariables = {
-    PI_SIDEBAR_WIDTH = "40"; # 内容列宽调宽一档，方便看完整文件路径
-    PI_SIDEBAR_GIT_LINES = "15"; # 详细模式多显示几行变更文件
-    PI_SIDEBAR_FULL_HEIGHT = "1"; # 1=全高固定窗口模式（非浮动）
-  };
 }
