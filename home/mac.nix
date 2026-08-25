@@ -16,6 +16,10 @@
     codexbar # api usage monitor
   ];
 
+  # SSH 从 kitty 登录时 TERM=xterm-kitty；macOS 自带的 ncurses
+  # 不会自动搜索 Nix 安装的 kitty terminfo，放入用户默认搜索路径。
+  home.file.".terminfo/x/xterm-kitty".source = "${pkgs.kitty}/lib/kitty/terminfo/x/xterm-kitty";
+
   # yazi on macOS: y 复制文件路径，Y 复制文件内容到剪贴板
   programs.yazi.keymap.mgr.prepend_keymap = [
     {
