@@ -15,13 +15,12 @@
   # Add ability to used TouchID for sudo authentication
   security.pam.services.sudo_local.touchIdAuth = true;
 
-  # SSH 服务：监听 2222 端口（与 NixOS 一致），仅允许公钥登录
-  # 说明：该 nix-darwin 版本的 openssh 模块通过 Apple 内置 sshd（launchd）启停，
-  #       端口等配置写入 /etc/ssh/sshd_config.d/100-nix-darwin.conf（extraConfig）。
+  # SSH 服务：通过 macOS 内置 sshd（launchd）启用，仅允许公钥登录。
+  # 不在这里改 Port：macOS 的 ssh.plist 由 launchd 监听 22 端口，
+  # sshd_config 中的 Port 不会改变 launchd 的监听端口。
   services.openssh = {
     enable = true;
     extraConfig = ''
-      Port 2222
       PasswordAuthentication no
       PubkeyAuthentication yes
       PermitRootLogin no
