@@ -38,7 +38,9 @@
         "--min-release-age=0"
       ];
 
-      # 插件声明：本地 store 路径（flake input，无 npm 依赖）或 npm 源（有依赖，pi 运行期安装）。
+      # 插件声明：这里有意保留两种导入方式，不强行统一：
+      # - 纯文件、无 npm 依赖的插件/技能使用 flake input：版本由 flake.lock 锁定，构建和离线使用更稳定；
+      # - 依赖 npm 运行时安装的插件使用 npm 源：由 npm 处理依赖，维护方式更贴近上游发布方式。
       # pi 启动时按 pi-package 规则从这些源收集 extensions/skills。
       packages = [
         "${inputs.pi-sidebar}"
@@ -46,6 +48,12 @@
         "${inputs.academic-research-skills}"
         "npm:pi-web-access@0.22.0"
         "npm:pi-usage-meters@0.1.0"
+        "npm:pi-subagents@0.56.0"
+        "npm:pi-btw@0.4.1"
+        "npm:pi-ask-me@0.1.1"
+        "npm:pi-dynamic-workflows@1.0.1"
+        "npm:pi-wechat-assistant@0.3.0"
+        "npm:pi-plan-mode@0.4.8"
       ];
 
     };
