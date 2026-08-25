@@ -25,7 +25,7 @@
       theme = "dark";
       defaultProvider = "xiaomi";
       defaultModel = "mimo-v2.5";
-      defaultThinkingLevel = "high";
+      defaultThinkingLevel = "medium";
 
       terminal = {
         showTerminalProgress = true;
