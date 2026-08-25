@@ -23,8 +23,8 @@
       lastChangelogVersion = "0.84.0";
 
       theme = "dark";
-      defaultProvider = "xiaomi";
-      defaultModel = "mimo-v2.5";
+      defaultProvider = "openai-codex";
+      defaultModel = "gpt-5.6-luna";
       defaultThinkingLevel = "medium";
 
       terminal = {
