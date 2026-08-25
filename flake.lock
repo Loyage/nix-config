@@ -1,5 +1,21 @@
 {
   "nodes": {
+    "academic-research-skills": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1787564167,
+        "narHash": "sha256-58lQizN0an9PfGMQxP0UG/r5oBlYBQn6ZcaY+CJjSek=",
+        "owner": "Imbad0202",
+        "repo": "academic-research-skills",
+        "rev": "127ff85e4bbfcdd10b95040537b6c6bd7ad17aeb",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Imbad0202",
+        "repo": "academic-research-skills",
+        "type": "github"
+      }
+    },
     "aerospace": {
       "flake": false,
       "locked": {
@@ -649,6 +665,7 @@
     },
     "root": {
       "inputs": {
+        "academic-research-skills": "academic-research-skills",
         "aerospace": "aerospace",
         "agenix": "agenix",
         "catppuccin": "catppuccin",

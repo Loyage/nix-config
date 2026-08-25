@@ -99,6 +99,11 @@
       url = "github:fitchmultz/pi-codex-goal/v0.2.0";
       flake = false;
     };
+    academic-research-skills = {
+      # ARS 学术研究技能套件（Pi wrapper），纯文件无 npm 依赖。
+      url = "github:Imbad0202/academic-research-skills";
+      flake = false;
+    };
     deepseek-harness-flake = {
       # DeepSeek Harness（dsh）home-manager 模块，独立 flake（~ 下单独 git 仓库）
       # ⚠️ 上传 GitHub 后务必改为：url = "github:<你的用户名>/deepseek-harness-flake";

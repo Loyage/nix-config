@@ -1,68 +1,76 @@
-# 使用全局科研 Skills
+# Academic Research Skills (ARS) — Pi 插件
 
-本仓库将科研相关的 Pi skills 放在：
+## 概述
 
-```text
-~/nix-config/config/research-skills/
+[ARS](https://github.com/Imbad0202/academic-research-skills) 是一套学术研究技能套件，覆盖从文献调研到论文发表的全流程。通过 Nix flake input 以 `flake = false` 方式引入，版本锁定在 `flake.lock` 中。
+
+## 安装方式
+
+不在每台机器上手动 `pi install`，而是通过 Nix 声明式管理：
+
+- `flake.nix` 声明 input（`flake = false`）
+- `home/programs/core-tools/pi-coding-agent.nix` 的 `packages` 列表引用 `"${inputs.academic-research-skills}"`
+- `just switch` 后写入 `~/.pi/agent/settings.json`，Pi 启动时自动加载
+
+## 不用时不影响 Pi
+
+Wrapper 默认关闭 ARS：
+
+- 启动时 `arsActive = false`
+- `before_agent_start` 钩子将 4 个 ARS skill 从系统提示词中剥离，模型看不到它们
+- 只有显式调用 `/ars-*` 命令或 `/skill:*` 时才激活
+- 同一会话内状态持久化（`/tree` 切换分支保持），新会话自动重置
+
+## 可用命令
+
+### 管线控制
+
+| 命令 | 说明 |
+|------|------|
+| `/ars-pi-start` | 当前会话启用 ARS，后续自然语言提问自动匹配技能 |
+| `/ars-pi-stop` | 当前会话关闭 ARS，恢复普通模式 |
+| `/ars-pi-doctor` | 检查环境依赖（orchestration、web、Python、Pandoc、tectonic 等） |
+
+### 研究与写作
+
+| 命令 | 说明 |
+|------|------|
+| `/ars-plan` | 苏格拉底式对话，梳理论文结构 |
+| `/ars-lit-review <topic>` | 文献综述 |
+| `/ars-reviewer` | 多角度同行评审 |
+| `/ars-full` | 完整 10 阶段管线 |
+
+### 直接调用核心技能
+
+```
+/skill:deep-research          # 深度研究（8 种模式）
+/skill:academic-paper         # 论文写作（11 种模式）
+/skill:academic-paper-reviewer # 论文评审（6 种模式）
+/skill:academic-pipeline      # 完整管线编排器
 ```
 
-Home Manager 会把整个目录链接到：
+## Pi 降级说明
 
-```text
-~/.agents/skills/research-skills
-```
+ARS 原生为 Claude Code 设计，Pi 下有几个已知限制：
 
-因此科研 skills 在所有项目中都可被 Pi 发现，但它们都设置了
-`disable-model-invocation: true`，不会自动进入上下文。
+- **无 agent 隔离/编排** — 多 agent 角色顺序执行（非并行），wrapper 会披露降级状态
+- **Claude hooks 不运行** — `PreToolUse` 写保护等仅在提示词层面执行，`/ars-pi-doctor` 会报告
+- **Web 检索** — 需要 Pi 侧安装了 web search 能力（如 `pi-web-access`），否则无法进行文献验证
 
-## 启用全局科研环境
-
-确认 `~/nix-config/config/research-skills` 中的文件已经加入 Git，然后执行：
+## 更新
 
 ```bash
+# 更新 ARS 到最新版本
 cd ~/nix-config
-git add config/research-skills
-home-manager switch --flake . --show-trace
+nix flake update academic-research-skills
+just switch
+
+# 更新所有输入（含 ARS）
+just up
 ```
 
-也可以使用仓库中的快捷命令：
+## 卸载
 
-```bash
-just home-switch
-```
-
-当前 Home Manager 配置会将科研 skill 集合安装到全局 Pi skill 目录，不需要在每个科研项目中创建 `.pi/settings.json`。
-
-## 在 Pi 中手动启用
-
-普通启动 Pi 时，科研 skills 不会影响 system prompt。需要使用科研能力时，手动输入：
-
-```text
-/skill:research-skill
-```
-
-入口 skill 会根据当前任务读取 `config/research-skills/` 下相关的子 skill 及其 references、assets 和 scripts。
-
-如果 Pi 已经在运行，配置更新后执行：
-
-```text
-/reload
-```
-
-## 给新项目 Agent 的配置指令
-
-科研环境已经由 Home Manager 全局安装。可以直接把下面的内容告诉新项目中的 Agent：
-
-```text
-科研 Pi skills 已通过 Home Manager 全局安装。
-
-默认不要主动读取或调用科研 skills，也不要修改项目的 .pi/settings.json。
-只有当我明确输入 /skill:research-skill 后，才启用科研 skill 集合；启用后根据当前任务读取相关子 skill 的 SKILL.md、references、assets 和 scripts。
-```
-
-## 重要说明
-
-- `~/nix-config` 必须是本机 Nix 配置仓库的实际路径。
-- `config/research-skills` 下的新文件需要加入 Git，否则 Nix flake 可能看不到它们。
-- 子 skill 仍可能注册 `/skill:<name>` 手动命令，但不会自动调用；推荐统一使用 `/skill:research-skill` 作为入口。
-- `disable-model-invocation` 只阻止自动注入，不会禁止用户手动调用子 skill。
+1. `flake.nix` 中移除 `academic-research-skills` input
+2. `pi-coding-agent.nix` 的 `packages` 中移除 `"${inputs.academic-research-skills}"`
+3. `just switch`
