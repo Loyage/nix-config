@@ -44,6 +44,7 @@
         "${inputs.pi-sidebar}"
         "${inputs.pi-codex-goal}"
         "npm:pi-web-access@0.22.0"
+        "npm:pi-usage-meters@0.1.0"
       ];
 
     };
