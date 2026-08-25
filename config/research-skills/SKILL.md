@@ -1,5 +1,5 @@
 ---
-name: research-skills
+name: research-skill
 description: Manual entry point for the research skill collection. Use this only when the user explicitly asks to activate the research toolkit for the current task.
 disable-model-invocation: true
 ---
