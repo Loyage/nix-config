@@ -6,12 +6,16 @@
 #    https://daiderd.com/nix-darwin/manual/index.html#sec-options
 #
 ###################################################################################
+{ pkgs, ... }:
 {
   system = {
     stateVersion = 5; # Define the state version of the system configuration.
     primaryUser = "loyage";
   };
   programs.zsh.enable = true;
+
+  # SSH 从 kitty 登录时 TERM=xterm-kitty；确保登录环境初始化前就能找到定义。
+  environment.variables.TERMINFO_DIRS = "${pkgs.kitty}/lib/kitty/terminfo:";
   # Add ability to used TouchID for sudo authentication
   security.pam.services.sudo_local.touchIdAuth = true;
 
