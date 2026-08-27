@@ -22,6 +22,7 @@ let
     # "typora"
     "zen"
     "codex-app"
+    "stablyai/orca/orca"
   ];
   utilities = [
     "jordanbaird-ice" # menu bar management tool

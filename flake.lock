@@ -215,6 +215,24 @@
         "type": "github"
       }
     },
+    "flake-utils_2": {
+      "inputs": {
+        "systems": "systems_4"
+      },
+      "locked": {
+        "lastModified": 1731533236,
+        "narHash": "sha256-l0KFg5HjrsfsO/JpG+r7fRrqm12kzFHyUHqHCVpMMbI=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "11707dc2f618dd54ca8739b309ec4fc024de578b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
+      }
+    },
     "git-hooks": {
       "inputs": {
         "flake-compat": "flake-compat",
@@ -581,6 +599,27 @@
         "type": "github"
       }
     },
+    "orca": {
+      "inputs": {
+        "flake-utils": "flake-utils_2",
+        "nixpkgs": [
+          "nixpkgs-unstable"
+        ]
+      },
+      "locked": {
+        "lastModified": 1787550736,
+        "narHash": "sha256-dOK/G6TQ5zzCty70ZwdR6we3u4Qrwsn2zh7OBSEh/wM=",
+        "owner": "stslex",
+        "repo": "orca-nix",
+        "rev": "6265cf72a45d6be261d5115b9b51c41423f61466",
+        "type": "github"
+      },
+      "original": {
+        "owner": "stslex",
+        "repo": "orca-nix",
+        "type": "github"
+      }
+    },
     "pi-codex-goal": {
       "flake": false,
       "locked": {
@@ -669,8 +708,10 @@
         "nixpkgs": "nixpkgs_4",
         "nixpkgs-unstable": "nixpkgs-unstable",
         "noctalia": "noctalia",
+        "orca": "orca",
         "pi-codex-goal": "pi-codex-goal",
         "plasma-manager": "plasma-manager",
+        "stablyai-orca": "stablyai-orca",
         "zen-browser": "zen-browser"
       }
     },
@@ -692,6 +733,22 @@
       "original": {
         "owner": "oxalica",
         "repo": "rust-overlay",
+        "type": "github"
+      }
+    },
+    "stablyai-orca": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1787379672,
+        "narHash": "sha256-PUl84cZslkYovIdIGE84LW0mbDwPuoHqJFzCq9z7JXk=",
+        "owner": "stablyai",
+        "repo": "homebrew-orca",
+        "rev": "130b3b113d63763f5fc1b38c8f2130b33e5685bb",
+        "type": "github"
+      },
+      "original": {
+        "owner": "stablyai",
+        "repo": "homebrew-orca",
         "type": "github"
       }
     },
@@ -726,6 +783,21 @@
       }
     },
     "systems_3": {
+      "locked": {
+        "lastModified": 1681028828,
+        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
+        "owner": "nix-systems",
+        "repo": "default",
+        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-systems",
+        "repo": "default",
+        "type": "github"
+      }
+    },
+    "systems_4": {
       "locked": {
         "lastModified": 1681028828,
         "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",

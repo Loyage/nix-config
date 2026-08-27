@@ -54,6 +54,10 @@
       url = "github:daipeihust/homebrew-tap";
       flake = false;
     };
+    stablyai-orca = {
+      url = "github:stablyai/homebrew-orca";
+      flake = false;
+    };
     zen-browser = {
       url = "github:youwen5/zen-browser-flake";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
@@ -97,6 +101,10 @@
       # ARS 学术研究技能套件（Pi wrapper），纯文件无 npm 依赖。
       url = "github:Imbad0202/academic-research-skills";
       flake = false;
+    };
+    orca = {
+      url = "github:stslex/orca-nix";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
     deepseek-harness-flake = {
       # DeepSeek Harness（dsh）home-manager 模块，独立 flake（~ 下单独 git 仓库）
@@ -250,6 +258,7 @@
                 "homebrew/homebrew-services" = inputs.homebrew-services;
                 "nikitabobko/homebrew-tap" = inputs.aerospace;
                 "daipeihust/homebrew-tap" = inputs.daipeihust;
+                "stablyai/homebrew-orca" = inputs.stablyai-orca;
               };
               mutableTaps = false;
             };
