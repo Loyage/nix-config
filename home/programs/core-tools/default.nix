@@ -38,6 +38,7 @@ in
       "bash".source = mkLink "${confPath}/bash";
       "zsh".source = mkLink "${confPath}/zsh";
       "kitty".source = mkLink "${confPath}/kitty";
+      "ghostty".source = mkLink "${confPath}/ghostty";
       "zathura".source = mkLink "${confPath}/zathura";
       "opencode/opencode.jsonc".source = mkLink "${confPath}/opencode/opencode.jsonc";
       "opencode/tui.jsonc".source = mkLink "${confPath}/opencode/tui.jsonc";

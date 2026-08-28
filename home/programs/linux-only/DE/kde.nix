@@ -224,7 +224,7 @@
       "launch-terminal" = {
         name = "Launch Terminal";
         key = "Meta+Return";
-        command = "kitty";
+        command = "ghostty";
       };
       "launch-browser" = {
         name = "Launch Browser";
@@ -234,7 +234,7 @@
       "launch-file-manager" = {
         name = "Launch File Manager";
         key = "Meta+E";
-        command = "kitty -e yazi";
+        command = "ghostty -e yazi";
       };
     };
 

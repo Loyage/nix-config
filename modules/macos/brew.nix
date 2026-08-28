@@ -18,6 +18,7 @@ let
       tap;
 
   dev-tools = [
+    "ghostty"
     # "kitty"
     # "typora"
     "zen"

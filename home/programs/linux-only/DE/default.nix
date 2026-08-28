@@ -31,7 +31,7 @@ in
       "niri".source = mkLink "${confPath}/niri";
       "xdg-desktop-portal-termfilechooser/config".text = ''
         [filechooser]
-        env=TERMCMD='${lib.getExe pkgs.kitty}'
+        env=TERMCMD='${lib.getExe pkgs.ghostty}'
         cmd='${pkgs.xdg-desktop-portal-termfilechooser}/share/xdg-desktop-portal-termfilechooser/yazi-wrapper.sh'
         default_dir=$HOME/Downloads
         open_mode=suggested

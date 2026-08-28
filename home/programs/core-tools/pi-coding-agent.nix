@@ -30,6 +30,7 @@
       # pi-powerline-footer：状态栏、欢迎面板和快捷操作
       powerline = {
         preset = "default";
+        welcome = false;
         placement = "below";
       };
 
