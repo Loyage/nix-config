@@ -14,6 +14,8 @@ working-directory = inherit
 scrollback-limit = 10000000
 
 # 外观
+# 加粗框线字符（如 ╭─╮）
+adjust-box-thickness = 2
 window-decoration = false
 macos-titlebar-style = hidden
 background = #282c34
