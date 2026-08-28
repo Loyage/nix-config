@@ -27,6 +27,12 @@
       defaultModel = "gpt-5.6-luna";
       defaultThinkingLevel = "medium";
 
+      # pi-powerline-footer：状态栏、欢迎面板和快捷操作
+      powerline = {
+        preset = "default";
+        placement = "below";
+      };
+
       terminal = {
         showTerminalProgress = true;
       };
@@ -46,13 +52,12 @@
         "${inputs.pi-codex-goal}"
         "${inputs.academic-research-skills}"
         "npm:pi-web-access@0.22.0"
-        "npm:pi-usage-meters@0.1.0"
         "npm:pi-subagents@0.56.0"
         "npm:pi-btw@0.4.1"
         "npm:pi-ask-me@0.1.1"
         "npm:pi-dynamic-workflows@1.0.1"
-        "npm:pi-wechat-assistant@0.3.0"
         "npm:pi-plan-mode@0.4.8"
+        "npm:pi-powerline-footer@0.16.0"
       ];
 
     };
