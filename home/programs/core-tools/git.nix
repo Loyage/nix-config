@@ -4,7 +4,12 @@
 }:
 {
   programs = {
-    gh.enable = true; # GitHub CLI
+    gh = {
+      enable = true;
+      # Home Manager owns config.yml as an immutable Nix-store symlink.
+      # Configure gh declaratively rather than letting `gh auth login` rewrite it.
+      settings.git_protocol = "ssh";
+    };
     lazygit.enable = true; # git TUI tool
     git = {
       enable = true;

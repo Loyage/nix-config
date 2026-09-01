@@ -50,10 +50,9 @@
       # - 依赖 npm 运行时安装的插件使用 npm 源：由 npm 处理依赖，维护方式更贴近上游发布方式。
       # pi 启动时按 pi-package 规则从这些源收集 extensions/skills。
       packages = [
-        "${inputs.pi-codex-goal}"
         "${inputs.academic-research-skills}"
         "npm:pi-web-access@0.22.0"
-        "npm:pi-subagents@0.56.0"
+        "npm:pi-context-view@0.5.0"
         "npm:pi-btw@0.4.1"
         "npm:pi-ask-me@0.1.1"
         "npm:pi-dynamic-workflows@1.0.1"
