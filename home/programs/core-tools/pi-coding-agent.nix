@@ -54,7 +54,7 @@
         "npm:pi-web-access@0.22.0"
         "npm:pi-context-view@0.5.0"
         "npm:pi-btw@0.4.1"
-        "npm:pi-ask-me@0.1.1"
+        "npm:@juicesharp/rpiv-ask-user-question@2.8.0"
         "npm:pi-dynamic-workflows@1.0.1"
         "npm:pi-plan-mode@0.4.8"
         "npm:pi-powerline-footer@0.16.0"
@@ -82,4 +82,15 @@
     };
   };
 
+  # rpiv-ask-user-question：控制模型何时通过结构化问答向用户确认决策。
+  xdg.configFile."rpiv-ask-user-question/config.json".text = builtins.toJSON {
+    guidance = {
+      promptSnippet = "Ask the user before making a non-trivial decision when multiple reasonable choices exist.";
+      promptGuidelines = [
+        "Ask before making architecture, product behavior, UX, public API, or data-model decisions when the user's preference is unknown."
+        "Do not ask about routine, low-impact, easily reversible implementation details."
+        "Batch related decisions into one ask_user_question call when practical."
+      ];
+    };
+  };
 }
