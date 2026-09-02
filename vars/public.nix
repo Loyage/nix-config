@@ -25,6 +25,8 @@
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGjwRoaSbb5uRHL2Fr7jIh5XlwVw0tFNX2MOLswyD2Bq loyage@LoyagedeMacBook-Air"
     # NixOS thinkpad 本机（hostname: nixos）— ~/.ssh/id_ed25519
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBOMetoPGnwCyaaLrTu1e03t0zfJFBtorpauDUwEsFfD loyage@nixos"
+    # remote jzh 服务器
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOkGycDKREAwvpU0/IOwkh7kaalg02N4mFDmVt828M8g jzh@cyy"
   ];
 
   # 本机 authorized_keys（允许哪些公钥 SSH 登录，公钥非机密）
