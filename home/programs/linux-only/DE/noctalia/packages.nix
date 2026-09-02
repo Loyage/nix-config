@@ -19,5 +19,6 @@
     wf-recorder
     ffmpeg
     gifski
+    swappy
   ];
 }
