@@ -147,25 +147,28 @@
 
       # specialArgs 内的参数可以在各个模块中访问到，只需要你添加到函数输入变量中即可
       specialArgs = { inherit inputs myvars mylib; };
+      desktopProfile = {
+        graphical = true;
+        systemManaged = true;
+      };
+      headlessProfile = {
+        graphical = false;
+        systemManaged = false;
+      };
 
-      # 生成远程服务器 home-manager 配置的函数
-      mkRemoteHome =
+      # 生成无 root 权限、无图形桌面的 standalone home-manager 配置
+      mkHeadlessHome =
         system:
-        let
-          # host-user.nix 已跟踪在 git 中，可通过 self 直接引用（无需 getEnv PWD）
-          remoteHostFile = self + "/hosts/remote/host-user.nix";
-        in
         home-manager.lib.homeManagerConfiguration {
           pkgs = import inputs.nixpkgs-unstable {
             inherit system;
             config.allowUnfree = true;
           };
-          extraSpecialArgs = specialArgs;
+          extraSpecialArgs = specialArgs // { hostProfile = headlessProfile; };
           modules = [
             ./home/remote-server.nix
             agenix.homeManagerModules.default
-          ]
-          ++ (if builtins.pathExists remoteHostFile then [ (import remoteHostFile) ] else [ ]);
+          ];
         };
 
       # 本机特定配置目录（gitignored，需要 --impure 构建）
@@ -173,7 +176,7 @@
       localHostDir = /home/loyage/nix-config/hosts/local;
 
       mkNixosSystem = nixpkgs.lib.nixosSystem {
-        inherit specialArgs;
+        specialArgs = specialArgs // { hostProfile = desktopProfile; };
         system = "x86_64-linux";
         pkgs = import inputs.nixpkgs-unstable {
           system = "x86_64-linux";
@@ -192,7 +195,7 @@
             home-manager = {
               useGlobalPkgs = true;
               useUserPackages = true;
-              extraSpecialArgs = specialArgs;
+              extraSpecialArgs = specialArgs // { hostProfile = desktopProfile; };
               backupFileExtension = "home-manager.backup";
               users.${myvars.username} = import ./home/nixos.nix;
             };
@@ -217,7 +220,7 @@
 
       # macOS 配置
       darwinConfigurations."${myvars.macosHostname}" = nix-darwin.lib.darwinSystem {
-        inherit specialArgs;
+        specialArgs = specialArgs // { hostProfile = desktopProfile; };
         system = "aarch64-darwin";
         pkgs = import inputs.nixpkgs-unstable {
           system = "aarch64-darwin";
@@ -233,7 +236,7 @@
             home-manager = {
               useGlobalPkgs = true;
               useUserPackages = true;
-              extraSpecialArgs = specialArgs;
+              extraSpecialArgs = specialArgs // { hostProfile = desktopProfile; };
               backupFileExtension = "home-manager.backup";
               users.${myvars.username} = import ./home/mac.nix;
             };
@@ -264,12 +267,13 @@
       # NixOS 配置（仅当 hosts/local/ 存在时定义，否则 nix flake check 在非 Linux 机器上会失败）
       nixosConfigurations = if builtins.pathExists localHostDir then { nixos = mkNixosSystem; } else { };
 
-      # 远程服务器 home-manager 配置（用于 Ubuntu/Debian 等非 NixOS 系统）
-      # 用法：home-manager switch --flake .#remote
-      #       home-manager switch --flake .#remote-aarch64
+      # 无 root 权限、无图形桌面的 standalone home-manager 配置。
+      # remote 名称保留为兼容别名；新命令使用语义更准确的 headless。
       homeConfigurations = {
-        "remote" = mkRemoteHome "x86_64-linux";
-        "remote-aarch64" = mkRemoteHome "aarch64-linux";
+        "headless" = mkHeadlessHome "x86_64-linux";
+        "headless-aarch64" = mkHeadlessHome "aarch64-linux";
+        "remote" = mkHeadlessHome "x86_64-linux";
+        "remote-aarch64" = mkHeadlessHome "aarch64-linux";
       };
     };
 }

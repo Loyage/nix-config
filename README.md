@@ -28,7 +28,7 @@
 ### NixOS
 
 ```bash
-sudo nixos-rebuild switch --flake .
+sudo nixos-rebuild switch --flake path:.
 # 或
 just switch
 ```
@@ -36,7 +36,7 @@ just switch
 ### macOS
 
 ```bash
-sudo darwin-rebuild switch --flake .
+sudo darwin-rebuild switch --flake path:.
 # 或
 just switch
 ```
@@ -127,10 +127,22 @@ chsh -s $(which zsh)
 
 ```bash
 cd ~/nix-config && git pull
-home-manager switch --flake .#remote
+home-manager switch --flake path:.#headless
 # 或
-just remote-switch
+just switch
 ```
+
+> 本仓库必须使用 `path:.` 读取 git-crypt 解锁后的工作区；普通的 `.#remote` 可能从
+> Git 对象取得密文。`just headless-switch` 会先实例化完整 activation derivation 作为 preflight，发现
+> `vars/private.nix` 尚未解锁时直接给出提示。解锁后的 Nix 源码会进入 `/nix/store`，
+> 因此 API key、token、密码和私钥必须使用 agenix，不要写入 `vars/private.nix`。
+>
+> Linux 上的 `just switch` 会自动判断：NixOS 执行系统 rebuild，其他发行版根据 CPU
+> 架构选择 `headless` Home Manager；未安装 `home-manager` 时也会自动通过 `nix run` 首次部署。
+> `headless` 表示“standalone Home Manager、无 sudo、无图形桌面”。全局
+> `hostProfile.graphical = false` 会排除 GUI 模块、GUI 配置链接和仅桌面使用的软件。
+> 用户名和 home 目录来自运行命令时的 `USER`/`HOME`，仓库不保存服务器用户名。
+> 旧的 `#remote` / `just remote-switch` 名称暂时保留为兼容别名。
 
 ---
 

@@ -2,6 +2,7 @@
   inputs,
   lib,
   pkgs,
+  hostProfile ? { graphical = true; },
   ...
 }:
 {
@@ -14,7 +15,7 @@
       codex
       antigravity-cli
     ]
-    ++ lib.optionals pkgs.stdenv.isLinux [
+    ++ lib.optionals (pkgs.stdenv.isLinux && hostProfile.graphical) [
       inputs.orca.packages.${pkgs.stdenv.hostPlatform.system}.default
     ];
 }

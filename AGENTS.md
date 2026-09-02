@@ -5,25 +5,26 @@ Cross-platform Nix Flake config: NixOS (x86_64-linux), nix-darwin (aarch64-darwi
 ## Commands (full list in Justfile)
 
 ```bash
-just switch                # NixOS: sudo nixos-rebuild switch --flake .#nixos --show-trace
+just switch                # unified: NixOS/darwin rebuild, ordinary Linux headless HM
 just switch-test           # apply config without changing boot entry
 just switch-boot           # apply on next boot only
 just up                    # nix flake update --commit-lock-file (commits "flake.lock: Update")
 just update-input <name>   # update a single input
-just home-switch           # home-manager switch --flake . --show-trace
+just home-switch           # home-manager switch --flake path:. --show-trace
 just remote-init           # first-time server deploy (x86_64); remote-init-arm for aarch64
 just remote-switch         # reapply server config after HM installed
+just headless-switch       # preferred name: no-sudo, non-graphical standalone HM
 just gc / just optimize    # cleanup
 just lint                  # run pre-commit hooks on all files
 just check                 # nix flake check (all configs + pre-commit checks)
 just hooks-install         # install git pre-commit hooks
 ```
 
-Same `just switch` on macOS runs `darwin-rebuild switch --flake . --impure`; recipes are gated by `[linux]`/`[macos]` attributes.
+Same `just switch` on macOS runs `darwin-rebuild switch --flake path:.`; recipes are gated by `[linux]`/`[macos]` attributes.
 
 ## Must know
 
-- **`--impure` 已非必需（除 remote 部署）**。`flake.nix` 不再使用 `builtins.getEnv`（`mkRemoteHome` 通过 `self` 引用已跟踪的 `hosts/remote/host-user.nix`）；NixOS/macOS 命令已移除 `--impure`。仅 `hosts/remote/host-user.nix` 仍用 `getEnv "USER"/"HOME"`，且带 `mkIf` 非空守卫（纯模式下返回 "" 时优雅降级到 home-manager 默认值），因此 remote 部署建议保留 `--impure` 以获取真实用户信息。
+- **`just switch` 是统一入口。** NixOS/macOS 走系统 rebuild；普通 Linux 自动选择当前架构的 headless standalone Home Manager。Headless 在 `home/home-setting.nix` 中通过 `USER`/`HOME` 获取当前身份，因此必须以目标用户运行并保留 `--impure`；纯求值时为空则回退到仓库默认用户。
 - **`hosts/local/` is gitignored and mandatory.** To set up a machine: `cp -r hosts/local.example hosts/local`, then edit `host-user.nix` (hostname, GRUB dual-boot UUIDs, resume device). `nixosConfigurations.nixos` is only defined when this dir exists (so `nix flake check` passes on non-Linux machines); the Justfile `switch*` recipes check for it and print a friendly error. This is where the NixOS hostname comes from — it is not set anywhere in the flake.
 - **`config/` dirs are symlinked at build time** with `config.lib.file.mkOutOfStoreSymlink` from `${HOME}/nix-config/config` (hardcoded in `home/programs/core-tools/default.nix`, `home/programs/linux-only/DE/default.nix`, `home/home-setting.nix`, fcitx5). The repo must be checked out at `~/nix-config` on every target machine or those symlinks break.
 - **`mylib.scanPaths` auto-imports** every `.nix` file and subdirectory of a dir, excluding `default.nix` (see `lib/default.nix`). Adding `home/programs/<layer>/<name>.nix` or a module file picks it up automatically; import order is alphabetical.
@@ -34,6 +35,7 @@ Same `just switch` on macOS runs `darwin-rebuild switch --flake . --impure`; rec
 - `modules/base` — cross-platform system modules (nix, agenix secrets, shell-tools)
 - `modules/linux`, `modules/macos` — platform system config; `modules/optional` — desktop/dev opt-ins
 - `home/programs/core-tools` — shared HM layer (imported by nixos/mac/remote entries)
+- `home/programs/core-tools/gui` — desktop-only HM layer; the flake injects global `hostProfile.graphical`; headless configs set it to `false`, excluding this subtree plus GUI config links/Orca
 - `home/programs/linux-only` — NixOS-only HM (DE/niri/noctalia, fcitx5, etc.), subdirs scanPath'd too
 - `home/{nixos,mac,remote-server}.nix` — per-platform HM entrypoints
 - `hosts/local{,example}/`, `hosts/remote/` — machine-specific overrides
@@ -50,8 +52,9 @@ Same `just switch` on macOS runs `darwin-rebuild switch --flake . --impure`; rec
 
 ## Gotchas
 
-- **新建的文件必须 `git add` 之后才会被 build 过程看到。** Flake 构建只读取 git 跟踪的文件（flake source tree = git-tracked files），`nixos-rebuild`/`home-manager` 以及 `mylib.scanPaths`、`mkOutOfStoreSymlink` 都会静默忽略未跟踪的新文件。改了新模块/新文件后 `just switch` 没生效，先 `git status` 检查是否已 `git add`。
+- **部署必须使用 `path:.`，新文件在正式部署前仍必须 `git add`。** 普通的 Git flake source（`.#...`）会从 Git 对象取得 git-crypt 密文；`path:.#...` 才读取解锁后的工作区，也可能让未跟踪文件在本机参与构建。新模块即使本机可见也必须提交，否则其他机器拉取后会缺文件。`hosts/local/` 是有意 gitignore 的例外。
+- **不要把高敏感明文放进 `vars/private.nix`。** `path:.` 会把解锁后的源码复制进通常可被本机其他用户读取的 `/nix/store`。公网 IP、主机名等低敏感结构化配置可使用 git-crypt；API key、token、密码和私钥必须使用 agenix。
 - No automated tests. Validation flow: `just switch-test`, verify manually, then `just switch`.
 - `flake.nix` overlays pin custom `qq` / `wechat` builds with exact hashes — update the hash when bumping versions. (deepseek-harness 的 `pnpm_11` pin 已随模块迁出到独立 flake `../deepseek-harness-flake` 的 `lib/pnpm.nix`，不在此处维护。)
-- Remote `hosts/remote/host-user.nix` forces `home.username`/`home.homeDirectory` from `USER`/`HOME` env, so run remote commands as the target user.
+- Headless standalone Home Manager derives `home.username`/`home.homeDirectory` from `USER`/`HOME`; run `just switch` as the target user. No server-specific username is committed.
 - Commit messages are short and descriptive; recent history uses `feat/fix(<scope>)` prefixes, lockfile bumps read `flake.lock: Update` (from `just up`), and occasional Chinese messages are intentional.

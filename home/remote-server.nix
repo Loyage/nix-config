@@ -11,12 +11,12 @@
   # 但 home-manager 的解密路径是 ${XDG_RUNTIME_DIR}/agenix/...（运行时展开），
   # 而不是系统级的 /run/agenix/...。
   age.secrets.deepseek-api-key = {
-    file = ../../secrets/deepseek-api-key.age;
+    file = ../secrets/deepseek-api-key.age;
     mode = "0400";
   };
 
   age.secrets.mimo-api-key = {
-    file = ../../secrets/mimo-api-key.age;
+    file = ../secrets/mimo-api-key.age;
     mode = "0400";
   };
 

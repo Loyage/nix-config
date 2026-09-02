@@ -52,8 +52,8 @@ clone 后是乱码 → 必须先 unlock        部署时用本机 SSH ed25519 �
 |------|----------------|-----------------|---------------------------|
 | 装 Nix | 跳过（自带） | 官方安装器 | 官方 daemon 安装器 |
 | 机器身份 | `hosts/local/`（hostname、GRUB UUID、resume） | `vars.macosHostname` + 系统主机名 | 无需（自动读 `USER`/`HOME`） |
-| 首次部署 | `sudo nixos-rebuild switch --flake .#nixos --impure` | 引导后用 `darwin-rebuild switch --flake .` | `nix run home-manager/master -- switch --flake .#remote --impure` |
-| 之后日常 | `just switch` | `just switch` | `just remote-switch` |
+| 首次部署 | `sudo nixos-rebuild switch --flake path:.#nixos --impure` | 引导后用 `darwin-rebuild switch --flake path:.` | `nix run home-manager/master -- switch --flake path:.#remote --impure` |
+| 之后日常 | `just switch` | `just switch` | `just switch` |
 | agenix 解密路径 | `/run/agenix/...` | `/run/agenix/...`（重启清空） | `${XDG_RUNTIME_DIR}/agenix/...`（通常 `/run/user/1000/...`） |
 
 ### 0.2 硬性约定（违反会静默失败）
@@ -61,9 +61,16 @@ clone 后是乱码 → 必须先 unlock        部署时用本机 SSH ed25519 �
 - **仓库必须 clone 到 `~/nix-config`**。`home/programs/core-tools/default.nix` 用
   `mkOutOfStoreSymlink` 硬编码 `${HOME}/nix-config/config` 生成 `~/.config/*` 符号链接，
   换路径会导致配置不生效。
-- **新建/新修改的 tracked 文件之外**：flake 构建只读取 git 跟踪的文件。改 `vars/*.nix`
-  或新建模块后必须 `git add` 才会被 build 看到（`hosts/local/` 是 gitignored，所以
-  NixOS 构建需要 `--impure`）。
+- **新文件在正式部署前仍必须 `git add`**。本仓库使用的 `path:.` 会读取当前工作区，
+  所以未跟踪文件在本机可能也能参与构建；但不提交它们会造成“本机成功、其他机器缺文件”的
+  不可复现状态。`hosts/local/` 是有意 gitignore 的例外，因此 NixOS 构建保留 `--impure`。
+- **本仓库的部署命令必须使用 `path:.` 作为 flake 路径**。普通的 `.` 会按 Git 仓库
+  取源，而 git-crypt 的加密文件在 Git 对象中仍是密文；`path:.` 才会读取工作区中
+  已经解锁的明文。执行任何 switch 前仍必须先完成第 5 步。
+- **不要把高敏感明文放进 `vars/private.nix`**。`path:.` 会把解锁后的源码复制到
+  `/nix/store`，而 Nix store 通常对本机其他用户可读。公网 IP、主机名等低敏感结构化配置
+  可以使用 git-crypt；API key、token、密码和私钥必须使用 agenix。git-crypt keyfile
+  必须放在仓库外，使用后立即删除。
 - **agenix 公钥只允许 `ssh-ed25519`**。加 `ssh-rsa` 会让 rekey 失败/所有机器解密失败。
 - **SSH 私钥必须空密码**（`-N ""`）：agenix 由 systemd/activation 非交互解密。
 
@@ -83,7 +90,7 @@ clone 后是乱码 → 必须先 unlock        部署时用本机 SSH ed25519 �
 
 ```bash
 uname -s -m                       # 平台与架构：Linux x86_64 / Darwin arm64 / Linux aarch64
-whoami                            # 应为 loyage（NixOS/macOS 上，若不是则见 2 末尾说明）
+whoami                            # NixOS/macOS 通常为 loyage；服务器可以是任意目标用户
 git --version; ssh -V             # 基础工具
 nix --version 2>/dev/null || echo "NIX_NOT_INSTALLED"
 test -d ~/nix-config && echo "EXISTS" || echo "OK"
@@ -192,34 +199,59 @@ cat docs/new-machine-setup.md | head -5   # ✅ 本文件可读（docs/ 未加�
 
 `vars/default.nix` 会 `import ./vars/private.nix`，不解锁就是乱码，flake 直接求值失败。
 
-### 5.1 获取 keyfile（二选一）
+### 5.1 获取 keyfile（三选一）
 
 🛑 **USER-ACTION B**，请用户任选其一提供：
 
 ```bash
-# 方式一：在 thinkpad 上导出后，通过安全渠道（密码管理器/加密聊天/U盘）传到本机
-#   cd ~/nix-config && git-crypt export-key /tmp/git-crypt.key   # 导出
+# 方式一：在已经解锁的 thinkpad 上导出，再通过安全渠道（密码管理器/加密聊天/U盘）传到本机
+#   cd ~/nix-config
+#   nix shell nixpkgs#git-crypt -c git-crypt status
+#   nix shell nixpkgs#git-crypt -c git-crypt export-key /tmp/git-crypt.key
 #   rm /tmp/git-crypt.key                                        # 传完后在 thinkpad 删掉
 # 若 thinkpad 能 SSH 到本机（openssh 在 2222 端口、公钥已注册），可直传：
 #   scp -P 2222 /tmp/git-crypt.key loyage@<本机IP>:~/
 
 # 方式二：从密码管理器取回之前保存的 key 文件
+
+# 方式三：在持有已注册 ed25519 私钥、能解密旧 .age 文件的机器上，从 agenix 备份恢复
+#   cd ~/nix-config
+#   umask 077
+#   agenix -d secrets/git-crypt-key.age -i ~/.ssh/id_ed25519 > /tmp/git-crypt.key
 ```
+
+> `export-key` 不能从锁定的仓库反向恢复密钥。若报 `Unable to open key file`，当前机器并非
+> 已解锁机器，请换一台机器或使用方式二/三。方式三也不能使用尚未注册并 rekey 的新机器密钥。
 
 ### 5.2 解锁
 
 ```bash
-# 本机若还没有 git-crypt（NixOS 首次部署前没有），用 nix 一次性跑，免安装：
-nix run nixpkgs#git-crypt -- unlock /path/to/git-crypt.key
+# 本机若还没有 git-crypt，用 nix shell 临时加入整个子进程的 PATH：
+nix shell nixpkgs#git-crypt -c git-crypt unlock /path/to/git-crypt.key
 # 或已安装：git-crypt unlock /path/to/git-crypt.key
-rm /path/to/git-crypt.key          # ⚠️ 用完即删，key 是敏感的
 ```
+
+> 不要使用 `nix run nixpkgs#git-crypt -- unlock ...`：Git 随后启动 smudge 子进程时可能
+> 找不到 `git-crypt`，导致密钥已安装但文件仍未解密。先完成下面的验证，再删除 keyfile。
+
+若 unlock 报 `existing encrypted files have not been decrypted`，说明密钥已写入仓库、但
+checkout 中途失败。保持 `git-crypt` 在 PATH 中，只重新检出受保护文件：
+
+```bash
+nix shell nixpkgs#git-crypt -c git checkout -- vars/private.nix
+# 若还有其他受 git-crypt 保护的文件，逐个执行同样命令。
+```
+
+> 不要用 `git checkout -- .`，它可能覆盖其他尚未提交的修改。
 
 ### ✅ 验证
 
 ```bash
 head -5 vars/private.nix           # 应看到明文 Nix 注释（"# 私有配置..."），不是 GITCRYPT 乱码
-git-crypt status | grep private    # 显示 "encrypted: vars/private.nix" 表示受保护且已解锁
+nix shell nixpkgs#git-crypt -c git-crypt status | grep private
+nix eval path:.#homeConfigurations.remote.activationPackage.drvPath --raw --impure >/dev/null
+# 上一行实例化完整 Home Manager derivation，证明解锁后的工作区和所有模块均可求值。
+rm /path/to/git-crypt.key          # ⚠️ 验证成功后立即删除
 ```
 
 > 之后 `git pull` 会自动维持解密状态，无需再次 unlock（除非执行过 `git-crypt lock`）。
@@ -274,7 +306,7 @@ fi
 
 ### 远程服务器 —— 无需操作
 
-`hosts/remote/host-user.nix` 通过 `getEnv "USER"/"HOME"` 自动取当前用户（所以部署
+`home/home-setting.nix` 在 headless profile 下通过 `getEnv "USER"/"HOME"` 自动取当前用户（所以部署
 必须带 `--impure`）。确认当前登录用户就是目标用户即可。
 
 ---
@@ -348,7 +380,7 @@ git log --oneline -2                 # ✅ 应看到 "rekey for <机器名>"
 
 ```bash
 cd ~/nix-config
-sudo nixos-rebuild switch --flake .#nixos --impure --show-trace
+sudo nixos-rebuild switch --flake path:.#nixos --impure --show-trace
 ```
 
 - `--impure` 必须：`hosts/local/` 是 gitignored，纯模式下求值会失败。
@@ -360,26 +392,30 @@ sudo nixos-rebuild switch --flake .#nixos --impure --show-trace
 ```bash
 cd ~/nix-config
 # 引导：先构建出系统，用系统自带的 darwin-rebuild 激活（使用仓库 pin 的 nix-darwin）
-nix build .#darwinConfigurations.${macosHostname}.system
-./result/sw/bin/darwin-rebuild switch --flake .
+nix build path:.#darwinConfigurations.${macosHostname}.system
+./result/sw/bin/darwin-rebuild switch --flake path:.
 # 备选引导（用 registry 的 nix-darwin master，版本可能略新）：
-# nix run github:lnl7/nix-darwin -- switch --flake .
+# nix run github:lnl7/nix-darwin -- switch --flake path:.
 ```
 
-之后日常：`just switch`（= `sudo darwin-rebuild switch --flake . --show-trace`）。
+之后日常：`just switch`（= `sudo darwin-rebuild switch --flake path:. --show-trace`）。
 
 ### 远程服务器
 
 ```bash
 cd ~/nix-config
+# just recipes 会先执行 headless-preflight：检查 git-crypt 文件头并实例化完整 activation derivation。
 # x86_64：
-nix run home-manager/master -- switch --flake .#remote --show-trace --impure -b backup
+nix run home-manager/master -- switch --flake path:.#remote --show-trace --impure -b backup
 # aarch64（Graviton/树莓派等）：
-nix run home-manager/master -- switch --flake .#remote-aarch64 --show-trace --impure -b backup
+nix run home-manager/master -- switch --flake path:.#remote-aarch64 --show-trace --impure -b backup
 ```
 
-- 之后日常：`home-manager switch --flake .#remote --impure -b backup`（`just remote-switch`）。
-- 以目标用户身份执行（`hosts/remote/host-user.nix` 读 `USER`/`HOME`）。
+- headless 配置通过全局能力 `hostProfile.graphical = false` 跳过 `home/programs/core-tools/gui`、GUI 配置链接和 Orca；它表达的是“无图形环境”，而不是机器是否通过 SSH 访问
+  AppImage；QQ、WeChat、Thunderbird、Zotero、WPS、Kitty、Ghostty、Zathura、Typora、
+  Neovide 等不会进入服务器 generation。
+- 之后日常统一执行 `just switch`；普通 Linux 会自动选择 `headless` 或 `headless-aarch64`，并判断是否需要通过 `nix run` 首次启动 Home Manager。
+- 以目标用户身份执行（headless profile 从 `USER`/`HOME` 获取身份，不在仓库中写死服务器用户名）。
 
 ### ✅ 部署日志应出现
 
@@ -444,6 +480,9 @@ pi
 |------|------|------|
 | `head vars/private.nix` 是 GITCRYPT 乱码 | 没 unlock | 重做第 5 步；确认 keyfile 与 `.gitattributes` 匹配 |
 | flake 求值报 `unexpected end of file`/语法错误，路径指向 `vars/private.nix` | 同上 | 先 unlock 再 eval |
+| 工作区已解锁，但 `/nix/store/...-source/vars/private.nix` 仍是 GITCRYPT | 使用了 Git 类型的 `.#...` flake source | 改用 `path:.#...`；仓库的 Justfile 已统一处理 |
+| unlock 后提示已设置密钥、但现有文件未解密 | `nix run` 启动的 smudge 子进程找不到 `git-crypt` | 用 `nix shell nixpkgs#git-crypt -c git checkout -- vars/private.nix` |
+| `git-crypt export-key` 报 `Unable to open key file` | 当前仓库从未成功解锁 | 换到已解锁旧机器导出，或从密码管理器/agenix 备份恢复 |
 | 部署日志 `[agenix] decrypting` 失败 / 找不到 key | 公钥没进 `publicKeys`，或 rekey 后没 pull | 重做第 7 步；确认是 `ssh-ed25519` |
 | 旧机器 `agenix -r` 报错 | `publicKeys` 混入了 `ssh-rsa` | 移除 rsa 条目后重跑 `agenix -r` |
 | `nixos-rebuild` 提示 flake 里没有 `.#nixos` | `hosts/local/` 不存在 | 重做第 6 步 NixOS 分支 |
@@ -459,9 +498,10 @@ pi
 
 ## 12. 最终自检清单
 
-- [ ] `uname -s -m` 与目标平台一致，`whoami` = `loyage`
+- [ ] `uname -s -m` 与目标平台一致；服务器上 `whoami` 是希望配置的目标用户
 - [ ] `~/nix-config` 存在，`git log` 有最新提交
 - [ ] `head vars/private.nix` 是明文
+- [ ] `just headless-preflight headless` 通过（无 sudo、无图形服务器）
 - [ ] 公钥已进 `vars/public.nix` 的 `publicKeys` 且已 push
 - [ ] `git log --oneline -2` 显示 rekey 提交已拉到
 - [ ] 首次部署日志有 `[agenix] decrypting...`

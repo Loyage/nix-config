@@ -27,30 +27,45 @@ deps:
 # NixOS 构建和切换
 # ─────────────────────────────────────────────────────────────────────────────
 
-# 构建并切换 NixOS 配置
+# 统一切换入口：NixOS 使用系统配置，普通 Linux 使用当前用户的 headless Home Manager
 [group('rebuild')]
 [linux]
 switch:
-  sudo nixos-rebuild switch --flake .#nixos --impure --show-trace --print-build-logs
+  @if test -e /etc/NIXOS; then \
+    test -d hosts/local || { echo "错误：NixOS 需要 hosts/local/；请从 hosts/local.example 创建并配置。" >&2; exit 1; }; \
+    sudo nixos-rebuild switch --flake path:.#nixos --impure --show-trace --print-build-logs; \
+  else \
+    case "$(uname -m)" in \
+      x86_64) target=headless ;; \
+      aarch64|arm64) target=headless-aarch64 ;; \
+      *) echo "错误：不支持的架构 $(uname -m)" >&2; exit 1 ;; \
+    esac; \
+    just headless-preflight "$target"; \
+    if command -v home-manager >/dev/null 2>&1; then \
+      home-manager switch --flake "path:.#$target" --show-trace --impure -b backup; \
+    else \
+      nix run home-manager/master -- switch --flake "path:.#$target" --show-trace --impure -b backup; \
+    fi; \
+  fi
 
 # 构建并切换 NixOS 配置 (使用测试通道)
 [group('rebuild')]
 [linux]
 switch-test:
   test -d hosts/local || (echo "hosts/local/ 不存在！请执行: cp -r hosts/local.example hosts/local" && exit 1)
-  sudo nixos-rebuild test --flake .#nixos --impure --print-build-logs
+  sudo nixos-rebuild test --flake path:.#nixos --impure --print-build-logs
 
 [group('rebuild')]
 [linux]
 switch-proxy:
   test -d hosts/local || (echo "hosts/local/ 不存在！请执行: cp -r hosts/local.example hosts/local" && exit 1)
-  sudo ALL_PROXY=http://127.0.0.1:7897 nixos-rebuild switch --flake .#nixos --impure --show-trace --print-build-logs
+  sudo ALL_PROXY=http://127.0.0.1:7897 nixos-rebuild switch --flake path:.#nixos --impure --show-trace --print-build-logs
 
 [group('rebuild')]
 [linux]
 switch-boot:
   test -d hosts/local || (echo "hosts/local/ 不存在！请执行: cp -r hosts/local.example hosts/local" && exit 1)
-  sudo nixos-rebuild boot --flake .#nixos --impure --print-build-logs
+  sudo nixos-rebuild boot --flake path:.#nixos --impure --print-build-logs
 
 # 查看 NixOS generations
 [group('rebuild')]
@@ -66,7 +81,7 @@ generations:
 [group('rebuild')]
 [macos]
 switch:
-  sudo darwin-rebuild switch --flake . --show-trace
+  sudo darwin-rebuild switch --flake path:. --show-trace
 
 # 查看 macOS generations
 [group('rebuild')]
@@ -77,7 +92,7 @@ generations:
 [group('rebuild')]
 [macos]
 switch-proxy:
-  sudo ALL_PROXY=http://127.0.0.1:7897 darwin-rebuild switch --flake . --show-trace
+  sudo ALL_PROXY=http://127.0.0.1:7897 darwin-rebuild switch --flake path:. --show-trace
 
 # 清理旧的 macOS generations
 [group('rebuild')]
@@ -140,7 +155,7 @@ hooks-install:
 [linux]
 [macos]
 home-switch:
-  home-manager switch --flake . --show-trace
+  home-manager switch --flake path:. --show-trace
 
 # 查看 Home Manager generations
 [group('home')]
@@ -157,28 +172,68 @@ home-clean:
   home-manager remove-generations old
 
 # ─────────────────────────────────────────────────────────────────────────────
-# 远程服务器开发环境（Ubuntu/Debian via SSH）
+# 无 sudo、无图形桌面的 standalone Home Manager 环境
 # ─────────────────────────────────────────────────────────────────────────────
+
+# 部署前检查：拒绝把尚未解锁的 git-crypt 文件交给 Nix，并实例化完整 activation derivation
+[group('remote')]
+headless-preflight TARGET="headless":
+  @magic="$(od -An -tx1 -N10 vars/private.nix | tr -d ' \n')"; \
+    test "$magic" != "00474954435259505400" || \
+    { echo "错误：vars/private.nix 尚未解锁，请先按 docs/new-machine-setup.md 第 5 步执行 git-crypt unlock。" >&2; exit 1; }
+  nix eval path:.#homeConfigurations.{{TARGET}}.activationPackage.drvPath --raw --impure >/dev/null
 
 # 首次部署：通过 nix run 安装 home-manager 并激活配置（x86_64）
 [group('remote')]
 remote-init:
-  nix run home-manager/master -- switch --flake .#remote --show-trace --impure -b backup
+  just headless-preflight remote
+  nix run home-manager/master -- switch --flake path:.#remote --show-trace --impure -b backup
 
 # 首次部署：aarch64 服务器（AWS Graviton、树莓派等）
 [group('remote')]
 remote-init-arm:
-  nix run home-manager/master -- switch --flake .#remote-aarch64 --show-trace --impure -b backup
+  just headless-preflight remote-aarch64
+  nix run home-manager/master -- switch --flake path:.#remote-aarch64 --show-trace --impure -b backup
 
 # 更新远程配置（已安装 home-manager 后使用）
 [group('remote')]
 remote-switch:
-  home-manager switch --flake .#remote --show-trace --impure -b backup
+  just headless-preflight remote
+  home-manager switch --flake path:.#remote --show-trace --impure -b backup
 
 # 更新远程配置（aarch64）
 [group('remote')]
 remote-switch-arm:
-  home-manager switch --flake .#remote-aarch64 --show-trace --impure -b backup
+  just headless-preflight remote-aarch64
+  home-manager switch --flake path:.#remote-aarch64 --show-trace --impure -b backup
+
+# 首次部署 headless x86_64 环境（推荐名称）
+[group('headless')]
+headless-init:
+  just headless-preflight headless
+  nix run home-manager/master -- switch --flake path:.#headless --show-trace --impure -b backup
+
+# 更新 headless x86_64 环境（推荐名称）
+[group('headless')]
+headless-switch:
+  just headless-preflight headless
+  home-manager switch --flake path:.#headless --show-trace --impure -b backup
+
+# 首次部署 / 更新 headless aarch64 环境
+[group('headless')]
+headless-init-arm:
+  just headless-preflight headless-aarch64
+  nix run home-manager/master -- switch --flake path:.#headless-aarch64 --show-trace --impure -b backup
+
+[group('headless')]
+headless-switch-arm:
+  just headless-preflight headless-aarch64
+  home-manager switch --flake path:.#headless-aarch64 --show-trace --impure -b backup
+
+# 旧名称兼容入口
+[group('remote')]
+remote-preflight TARGET="remote":
+  just headless-preflight {{TARGET}}
 
 # 查看远程 home-manager generations
 [group('remote')]

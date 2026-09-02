@@ -2,6 +2,8 @@
   pkgs,
   mylib,
   config,
+  lib,
+  hostProfile ? { graphical = true; },
   ...
 }:
 let
@@ -22,7 +24,8 @@ let
   ];
 in
 {
-  imports = mylib.scanPaths ./.;
+  # imports 不能依赖普通 module option，因此由 flake 注入的主机能力决定是否导入 GUI 子树。
+  imports = builtins.filter (module: hostProfile.graphical || module != ./gui) (mylib.scanPaths ./.);
 
   home.packages = tools;
 
@@ -34,15 +37,17 @@ in
     in
     {
       "nvim".source = mkLink "${confPath}/nvim";
-      "avater.png".source = mkLink "${confPath}/avater.png";
       "bash".source = mkLink "${confPath}/bash";
       "zsh".source = mkLink "${confPath}/zsh";
-      "kitty".source = mkLink "${confPath}/kitty";
-      "ghostty".source = mkLink "${confPath}/ghostty";
-      "zathura".source = mkLink "${confPath}/zathura";
       "opencode/opencode.jsonc".source = mkLink "${confPath}/opencode/opencode.jsonc";
       "opencode/tui.jsonc".source = mkLink "${confPath}/opencode/tui.jsonc";
       # pi-web-access 配置
       "pi/web-search.json".source = mkLink "${confPath}/pi/web-search.json";
+    }
+    // lib.optionalAttrs hostProfile.graphical {
+      "avater.png".source = mkLink "${confPath}/avater.png";
+      "kitty".source = mkLink "${confPath}/kitty";
+      "ghostty".source = mkLink "${confPath}/ghostty";
+      "zathura".source = mkLink "${confPath}/zathura";
     };
 }

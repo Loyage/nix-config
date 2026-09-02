@@ -3,18 +3,26 @@
   config,
   mylib,
   myvars,
+  hostProfile ? { systemManaged = true; },
   ...
 }:
 let
+  envUsername = builtins.getEnv "USER";
+  envHomeDirectory = builtins.getEnv "HOME";
+  username =
+    if hostProfile.systemManaged || envUsername == "" then myvars.username else envUsername;
+  homeDirectory =
+    if hostProfile.systemManaged || envHomeDirectory == "" then
+      (if pkgs.stdenv.isDarwin then "/Users/${username}" else "/home/${username}")
+    else
+      envHomeDirectory;
   skillsSourceDir = ../config/skills;
-  skillsTargetDir = "${config.home.homeDirectory}/nix-config/config/skills";
-  researchSkillsTargetDir = "${config.home.homeDirectory}/nix-config/config/research-skills";
+  skillsTargetDir = "${homeDirectory}/nix-config/config/skills";
+  researchSkillsTargetDir = "${homeDirectory}/nix-config/config/research-skills";
 in
 {
   home = {
-    inherit (myvars) username;
-    homeDirectory =
-      if pkgs.stdenv.isDarwin then "/Users/${myvars.username}" else "/home/${myvars.username}";
+    inherit username homeDirectory;
     stateVersion = "25.11";
   };
 
