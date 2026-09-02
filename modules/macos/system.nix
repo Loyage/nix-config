@@ -11,6 +11,7 @@
   system = {
     stateVersion = 5; # Define the state version of the system configuration.
     primaryUser = "loyage";
+    defaults.dock.mru-spaces = false;
   };
   programs.zsh.enable = true;
 
