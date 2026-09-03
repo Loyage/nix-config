@@ -5,6 +5,11 @@
 alias ntop='nvitop'
 alias J='just'
 
+# macOS Finder
+if [ "$(uname -s)" = "Darwin" ]; then
+  alias finder='open'
+fi
+
 # -----------------------------------------------------
 # Better commands
 # -----------------------------------------------------
