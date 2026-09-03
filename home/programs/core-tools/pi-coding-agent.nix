@@ -84,7 +84,8 @@
   };
 
   # @pi-orca/agents：声明式维护用户级子代理模板。
-  # scout/planner 使用低开销 SDK；worker/reviewer 使用独立进程，避免子代理故障影响主 Pi。
+  # scout/planner 使用低开销 SDK；写入和审查代理使用独立进程，避免子代理故障影响主 Pi。
+  # worktree 代理由插件自动分配独立 worktree/分支，适合显式要求隔离实施的任务。
   home.file =
     lib.mapAttrs' (name: text: lib.nameValuePair ".pi/agent/orca/agents/${name}.md" { inherit text; })
       {
@@ -158,6 +159,33 @@
           # Worker Agent
 
           先阅读现有实现和项目约定，再完成指定改动并运行相关检查。不要扩大范围；报告改动、验证结果和遗留风险。
+        '';
+
+        worktree = ''
+          ---
+          name: worktree
+          description: 在独立 Git worktree 和分支中实施代码改动
+          model: openai-codex/gpt-5.6-luna
+          thinking: medium
+          context: fresh
+          tools: [read, write, edit, grep, find, ls, bash]
+          skills: []
+          restrictions: []
+          restrictionsMode: override
+          isolation: process
+          lifecycle: one-shot
+          completionNotify: parent
+          useWorktree: true
+          labels:
+            category: implementation
+            workspace: worktree
+          ---
+
+          # Worktree Worker Agent
+
+          你在插件自动创建的独立 Git worktree 和 `orca/...` 分支中工作。
+          先阅读现有实现和项目约定，再完成指定改动并运行相关检查。
+          不要扩大任务范围，不要推送远端。完成后提交全部相关改动，并报告分支名、提交哈希、验证结果和遗留风险，方便父代理审查后合并。
         '';
 
         reviewer = ''
