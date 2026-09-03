@@ -164,7 +164,9 @@
             inherit system;
             config.allowUnfree = true;
           };
-          extraSpecialArgs = specialArgs // { hostProfile = headlessProfile; };
+          extraSpecialArgs = specialArgs // {
+            hostProfile = headlessProfile;
+          };
           modules = [
             ./home/remote-server.nix
             agenix.homeManagerModules.default
@@ -176,7 +178,9 @@
       localHostDir = /home/loyage/nix-config/hosts/local;
 
       mkNixosSystem = nixpkgs.lib.nixosSystem {
-        specialArgs = specialArgs // { hostProfile = desktopProfile; };
+        specialArgs = specialArgs // {
+          hostProfile = desktopProfile;
+        };
         system = "x86_64-linux";
         pkgs = import inputs.nixpkgs-unstable {
           system = "x86_64-linux";
@@ -195,7 +199,9 @@
             home-manager = {
               useGlobalPkgs = true;
               useUserPackages = true;
-              extraSpecialArgs = specialArgs // { hostProfile = desktopProfile; };
+              extraSpecialArgs = specialArgs // {
+                hostProfile = desktopProfile;
+              };
               backupFileExtension = "home-manager.backup";
               users.${myvars.username} = import ./home/nixos.nix;
             };
@@ -220,7 +226,9 @@
 
       # macOS 配置
       darwinConfigurations."${myvars.macosHostname}" = nix-darwin.lib.darwinSystem {
-        specialArgs = specialArgs // { hostProfile = desktopProfile; };
+        specialArgs = specialArgs // {
+          hostProfile = desktopProfile;
+        };
         system = "aarch64-darwin";
         pkgs = import inputs.nixpkgs-unstable {
           system = "aarch64-darwin";
@@ -236,7 +244,9 @@
             home-manager = {
               useGlobalPkgs = true;
               useUserPackages = true;
-              extraSpecialArgs = specialArgs // { hostProfile = desktopProfile; };
+              extraSpecialArgs = specialArgs // {
+                hostProfile = desktopProfile;
+              };
               backupFileExtension = "home-manager.backup";
               users.${myvars.username} = import ./home/mac.nix;
             };

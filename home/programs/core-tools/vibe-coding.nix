@@ -2,7 +2,9 @@
   inputs,
   lib,
   pkgs,
-  hostProfile ? { graphical = true; },
+  hostProfile ? {
+    graphical = true;
+  },
   ...
 }:
 {

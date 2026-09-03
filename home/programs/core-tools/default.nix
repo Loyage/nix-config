@@ -3,7 +3,9 @@
   mylib,
   config,
   lib,
-  hostProfile ? { graphical = true; },
+  hostProfile ? {
+    graphical = true;
+  },
   ...
 }:
 let

@@ -3,14 +3,15 @@
   config,
   mylib,
   myvars,
-  hostProfile ? { systemManaged = true; },
+  hostProfile ? {
+    systemManaged = true;
+  },
   ...
 }:
 let
   envUsername = builtins.getEnv "USER";
   envHomeDirectory = builtins.getEnv "HOME";
-  username =
-    if hostProfile.systemManaged || envUsername == "" then myvars.username else envUsername;
+  username = if hostProfile.systemManaged || envUsername == "" then myvars.username else envUsername;
   homeDirectory =
     if hostProfile.systemManaged || envHomeDirectory == "" then
       (if pkgs.stdenv.isDarwin then "/Users/${username}" else "/home/${username}")
