@@ -38,6 +38,18 @@
     ) myvars.sshHosts;
   };
 
+  # OpenSSH 会拒绝 owner 既非当前用户也非 root 的配置文件。Nix Store 在
+  # 用户命名空间中可能显示为 nobody，因此把 HM 生成的 symlink 落地成普通文件。
+  # force 避免下次激活时将这个普通文件重复备份为 .home-manager.backup。
+  home.file.".ssh/config".force = true;
+  home.activation.materializeSshConfig = lib.hm.dag.entryAfter [ "linkGeneration" ] ''
+    config="$HOME/.ssh/config"
+    tmp="$config.tmp"
+    run cp --dereference "$config" "$tmp"
+    run chmod 600 "$tmp"
+    run mv -f "$tmp" "$config"
+  '';
+
   # 本机 authorized_keys（允许哪些公钥登录，公钥非机密）
   # 不用 home.file（它是 symlink 到 nix store、owner=root，sshd StrictModes 会拒绝），
   # 用 activation 写真实文件并 chmod 600，三平台（NixOS/macOS/remote）行为一致。
