@@ -157,7 +157,7 @@
           ---
           name: worker
           description: 按明确任务实施代码改动并进行验证
-          model: openai-codex/gpt-5.6-luna
+          model: openai-codex/gpt-5.6-sol
           thinking: medium
           context: fresh
           tools: [read, write, edit, grep, find, ls, bash]
@@ -181,7 +181,7 @@
           ---
           name: worktree
           description: 在独立 Git worktree 和分支中实施代码改动
-          model: openai-codex/gpt-5.6-luna
+          model: openai-codex/gpt-5.6-sol
           thinking: medium
           context: fresh
           tools: [read, write, edit, grep, find, ls, bash]
