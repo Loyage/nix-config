@@ -2,6 +2,7 @@
   inputs,
   pkgs,
   lib,
+  myvars,
   ...
 }:
 {
@@ -82,6 +83,21 @@
       };
     };
   };
+
+  # git-crypt 默认从每个 worktree 独立的 Git 目录读取 key，而 key 实际只存在于
+  # 主仓库的 common Git 目录。让过滤器显式使用 common dir，避免 agents 创建
+  # worktree 时因 smudge 找不到 key 而失败。
+  home.activation.piAgentsGitCryptWorktree = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    repo="$HOME/${myvars.repositoryDirectory}"
+    if ${pkgs.git}/bin/git -C "$repo" rev-parse --git-dir >/dev/null 2>&1; then
+      ${pkgs.git}/bin/git -C "$repo" config --local filter.git-crypt.smudge \
+        'GIT_DIR="$(git rev-parse --git-common-dir)" git-crypt smudge'
+      ${pkgs.git}/bin/git -C "$repo" config --local filter.git-crypt.clean \
+        'GIT_DIR="$(git rev-parse --git-common-dir)" git-crypt clean'
+      ${pkgs.git}/bin/git -C "$repo" config --local diff.git-crypt.textconv \
+        'GIT_DIR="$(git rev-parse --git-common-dir)" git-crypt diff'
+    fi
+  '';
 
   # @pi-orca/agents：声明式维护用户级子代理模板。
   # scout/planner 使用低开销 SDK；写入和审查代理使用独立进程，避免子代理故障影响主 Pi。
