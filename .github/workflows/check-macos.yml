@@ -17,9 +17,9 @@ jobs:
       - uses: actions/checkout@v4
       - uses: DeterminateSystems/nix-installer-action@main
       - name: Replace encrypted private vars with CI placeholder
-        run: printf '{ sshHosts = {}; }\n' > vars/private.nix
-      - name: Evaluate every platform
-        run: nix flake check --all-systems --no-build --show-trace --impure
+        run: printf '{ sshHosts = { }; }\n' > vars/private.nix
+      # Evaluating all platform outputs with `--no-build` triggers IFDs
+      # before generated build inputs exist. Build the native checks directly.
       - name: Build macOS checks
         run: |
           nix build --impure .#checks.aarch64-darwin.pre-commit-check --show-trace
