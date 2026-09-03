@@ -58,6 +58,7 @@
         "npm:pi-dynamic-workflows@1.0.1"
         "npm:pi-plan-mode@0.4.8"
         "npm:pi-powerline-footer@0.16.0"
+        "npm:@pi-orca/agents@0.0.5"
       ];
 
     };
@@ -81,6 +82,108 @@
       };
     };
   };
+
+  # @pi-orca/agents：声明式维护用户级子代理模板。
+  # scout/planner 使用低开销 SDK；worker/reviewer 使用独立进程，避免子代理故障影响主 Pi。
+  home.file =
+    lib.mapAttrs' (name: text: lib.nameValuePair ".pi/agent/orca/agents/${name}.md" { inherit text; })
+      {
+        scout = ''
+          ---
+          name: scout
+          description: 快速、只读的代码库探索与信息收集
+          model: deepseek/deepseek-v4-flash
+          thinking: minimal
+          context: fresh
+          tools: [read, grep, find, ls, bash]
+          skills: []
+          restrictions: []
+          restrictionsMode: override
+          isolation: sdk
+          lifecycle: one-shot
+          completionNotify: parent
+          useWorktree: false
+          labels:
+            category: investigation
+          ---
+
+          # Scout Agent
+
+          快速调查指定问题并返回简洁、可核验的结论。只读操作，不修改文件；引用具体文件路径和行号。
+        '';
+
+        planner = ''
+          ---
+          name: planner
+          description: 分解复杂任务并制定依赖明确的实施计划
+          model: openai-codex/gpt-5.6-sol
+          thinking: high
+          context: fresh
+          tools: [read, grep, find, ls]
+          skills: []
+          restrictions: []
+          restrictionsMode: override
+          isolation: sdk
+          lifecycle: one-shot
+          completionNotify: parent
+          useWorktree: false
+          labels:
+            category: planning
+          ---
+
+          # Planner Agent
+
+          调查现有实现后制定具体计划。指出文件、符号、执行顺序、依赖、风险和验证步骤；只规划，不实施。
+        '';
+
+        worker = ''
+          ---
+          name: worker
+          description: 按明确任务实施代码改动并进行验证
+          model: openai-codex/gpt-5.6-luna
+          thinking: medium
+          context: fresh
+          tools: [read, write, edit, grep, find, ls, bash]
+          skills: []
+          restrictions: []
+          restrictionsMode: override
+          isolation: process
+          lifecycle: one-shot
+          completionNotify: parent
+          useWorktree: false
+          labels:
+            category: implementation
+          ---
+
+          # Worker Agent
+
+          先阅读现有实现和项目约定，再完成指定改动并运行相关检查。不要扩大范围；报告改动、验证结果和遗留风险。
+        '';
+
+        reviewer = ''
+          ---
+          name: reviewer
+          description: 只读审查代码的正确性、安全性和一致性
+          model: openai-codex/gpt-5.6-sol
+          thinking: high
+          context: fresh
+          tools: [read, grep, find, ls, bash]
+          skills: []
+          restrictions: []
+          restrictionsMode: override
+          isolation: process
+          lifecycle: one-shot
+          completionNotify: parent
+          useWorktree: false
+          labels:
+            category: review
+          ---
+
+          # Reviewer Agent
+
+          只读审查，不修改文件。按严重程度列出发现，并为每项提供文件路径、行号、影响和建议修复方式。
+        '';
+      };
 
   # rpiv-ask-user-question：控制模型何时通过结构化问答向用户确认决策。
   xdg.configFile."rpiv-ask-user-question/config.json".text = builtins.toJSON {
