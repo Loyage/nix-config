@@ -4,16 +4,18 @@
 
 > 📖 相关文档：
 > - [新机器部署指南（AI Agent 可执行）](docs/new-machine-setup.md) — 新机器完整上线流程（含 git-crypt / agenix）
+> - [配置维护与安全注意事项](docs/maintenance.md) — 检查、部署、SSH、Homebrew 与 CI 注意事项
 
 ## 支持的平台
 
 | 配置 | 平台 | Flake 输出 |
 |------|------|------------|
-| ThinkPad | NixOS x86_64 | `nixosConfigurations.thinkpad` |
-| Legion | NixOS x86_64 | `nixosConfigurations.legion` |
-| MacBook Air | macOS aarch64 | `macosConfigurations.LoyagedeMacBook-Air` |
-| 远程服务器 | Linux x86_64 | `homeConfigurations.remote` |
-| 远程服务器 (ARM) | Linux aarch64 | `homeConfigurations.remote-aarch64` |
+| NixOS 本机 | NixOS x86_64 | `nixosConfigurations.nixos` |
+| MacBook Air | macOS aarch64 | `darwinConfigurations.LoyagedeMacBook-Air` |
+| Headless Linux | Linux x86_64 | `homeConfigurations.headless` |
+| Headless Linux (ARM) | Linux aarch64 | `homeConfigurations.headless-aarch64` |
+
+`remote` / `remote-aarch64` 是兼容别名。
 
 > **DeepSeek Harness（dsh）默认全机关闭**，只在 legion 一台主机上构建
 > （`hosts/local/host-user.nix` 里 `programs.deepseekHarness.enable = true`）。
@@ -22,6 +24,13 @@
 > 并会自动清理 `~/deepseek-harness` 与 `~/.dsh`。
 
 ---
+
+## 仓库路径约定
+
+仓库默认位于 `$HOME/nix-config`。Home Manager 的 out-of-store 配置链接统一从
+`vars/public.nix` 的 `repositoryDirectory` 推导；flake 求值时可通过
+`NIX_CONFIG_ROOT=/绝对路径` 覆盖。NixOS 的 gitignored `hosts/local/` 也从该根目录读取，
+因此本地部署需使用 `path:.` 和 `--impure`。
 
 ## 本地机器
 
@@ -143,6 +152,29 @@ just switch
 > `hostProfile.graphical = false` 会排除 GUI 模块、GUI 配置链接和仅桌面使用的软件。
 > 用户名和 home 目录来自运行命令时的 `USER`/`HOME`，仓库不保存服务器用户名。
 > 旧的 `#remote` / `just remote-switch` 名称暂时保留为兼容别名。
+
+## 检查与 CI
+
+```bash
+just lint   # nixfmt、deadnix、Statix 和文本检查
+just check  # 评估全部平台，只构建当前平台的完整配置
+```
+
+`.github/workflows/check-linux.yml` 与 `check-macos.yml` 分平台构建实际系统或 Home Manager
+activation derivation。CI 不持有 git-crypt 密钥，而是在 checkout 后把加密的
+`vars/private.nix` 替换为只含空 `sshHosts` 的临时占位配置，不输出或上传解密内容。
+
+## 安全策略说明
+
+- 这是个人管理的工作站配置：NixOS 有意保留 `NOPASSWD: ALL` 和普通用户
+  `trusted-users`，二者都近似授予 root 权限，不应原样用于不受信任的多用户机器。
+- Steam 入站防火墙开关默认全部关闭；需要时只在 `hosts/local/` 按主机开启。
+- `allowUnfree = true` 有意保留，因为桌面层包含 Steam、专有 GUI 应用和字体；若用于
+  更严格的服务器环境，应改为 allowlist。
+- `localConfig.authorizedKeys` 支持按主机覆盖登录密钥。为避免迁移时锁死，未覆盖的主机
+  暂时回退到 `vars/public.nix` 的兼容列表；确认新终端可登录后再缩小列表。
+- darwin rebuild 不再自动更新、升级或 zap 清理 Homebrew；维护需显式执行
+  `just brew-maintain`。
 
 ---
 

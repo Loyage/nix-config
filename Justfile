@@ -94,6 +94,14 @@ generations:
 switch-proxy:
   sudo ALL_PROXY=http://127.0.0.1:7897 darwin-rebuild switch --flake path:. --show-trace
 
+# 显式更新 Homebrew；不再绑定到 darwin-rebuild 激活过程
+[group('rebuild')]
+[macos]
+brew-maintain:
+  brew update
+  brew upgrade
+  brew cleanup
+
 # 清理旧的 macOS generations
 [group('rebuild')]
 [macos]
@@ -132,12 +140,19 @@ optimize:
 lint:
   nix develop -c pre-commit run --all-files
 
-# 运行 nix flake check（评估所有配置 + 构建并运行 pre-commit 检查）
+# 评估所有平台；只构建当前平台的完整配置，避免 macOS 构建 Linux derivation
 [group('clean')]
 [linux]
 [macos]
 check:
-  nix flake check
+  nix flake check --all-systems --no-build --show-trace --impure
+  @case "$(uname -s)-$(uname -m)" in \
+    Darwin-arm64) attrs="pre-commit-check darwin-system" ;; \
+    Linux-x86_64) attrs="pre-commit-check headless-activation nixos-system" ;; \
+    Linux-aarch64|Linux-arm64) attrs="pre-commit-check headless-activation" ;; \
+    *) echo "错误：不支持的平台 $(uname -s)-$(uname -m)" >&2; exit 1 ;; \
+  esac; \
+  for attr in ${=attrs}; do nix build --impure ".#checks.$(nix eval --impure --raw --expr builtins.currentSystem).$attr" --show-trace; done
 
 # 安装 git pre-commit hooks（进入 devShell 时也会自动安装）
 [group('clean')]
@@ -150,12 +165,12 @@ hooks-install:
 # Home Manager
 # ─────────────────────────────────────────────────────────────────────────────
 
-# 构建并切换 Home Manager 配置 (NixOS)
+# 兼容入口：系统集成 HM 与 standalone Linux 均转发到统一 switch
 [group('home')]
 [linux]
 [macos]
 home-switch:
-  home-manager switch --flake path:. --show-trace
+  just switch
 
 # 查看 Home Manager generations
 [group('home')]

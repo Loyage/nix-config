@@ -3,6 +3,7 @@
   mylib,
   config,
   lib,
+  myvars,
   hostProfile ? {
     graphical = true;
   },
@@ -35,7 +36,7 @@ in
   xdg.configFile =
     let
       mkLink = config.lib.file.mkOutOfStoreSymlink;
-      confPath = "${config.home.homeDirectory}/nix-config/config";
+      confPath = "${config.home.homeDirectory}/${myvars.repositoryDirectory}/config";
     in
     {
       "nvim".source = mkLink "${confPath}/nvim";

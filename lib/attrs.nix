@@ -5,7 +5,7 @@
   #
   #   genAttrs [ "foo" "bar" ] (name: "x_" + name)
   #     => { foo = "x_foo"; bar = "x_bar"; }
-  genAttrs = lib.genAttrs;
+  inherit (lib) genAttrs;
 
   # Update only the values of the given attribute set.
   #

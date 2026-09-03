@@ -3,6 +3,7 @@
   pkgs,
   config,
   mylib,
+  myvars,
   ...
 }:
 let
@@ -25,7 +26,7 @@ in
   xdg.configFile =
     let
       mkLink = config.lib.file.mkOutOfStoreSymlink;
-      confPath = "${config.home.homeDirectory}/nix-config/config";
+      confPath = "${config.home.homeDirectory}/${myvars.repositoryDirectory}/config";
     in
     {
       "niri".source = mkLink "${confPath}/niri";

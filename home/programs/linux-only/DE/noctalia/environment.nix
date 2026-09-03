@@ -1,5 +1,4 @@
-{ ... }:
-{
+_: {
   home.sessionVariables = {
     QT_QPA_PLATFORM = "wayland;xcb";
     QT_QPA_PLATFORMTHEME = "qt6ct";

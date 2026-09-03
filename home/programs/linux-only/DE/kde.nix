@@ -26,10 +26,12 @@
     };
   };
   # 强制覆盖 KDE 运行时生成的 GTK 配置文件，避免 HM 每次 rebuild 冲突
-  home.file."${config.xdg.configHome}/gtk-2.0/gtkrc".force = lib.mkForce true;
-  home.file."${config.xdg.configHome}/gtk-3.0/settings.ini".force = lib.mkForce true;
-  home.file."${config.xdg.configHome}/gtk-4.0/settings.ini".force = lib.mkForce true;
-  home.file."${config.xdg.configHome}/gtk-4.0/gtk.css".force = lib.mkForce true;
+  home.file = {
+    "${config.xdg.configHome}/gtk-2.0/gtkrc".force = lib.mkForce true;
+    "${config.xdg.configHome}/gtk-3.0/settings.ini".force = lib.mkForce true;
+    "${config.xdg.configHome}/gtk-4.0/settings.ini".force = lib.mkForce true;
+    "${config.xdg.configHome}/gtk-4.0/gtk.css".force = lib.mkForce true;
+  };
 
   programs.plasma = {
     enable = true;
@@ -46,7 +48,7 @@
       };
       # 壁纸幻灯片（目录需存在，否则使用默认壁纸）
       wallpaperSlideShow = {
-        path = "/home/loyage/Pictures/Wallpapers";
+        path = "${config.home.homeDirectory}/Pictures/Wallpapers";
         interval = 1800;
       };
     };

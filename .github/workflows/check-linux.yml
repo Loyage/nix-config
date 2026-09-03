@@ -1,0 +1,40 @@
+name: Check Linux
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: ubuntu-24.04
+            system: x86_64-linux
+            attrs: pre-commit-check headless-activation nixos-system
+          - runner: ubuntu-24.04-arm
+            system: aarch64-linux
+            attrs: pre-commit-check headless-activation
+    runs-on: ${{ matrix.runner }}
+    env:
+      NIX_CONFIG_ROOT: ${{ github.workspace }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: DeterminateSystems/nix-installer-action@main
+      - name: Replace encrypted private vars with CI placeholder
+        run: printf '{ sshHosts = {}; }\n' > vars/private.nix
+      - name: Prepare NixOS host fixture
+        if: matrix.system == 'x86_64-linux'
+        run: cp -R hosts/local.example hosts/local
+      - name: Evaluate every platform
+        run: nix flake check --all-systems --no-build --show-trace --impure
+      - name: Build Linux checks
+        run: |
+          for attr in ${{ matrix.attrs }}; do
+            nix build --impure ".#checks.${{ matrix.system }}.$attr" --show-trace
+          done

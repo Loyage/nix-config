@@ -1,0 +1,26 @@
+name: Check macOS
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: macos-14
+    env:
+      NIX_CONFIG_ROOT: ${{ github.workspace }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: DeterminateSystems/nix-installer-action@main
+      - name: Replace encrypted private vars with CI placeholder
+        run: printf '{ sshHosts = {}; }\n' > vars/private.nix
+      - name: Evaluate every platform
+        run: nix flake check --all-systems --no-build --show-trace --impure
+      - name: Build macOS checks
+        run: |
+          nix build --impure .#checks.aarch64-darwin.pre-commit-check --show-trace
+          nix build --impure .#checks.aarch64-darwin.darwin-system --show-trace

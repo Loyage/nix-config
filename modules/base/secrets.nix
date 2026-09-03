@@ -1,37 +1,32 @@
-{ pkgs, myvars, ... }: {
-  # Agenix secret management configuration.
-  # identityPaths are the private keys used to decrypt the secrets.
-  # The system will try to use all of them until one works.
-  age.identityPaths = [
-    # System keys (typically for NixOS/Darwin system-level decryption)
-    "/etc/ssh/ssh_host_ed25519_key"
-    "/etc/ssh/ssh_host_rsa_key"
-    # User keys
-    "${if pkgs.stdenv.isDarwin then "/Users" else "/home"}/${myvars.username}/.ssh/id_rsa"
-    "${if pkgs.stdenv.isDarwin then "/Users" else "/home"}/${myvars.username}/.ssh/id_ed25519"
-  ];
+{ pkgs, myvars, ... }:
+{
+  age = {
+    # System and user keys are tried in order until one decrypts the secret.
+    identityPaths = [
+      "/etc/ssh/ssh_host_ed25519_key"
+      "/etc/ssh/ssh_host_rsa_key"
+      "${if pkgs.stdenv.isDarwin then "/Users" else "/home"}/${myvars.username}/.ssh/id_rsa"
+      "${if pkgs.stdenv.isDarwin then "/Users" else "/home"}/${myvars.username}/.ssh/id_ed25519"
+    ];
 
-  # You can define secrets here or in other modules.
-  age.secrets.deepseek-api-key = {
-    # pi agent 的 deepseek API key（加密自 secrets/deepseek-api-key.age）
-    file = ../../secrets/deepseek-api-key.age;
-    # 默认 path 为 /run/agenix/deepseek-api-key（symlink → /run/agenix.d/deepseek-api-key）
-    mode = "0400";
-    owner = myvars.username;
-  };
-
-  age.secrets.mimo-api-key = {
-    # pi agent 的 mimo API key（加密自 secrets/mimo-api-key.age）
-    file = ../../secrets/mimo-api-key.age;
-    mode = "0400";
-    owner = myvars.username;
-  };
-
-  age.secrets.git-crypt-key = {
-    # git-crypt 对称 key，解锁 vars/private.nix（含公网 IP）
-    # 用法：git-crypt unlock /run/agenix/git-crypt-key
-    file = ../../secrets/git-crypt-key.age;
-    mode = "0400";
-    owner = myvars.username;
+    secrets = {
+      deepseek-api-key = {
+        # 默认 path 为 /run/agenix/deepseek-api-key。
+        file = ../../secrets/deepseek-api-key.age;
+        mode = "0400";
+        owner = myvars.username;
+      };
+      mimo-api-key = {
+        file = ../../secrets/mimo-api-key.age;
+        mode = "0400";
+        owner = myvars.username;
+      };
+      git-crypt-key = {
+        # 用法：git-crypt unlock /run/agenix/git-crypt-key
+        file = ../../secrets/git-crypt-key.age;
+        mode = "0400";
+        owner = myvars.username;
+      };
+    };
   };
 }

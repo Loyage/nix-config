@@ -1,17 +1,16 @@
 {
   description = "Nix for macOS configuration";
 
+  # modules/base/nix.nix 直接复用此 attrset，避免两处列表漂移。
   nixConfig = {
     substituters = [
-      "https://mirror.tuna.tsinghua.edu.cn/nix-channels/store" # Tsinghua University Mirror
-      # "https://mirror.sjtu.edu.cn/nix-channels/store" # Shanghai Jiao Tong University Mirror
-      "https://cache.nixos.org" # Official NixOS Cache
-      "https://nix-community.cachix.org" # Community Cachix Cache
+      "https://mirrors.ustc.edu.cn/nix-channels/store"
+      "https://mirror.tuna.tsinghua.edu.cn/nix-channels/store"
+      "https://nix-community.cachix.org"
+      "https://cache.nixos.org"
     ];
     trusted-public-keys = [
-      # nix community's cache server public key
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-      # nixos官方缓存key，在nixos中硬编码，可以不需要，但是在nix-darwin中需要显式添加
       "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
     ];
   };
@@ -73,6 +72,7 @@
     nix-openclaw = {
       url = "github:openclaw/nix-openclaw";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
+      inputs.home-manager.follows = "home-manager";
     };
     plasma-manager = {
       url = "github:nix-community/plasma-manager";
@@ -102,11 +102,11 @@
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
     deepseek-harness-flake = {
-      # DeepSeek Harness（dsh）home-manager 模块，独立 flake（~ 下单独 git 仓库）
-      # ⚠️ 上传 GitHub 后务必改为：url = "github:<你的用户名>/deepseek-harness-flake";
-      #    然后 nix flake lock --update-input deepseek-harness-flake
-      # （用绝对路径：相对 path: 会在纯模式下被解析到 /nix/store 而报错）
+      # DeepSeek Harness（dsh）home-manager 模块。复用顶层 nixpkgs/HM，
+      # 确保模块 option 与本仓库使用的 Home Manager 版本一致。
       url = "github:Loyage/deepseek-harness-flake";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+      inputs.home-manager.follows = "home-manager";
     };
   };
 
@@ -133,6 +133,7 @@
 
       systems = [
         "x86_64-linux"
+        "aarch64-linux"
         "aarch64-darwin"
       ];
       forAllSystems =
@@ -144,9 +145,31 @@
           }) systems
         );
       preCommit = import ./git-hooks.nix { inherit self git-hooks; };
+      # currentSystem 在纯求值中不可用；原生系统 derivation 只在 --impure
+      # 检查中暴露，跨平台的 pre-commit checks 仍可纯求值。
+      evaluatorSystem = builtins.currentSystem or null;
+
+      # 仓库约定默认位于 $HOME/nix-config；可用 NIX_CONFIG_ROOT 覆盖。
+      # 纯求值时环境变量不可见，回退路径只用于判断 gitignored hosts/local/。
+      configuredRoot = builtins.getEnv "NIX_CONFIG_ROOT";
+      evaluationHome = builtins.getEnv "HOME";
+      repositoryRoot =
+        if configuredRoot != "" then
+          configuredRoot
+        else if evaluationHome != "" then
+          "${evaluationHome}/${myvars.repositoryDirectory}"
+        else
+          "/home/${myvars.username}/${myvars.repositoryDirectory}";
 
       # specialArgs 内的参数可以在各个模块中访问到，只需要你添加到函数输入变量中即可
-      specialArgs = { inherit inputs myvars mylib; };
+      specialArgs = {
+        inherit
+          inputs
+          myvars
+          mylib
+          repositoryRoot
+          ;
+      };
       desktopProfile = {
         graphical = true;
         systemManaged = true;
@@ -174,8 +197,9 @@
         };
 
       # 本机特定配置目录（gitignored，需要 --impure 构建）
-      # 新机器部署：cp -r hosts/local.example hosts/local && 编辑其中的文件
-      localHostDir = /home/loyage/nix-config/hosts/local;
+      # 新机器部署：cp -r hosts/local.example hosts/local && 编辑其中的文件。
+      localHostDir = "${repositoryRoot}/hosts/local";
+      localHostModules = if builtins.pathExists localHostDir then mylib.scanPaths localHostDir else [ ];
 
       mkNixosSystem = nixpkgs.lib.nixosSystem {
         specialArgs = specialArgs // {
@@ -208,24 +232,10 @@
           }
         ]
         # 导入 hosts/local/ 中所有 .nix 文件（硬件配置、主机名等）
-        ++ mylib.scanPaths localHostDir;
+        ++ localHostModules;
       };
-    in
-    {
-      # pre-commit hooks 检查（nix flake check 会构建并运行）
-      checks = forAllSystems (system: {
-        pre-commit-check = preCommit system;
-      });
 
-      # 开发 shell：进入后自动安装 git pre-commit hooks
-      devShells = forAllSystems (system: {
-        default = inputs.nixpkgs-unstable.legacyPackages.${system}.mkShell {
-          shellHook = (preCommit system).shellHook;
-        };
-      });
-
-      # macOS 配置
-      darwinConfigurations."${myvars.macosHostname}" = nix-darwin.lib.darwinSystem {
+      mkDarwinSystem = nix-darwin.lib.darwinSystem {
         specialArgs = specialArgs // {
           hostProfile = desktopProfile;
         };
@@ -273,6 +283,36 @@
           }
         ];
       };
+    in
+    {
+      # 不只枚举 outputs：checks 直接引用各平台完整系统/activation derivation。
+      checks = forAllSystems (
+        system:
+        {
+          pre-commit-check = preCommit system;
+        }
+        // lib.optionalAttrs (evaluatorSystem == system && lib.hasSuffix "-linux" system) {
+          headless-activation = (mkHeadlessHome system).activationPackage;
+        }
+        # NixOS modules contain Linux-only IFDs; expose this check only on Linux
+        # hosts/CI so macOS --all-systems never tries to realise them.
+        // lib.optionalAttrs (system == "x86_64-linux" && evaluatorSystem == "x86_64-linux") {
+          nixos-system = mkNixosSystem.config.system.build.toplevel;
+        }
+        // lib.optionalAttrs (system == "aarch64-darwin" && evaluatorSystem == system) {
+          darwin-system = mkDarwinSystem.system;
+        }
+      );
+
+      # 开发 shell：进入后自动安装 git pre-commit hooks
+      devShells = forAllSystems (system: {
+        default = inputs.nixpkgs-unstable.legacyPackages.${system}.mkShell {
+          inherit ((preCommit system)) shellHook;
+        };
+      });
+
+      # macOS 配置
+      darwinConfigurations."${myvars.macosHostname}" = mkDarwinSystem;
 
       # NixOS 配置（仅当 hosts/local/ 存在时定义，否则 nix flake check 在非 Linux 机器上会失败）
       nixosConfigurations = if builtins.pathExists localHostDir then { nixos = mkNixosSystem; } else { };

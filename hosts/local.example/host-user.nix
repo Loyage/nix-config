@@ -1,8 +1,12 @@
 # 本机特定配置：主机名、GRUB 双系统引导、休眠恢复设备等
 # 复制到 hosts/local/ 后根据本机情况修改
-{ ... }:
+{ myvars, ... }:
 {
   networking.hostName = "CHANGE-ME";
+
+  # 每台机器只保留实际需要的登录密钥，避免所有主机共享整套授权。
+  # 首次迁移可先使用 myvars.authorizedKeys，确认登录后再缩小列表。
+  home-manager.users.${myvars.username}.localConfig.authorizedKeys = myvars.authorizedKeys;
 
   # 可选：只在这台主机构建 DeepSeek Harness（模块默认全机关闭；当前仅 legion 开启）
   # programs.deepseekHarness.enable = true;

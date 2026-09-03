@@ -1,9 +1,9 @@
-{ ... }:
+{ config, myvars, ... }:
 {
   programs.noctalia.settings = {
     shell = {
       password_style = "random";
-      avatar_path = "/home/loyage/nix-config/config/avater.png";
+      avatar_path = "${config.home.homeDirectory}/${myvars.repositoryDirectory}/config/avater.png";
       lang = "zh-Hans";
       font_family = "Maple Mono NF CN";
       panel.launcher_position = "bottom_center";

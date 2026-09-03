@@ -1,5 +1,4 @@
-{ ... }:
-{
+_: {
   programs.noctalia.settings = {
     bar = {
       order = [ "mybar" ];

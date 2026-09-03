@@ -11,6 +11,8 @@ git-hooks.lib.${system}.run {
   hooks = {
     # Nix 格式化（RFC 风格，与 nixpkgs 一致）
     nixfmt.enable = true;
+    # Nix 静态分析；现有警告已清理，后续提交不得回归。
+    statix.enable = true;
     # 检测未使用的 Nix 绑定
     deadnix = {
       enable = true;

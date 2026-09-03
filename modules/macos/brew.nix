@@ -56,9 +56,13 @@ in
       "im-select" # auto select input method
     ];
     masApps = { };
-    onActivation.autoUpdate = true;
-    onActivation.upgrade = true;
-    onActivation.cleanup = "zap";
+    # rebuild 只收敛声明，不执行未锁定的更新、升级或破坏性 zap 清理。
+    # 需要维护时显式运行 `just brew-maintain`。
+    onActivation = {
+      autoUpdate = false;
+      upgrade = false;
+      cleanup = "none";
+    };
     taps = builtins.map mkTap (builtins.attrNames config.nix-homebrew.taps);
   };
 }

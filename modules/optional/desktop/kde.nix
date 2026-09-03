@@ -1,43 +1,48 @@
 { pkgs, ... }:
 {
-  # KDE Plasma 6 桌面环境
-  services.desktopManager.plasma6.enable = true;
+  # KDE Plasma 6 桌面环境及相关系统服务。
+  services = {
+    desktopManager.plasma6.enable = true;
+    gvfs.enable = true;
+    dbus.packages = [ pkgs.kdePackages.kwallet ];
+  };
 
-  # KDE 应用程序
-  environment.systemPackages = with pkgs; [
-    # 系统工具
-    kdePackages.ark # 压缩包管理
-    kdePackages.spectacle # 截图工具
-    kdePackages.gwenview # 图片查看器
-    kdePackages.okular # PDF 阅读器
-    kdePackages.kate # 文本编辑器
-    kdePackages.kcalc # 计算器
-    kdePackages.konsole # 终端
+  environment = {
+    systemPackages = with pkgs; [
+      kdePackages.ark
+      kdePackages.spectacle
+      kdePackages.gwenview
+      kdePackages.okular
+      kdePackages.kate
+      kdePackages.kcalc
+      kdePackages.konsole
+      kdePackages.kde-cli-tools
+      kdePackages.kscreen
+      kdePackages.powerdevil
+      kdePackages.bluedevil
+      kdePackages.kwayland
+      kdePackages.kwayland-integration
+      kdePackages.fcitx5-qt
+      kdePackages.breeze
+      kdePackages.breeze-icons
+      kdePackages.breeze-gtk
+      kdePackages.qtstyleplugin-kvantum
+      whitesur-kde
+      whitesur-icon-theme
+      whitesur-gtk-theme
+      whitesur-cursors
+    ];
+    plasma6.excludePackages = [ pkgs.kdePackages.dolphin ];
 
-    # 系统设置
-    kdePackages.kde-cli-tools
-    kdePackages.kscreen # 屏幕管理
-    kdePackages.powerdevil # 电源管理
-    kdePackages.bluedevil # 蓝牙管理
+    # greetd 启动的图形会话不会 source Home Manager 的 ~/.profile。
+    sessionVariables = {
+      GTK_IM_MODULE = "fcitx";
+      QT_IM_MODULE = "fcitx";
+      XMODIFIERS = "@im=fcitx";
+      GLFW_IM_MODULE = "fcitx5";
+    };
+  };
 
-    # Wayland 支持
-    kdePackages.kwayland
-    kdePackages.kwayland-integration
-    kdePackages.fcitx5-qt
-
-    # 主题和外观
-    kdePackages.breeze
-    kdePackages.breeze-icons
-    kdePackages.breeze-gtk
-    kdePackages.qtstyleplugin-kvantum # kvantum 窗口样式引擎
-    whitesur-kde
-    whitesur-icon-theme
-    whitesur-gtk-theme
-    whitesur-cursors
-  ];
-  environment.plasma6.excludePackages = [ pkgs.kdePackages.dolphin ];
-
-  # XDG 桌面门户（KDE portal 会与 Hyprland portal 共存，系统自动选择）
   xdg.portal = {
     enable = true;
     extraPortals = [
@@ -47,21 +52,5 @@
     config.common."org.freedesktop.impl.portal.FileChooser" = [ "termfilechooser" ];
   };
 
-  # GVFS 支持（网络文件系统、回收站等）
-  services.gvfs.enable = true;
-
-  # 允许 KDE Connect（如果需要与手机连接）
   programs.kdeconnect.enable = true;
-
-  # D-Bus 服务
-  services.dbus.packages = [ pkgs.kdePackages.kwallet ];
-
-  # 输入法环境变量必须在系统层设置，才能进入 KDE Plasma Wayland 的 systemd 用户会话
-  # home.sessionVariables 只写入 ~/.profile，greetd 启动的图形会话不会 source 它
-  environment.sessionVariables = {
-    GTK_IM_MODULE = "fcitx";
-    QT_IM_MODULE = "fcitx";
-    XMODIFIERS = "@im=fcitx";
-    GLFW_IM_MODULE = "fcitx5"; # kitty 使用 GLFW，需要此变量
-  };
 }

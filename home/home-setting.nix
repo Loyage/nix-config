@@ -17,9 +17,10 @@ let
       (if pkgs.stdenv.isDarwin then "/Users/${username}" else "/home/${username}")
     else
       envHomeDirectory;
+  repositoryRoot = "${homeDirectory}/${myvars.repositoryDirectory}";
   skillsSourceDir = ../config/skills;
-  skillsTargetDir = "${homeDirectory}/nix-config/config/skills";
-  researchSkillsTargetDir = "${homeDirectory}/nix-config/config/research-skills";
+  skillsTargetDir = "${repositoryRoot}/config/skills";
+  researchSkillsTargetDir = "${repositoryRoot}/config/research-skills";
 in
 {
   home = {
@@ -48,7 +49,7 @@ in
 
       # Pi Agent 全局指令文件
       ".pi/agent/AGENTS.md".source =
-        config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nix-config/config/pi/AGENTS.md";
+        config.lib.file.mkOutOfStoreSymlink "${repositoryRoot}/config/pi/AGENTS.md";
     };
 
   programs.home-manager.enable = true;

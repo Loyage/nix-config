@@ -6,11 +6,11 @@
 #    https://daiderd.com/nix-darwin/manual/index.html#sec-options
 #
 ###################################################################################
-{ pkgs, ... }:
+{ pkgs, myvars, ... }:
 {
   system = {
     stateVersion = 5; # Define the state version of the system configuration.
-    primaryUser = "loyage";
+    primaryUser = myvars.username;
     defaults.dock.mru-spaces = false;
   };
   programs.zsh.enable = true;

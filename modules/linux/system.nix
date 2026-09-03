@@ -33,6 +33,8 @@
     font-awesome
   ];
 
+  # 个人工作站需要无人值守执行 rebuild/systemctl 脚本，因此明确保留
+  # NOPASSWD: ALL。此策略等同于该用户可获取 root，不适用于多用户主机。
   security.sudo = {
     enable = true; # Enable sudo
     extraRules = [

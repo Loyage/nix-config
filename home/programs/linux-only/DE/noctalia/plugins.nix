@@ -1,5 +1,4 @@
-{ ... }:
-{
+_: {
   programs.noctalia.settings = {
     plugins = {
       auto_update = false;
