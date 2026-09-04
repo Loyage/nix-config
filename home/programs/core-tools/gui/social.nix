@@ -4,8 +4,6 @@
 }:
 {
   home.packages = with pkgs; [
-    # qq
-    # wechat
     # thunderbird
   ];
 }

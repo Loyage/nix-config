@@ -34,10 +34,10 @@ let
     # "obs"
   ];
   social-media = [
-    # "wechat"
-    # "qq"
-    # "discord"
-    # "telegram"
+    "wechat"
+    "qq"
+    "discord"
+    "telegram"
   ];
   entertainment = [
     "neteasemusic"
