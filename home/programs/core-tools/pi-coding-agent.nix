@@ -24,8 +24,9 @@
       lastChangelogVersion = "0.84.0";
 
       theme = "dark";
+      tuiMode = "fullscreen";
       defaultProvider = "openai-codex";
-      defaultModel = "gpt-5.6-luna";
+      defaultModel = "gpt-5.6-sol";
       defaultThinkingLevel = "medium";
 
       # pi-powerline-footer：状态栏、欢迎面板和快捷操作
