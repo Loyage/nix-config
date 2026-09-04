@@ -17,7 +17,7 @@
       codex
       antigravity-cli
     ]
-    ++ lib.optionals (pkgs.stdenv.isLinux && hostProfile.graphical) [
+    ++ lib.optionals (pkgs.stdenv.hostPlatform.isLinux && hostProfile.graphical) [
       inputs.orca.packages.${pkgs.stdenv.hostPlatform.system}.default
     ];
 }

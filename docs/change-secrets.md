@@ -106,19 +106,11 @@ just remote-switch   # 每台远程服务器（以目标用户身份）
 每台 switch 时 agenix 重新解密出新值：
 - `/run/agenix/deepseek-api-key`（NixOS/macOS）或 `${XDG_RUNTIME_DIR}/agenix/...`（remote）
 - pi agent 的 `apiKey = "!cat <path>"` 自动指向新值，无需改配置
-- dsh（DeepSeek Harness）：`dsh-setup.service` 会在 switch 激活时自动把新值写进
-  `~/.dsh/.credentials.yaml`；若想立即生效（不等 switch），手动执行：
-
-  ```bash
-  umask 077
-  printf 'DEEPSEEK_API_KEY: %s\n' "$(cat /run/agenix/deepseek-api-key)" > ~/.dsh/.credentials.yaml
-  ```
 
 ### A.5 验证本机生效
 
 ```bash
-head -c4 /run/agenix/deepseek-api-key        # 新值开头
-head -c4 ~/.dsh/.credentials.yaml 2>/dev/null # dsh 凭据也已更新（文件内容为 DEEPSEEK_API_KEY: sk-...）
+head -c4 /run/agenix/deepseek-api-key # 新值开头
 ```
 
 ---
@@ -298,7 +290,6 @@ rm /tmp/git-crypt.key
 | `agenix -r` 没有 rekey 新文件 | `secrets/secrets.nix` 没注册 | 补 B.1 后重跑 |
 | `agenix -e` 输入后提示 unchanged | 内容没变（diff 相同） | 确认 stdin 内容确实与旧值不同 |
 | 改完 switch 后 pi 仍用旧 key | 该机器没 switch / agenix 未重解密 | 重跑 `just switch`；检查 `/run/agenix/<name>` 内容 |
-| dsh 里没有默认 API | `~/.dsh/.credentials.yaml` 未重写 | switch 后 dsh-setup 会自动重写；或手动执行 A.4 的 printf 命令 |
 | remote 上读不到新值 | 路径是 `${XDG_RUNTIME_DIR}/agenix/...` 不是 `/run/agenix/...` | 用 `echo ${XDG_RUNTIME_DIR:-/run/user/$(id -u)}` 确认路径 |
 | `head vars/private.nix` 是 GITCRYPT 乱码 | 处于锁定状态 | 按 D.2 unlock |
 
@@ -310,5 +301,4 @@ rm /tmp/git-crypt.key
 - [ ] `agenix -d <改过的.age> -i ~/.ssh/id_ed25519 | head -c4` 输出新值开头
 - [ ] 本机 `/run/agenix/<name>` 已是新值（或 remote 的 XDG 路径）
 - [ ] 共享 key 轮换后，**所有**机器的 switch / remote-switch 都已执行（或已明确告知用户执行）
-- [ ] dsh 机器上 `~/.dsh/.credentials.yaml` 已更新（switch 或手动）
 - [ ] 敏感明文没有出现在本文件、git log、agent 对话或日志中

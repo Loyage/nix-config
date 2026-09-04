@@ -5,8 +5,8 @@
     identityPaths = [
       "/etc/ssh/ssh_host_ed25519_key"
       "/etc/ssh/ssh_host_rsa_key"
-      "${if pkgs.stdenv.isDarwin then "/Users" else "/home"}/${myvars.username}/.ssh/id_rsa"
-      "${if pkgs.stdenv.isDarwin then "/Users" else "/home"}/${myvars.username}/.ssh/id_ed25519"
+      "${if pkgs.stdenv.hostPlatform.isDarwin then "/Users" else "/home"}/${myvars.username}/.ssh/id_rsa"
+      "${if pkgs.stdenv.hostPlatform.isDarwin then "/Users" else "/home"}/${myvars.username}/.ssh/id_ed25519"
     ];
 
     secrets = {

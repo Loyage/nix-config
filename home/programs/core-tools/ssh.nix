@@ -6,7 +6,7 @@
   ...
 }:
 let
-  detectedHost = if pkgs.stdenv.isDarwin then myvars.macosHostname else builtins.getEnv "HOSTNAME";
+  detectedHost = if pkgs.stdenv.hostPlatform.isDarwin then myvars.macosHostname else builtins.getEnv "HOSTNAME";
   defaultAuthorizedKeys = myvars.authorizedKeysByHost.${detectedHost} or myvars.authorizedKeys;
 in
 {

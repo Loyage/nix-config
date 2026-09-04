@@ -1,9 +1,8 @@
-{ config, inputs, ... }:
+{ config, ... }:
 {
   imports = [
     ./home-setting.nix
     ./programs/core-tools
-    inputs.deepseek-harness-flake.homeModules.default
   ];
 
   # agenix 机密：deepseek / mimo API key（standalone home-manager 级）

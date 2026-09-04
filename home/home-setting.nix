@@ -14,7 +14,7 @@ let
   username = if hostProfile.systemManaged || envUsername == "" then myvars.username else envUsername;
   homeDirectory =
     if hostProfile.systemManaged || envHomeDirectory == "" then
-      (if pkgs.stdenv.isDarwin then "/Users/${username}" else "/home/${username}")
+      (if pkgs.stdenv.hostPlatform.isDarwin then "/Users/${username}" else "/home/${username}")
     else
       envHomeDirectory;
   repositoryRoot = "${homeDirectory}/${myvars.repositoryDirectory}";

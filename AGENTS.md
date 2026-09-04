@@ -55,6 +55,6 @@ Same `just switch` on macOS runs `darwin-rebuild switch --flake path:.`; recipes
 - **部署必须使用 `path:.`，新文件在正式部署前仍必须 `git add`。** 普通的 Git flake source（`.#...`）会从 Git 对象取得 git-crypt 密文；`path:.#...` 才读取解锁后的工作区，也可能让未跟踪文件在本机参与构建。新模块即使本机可见也必须提交，否则其他机器拉取后会缺文件。`hosts/local/` 是有意 gitignore 的例外。
 - **不要把高敏感明文放进 `vars/private.nix`。** `path:.` 会把解锁后的源码复制进通常可被本机其他用户读取的 `/nix/store`。公网 IP、主机名等低敏感结构化配置可使用 git-crypt；API key、token、密码和私钥必须使用 agenix。
 - No automated tests. Validation flow: `just switch-test`, verify manually, then `just switch`.
-- `flake.nix` overlays pin custom `qq` / `wechat` builds with exact hashes — update the hash when bumping versions. (deepseek-harness 的 `pnpm_11` pin 已随模块迁出到独立 flake `../deepseek-harness-flake` 的 `lib/pnpm.nix`，不在此处维护。)
+- `flake.nix` overlays pin custom `qq` / `wechat` builds with exact hashes — update the hash when bumping versions.
 - Headless standalone Home Manager derives `home.username`/`home.homeDirectory` from `USER`/`HOME`; run `just switch` as the target user. No server-specific username is committed.
 - Commit messages are short and descriptive; recent history uses `feat/fix(<scope>)` prefixes, lockfile bumps read `flake.lock: Update` (from `just up`), and occasional Chinese messages are intentional.

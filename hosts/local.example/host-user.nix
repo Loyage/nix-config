@@ -8,9 +8,6 @@
   # 首次迁移可先使用 myvars.authorizedKeys，确认登录后再缩小列表。
   home-manager.users.${myvars.username}.localConfig.authorizedKeys = myvars.authorizedKeys;
 
-  # 可选：只在这台主机构建 DeepSeek Harness（模块默认全机关闭；当前仅 legion 开启）
-  # programs.deepseekHarness.enable = true;
-
   boot = {
     loader.grub.extraEntries = ''
       menuentry "Windows" {

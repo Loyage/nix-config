@@ -14,6 +14,7 @@ let
     tree
     tree-sitter
     file
+    jq
     glow # markdown previewer in terminal
     aria2 # download manager
     socat # socket cat

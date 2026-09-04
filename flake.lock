@@ -128,47 +128,6 @@
         "type": "github"
       }
     },
-    "deepseek-harness": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1786621126,
-        "narHash": "sha256-ZPGCNoPXVjP76Tm/tFPDX2X95cd83M4iHLmVP5dR+Ps=",
-        "owner": "deepseek-ai",
-        "repo": "deepseek-harness",
-        "rev": "47f943859bef60e4160492346772ded9b24f765a",
-        "type": "github"
-      },
-      "original": {
-        "owner": "deepseek-ai",
-        "repo": "deepseek-harness",
-        "rev": "47f943859bef60e4160492346772ded9b24f765a",
-        "type": "github"
-      }
-    },
-    "deepseek-harness-flake": {
-      "inputs": {
-        "deepseek-harness": "deepseek-harness",
-        "home-manager": [
-          "home-manager"
-        ],
-        "nixpkgs": [
-          "nixpkgs-unstable"
-        ]
-      },
-      "locked": {
-        "lastModified": 1787030366,
-        "narHash": "sha256-uhkzUqLQjrY9KQNB8Wh3B2ShYmgVUzEASqYBBK8G0P8=",
-        "owner": "Loyage",
-        "repo": "deepseek-harness-flake",
-        "rev": "e643b0caf815a8c3cdc89d220b144c1bcb1bcfc9",
-        "type": "github"
-      },
-      "original": {
-        "owner": "Loyage",
-        "repo": "deepseek-harness-flake",
-        "type": "github"
-      }
-    },
     "fcitx5-vinput": {
       "flake": false,
       "locked": {
@@ -623,7 +582,6 @@
         "agenix": "agenix",
         "catppuccin": "catppuccin",
         "daipeihust": "daipeihust",
-        "deepseek-harness-flake": "deepseek-harness-flake",
         "fcitx5-vinput": "fcitx5-vinput",
         "git-hooks": "git-hooks",
         "hibiki": "hibiki",

@@ -17,12 +17,6 @@
 
 `remote` / `remote-aarch64` 是兼容别名。
 
-> **DeepSeek Harness（dsh）默认全机关闭**，只在 legion 一台主机上构建
-> （`hosts/local/host-user.nix` 里 `programs.deepseekHarness.enable = true`）。
-> 模块已独立为单独 flake：`../deepseek-harness-flake`（上传 GitHub 后改
-> `flake.nix` 里 `deepseek-harness-flake` input 的 URL）。其他机器 switch 时不会克隆/构建，
-> 并会自动清理 `~/deepseek-harness` 与 `~/.dsh`。
-
 ---
 
 ## 仓库路径约定

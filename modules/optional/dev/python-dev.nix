@@ -59,6 +59,6 @@ let
 in
 {
   environment.systemPackages =
-    lib.optionals pkgs.stdenv.isLinux [ pythonFHS ]
-    ++ lib.optionals pkgs.stdenv.isDarwin darwinPackages;
+    lib.optionals pkgs.stdenv.hostPlatform.isLinux [ pythonFHS ]
+    ++ lib.optionals pkgs.stdenv.hostPlatform.isDarwin darwinPackages;
 }

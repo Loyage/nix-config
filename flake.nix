@@ -101,13 +101,6 @@
       url = "github:stslex/orca-nix";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
-    deepseek-harness-flake = {
-      # DeepSeek Harness（dsh）home-manager 模块。复用顶层 nixpkgs/HM，
-      # 确保模块 option 与本仓库使用的 Home Manager 版本一致。
-      url = "github:Loyage/deepseek-harness-flake";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
-      inputs.home-manager.follows = "home-manager";
-    };
   };
 
   # The `outputs` function will return all the build results of the flake.

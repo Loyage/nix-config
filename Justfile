@@ -33,7 +33,7 @@ deps:
 switch:
   @if test -e /etc/NIXOS; then \
     test -d hosts/local || { echo "错误：NixOS 需要 hosts/local/；请从 hosts/local.example 创建并配置。" >&2; exit 1; }; \
-    sudo nixos-rebuild switch --flake path:.#nixos --impure --show-trace --print-build-logs; \
+    sudo env NIX_CONFIG_ROOT="$PWD" nixos-rebuild switch --flake path:.#nixos --impure --show-trace --print-build-logs; \
   else \
     case "$(uname -m)" in \
       x86_64) target=headless ;; \
@@ -53,19 +53,19 @@ switch:
 [linux]
 switch-test:
   test -d hosts/local || (echo "hosts/local/ 不存在！请执行: cp -r hosts/local.example hosts/local" && exit 1)
-  sudo nixos-rebuild test --flake path:.#nixos --impure --print-build-logs
+  sudo env NIX_CONFIG_ROOT="$PWD" nixos-rebuild test --flake path:.#nixos --impure --print-build-logs
 
 [group('rebuild')]
 [linux]
 switch-proxy:
   test -d hosts/local || (echo "hosts/local/ 不存在！请执行: cp -r hosts/local.example hosts/local" && exit 1)
-  sudo ALL_PROXY=http://127.0.0.1:7897 nixos-rebuild switch --flake path:.#nixos --impure --show-trace --print-build-logs
+  sudo env NIX_CONFIG_ROOT="$PWD" ALL_PROXY=http://127.0.0.1:7897 nixos-rebuild switch --flake path:.#nixos --impure --show-trace --print-build-logs
 
 [group('rebuild')]
 [linux]
 switch-boot:
   test -d hosts/local || (echo "hosts/local/ 不存在！请执行: cp -r hosts/local.example hosts/local" && exit 1)
-  sudo nixos-rebuild boot --flake path:.#nixos --impure --print-build-logs
+  sudo env NIX_CONFIG_ROOT="$PWD" nixos-rebuild boot --flake path:.#nixos --impure --print-build-logs
 
 # 查看 NixOS generations
 [group('rebuild')]

@@ -1,6 +1,5 @@
 {
   pkgs,
-  inputs,
   config,
   ...
 }:
@@ -8,7 +7,6 @@
   imports = [
     ./home-setting.nix
     ./programs/core-tools
-    inputs.deepseek-harness-flake.homeModules.default
   ];
 
   home = {
