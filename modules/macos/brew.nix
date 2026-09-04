@@ -36,8 +36,8 @@ let
   social-media = [
     "wechat"
     "qq"
-    "discord"
-    "telegram"
+    # "discord"
+    # "telegram"
   ];
   entertainment = [
     "neteasemusic"
