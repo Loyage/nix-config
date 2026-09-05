@@ -43,6 +43,14 @@
 
   # 基础服务
   services = {
+    # 合盖使用外接显示器时，DPMS 关闭显示器不能触发系统挂起。
+    # 休眠仍通过 Noctalia 会话面板显式执行。
+    logind.settings.Login = {
+      HandleLidSwitch = "ignore";
+      HandleLidSwitchExternalPower = "ignore";
+      HandleLidSwitchDocked = "ignore";
+    };
+
     printing.enable = true;
     pulseaudio.enable = false;
     pipewire = {
