@@ -24,6 +24,7 @@
       lastChangelogVersion = "0.84.0";
 
       theme = "dark";
+      collapseChangelog = true;
       tuiMode = "regular";
       defaultProvider = "openai-codex";
       defaultModel = "gpt-5.6-sol";
