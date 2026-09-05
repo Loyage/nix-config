@@ -1,7 +1,7 @@
 _: {
   programs.noctalia.settings = {
     plugins = {
-      auto_update = false;
+      auto_update = "none";
       source = [
         {
           kind = "git";
