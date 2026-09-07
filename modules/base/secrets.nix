@@ -23,6 +23,11 @@
         mode = "0400";
         owner = myvars.username;
       };
+      github-copilot-auth = {
+        file = ../../secrets/github-copilot-auth.age;
+        mode = "0400";
+        owner = myvars.username;
+      };
       git-crypt-key = {
         # 用法：git-crypt unlock /run/agenix/git-crypt-key
         file = ../../secrets/git-crypt-key.age;

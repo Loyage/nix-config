@@ -86,20 +86,63 @@
     };
   };
 
-  # git-crypt 默认从每个 worktree 独立的 Git 目录读取 key，而 key 实际只存在于
-  # 主仓库的 common Git 目录。让过滤器显式使用 common dir，避免 agents 创建
-  # worktree 时因 smudge 找不到 key 而失败。
-  home.activation.piAgentsGitCryptWorktree = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-    repo="$HOME/${myvars.repositoryDirectory}"
-    if ${pkgs.git}/bin/git -C "$repo" rev-parse --git-dir >/dev/null 2>&1; then
-      ${pkgs.git}/bin/git -C "$repo" config --local filter.git-crypt.smudge \
-        'GIT_DIR="$(git rev-parse --git-common-dir)" git-crypt smudge'
-      ${pkgs.git}/bin/git -C "$repo" config --local filter.git-crypt.clean \
-        'GIT_DIR="$(git rev-parse --git-common-dir)" git-crypt clean'
-      ${pkgs.git}/bin/git -C "$repo" config --local diff.git-crypt.textconv \
-        'GIT_DIR="$(git rev-parse --git-common-dir)" git-crypt diff'
-    fi
-  '';
+  home.activation = {
+    # GitHub Copilot 的长期 GitHub OAuth token 以独立 age secret 保存。首次部署时把
+    # 凭据种子合并进 pi 可写的 auth.json；之后由 pi 原地刷新短期 Copilot token。
+    # 已有登录不会被旧种子覆盖，其他 provider 的凭据也会保留。
+    piGithubCopilotAuth = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+      auth_dir="$HOME/.pi/agent"
+      auth_file="$auth_dir/auth.json"
+      credential_file="/run/agenix/github-copilot-auth"
+      runtime_dir="''${XDG_RUNTIME_DIR:-}"
+
+      if [ -n "$runtime_dir" ] && [ -r "$runtime_dir/agenix/github-copilot-auth" ]; then
+        credential_file="$runtime_dir/agenix/github-copilot-auth"
+      fi
+
+      if [ -r "$credential_file" ] \
+        && ${pkgs.jq}/bin/jq -e '.type == "oauth" and (.refresh | type == "string")' \
+          "$credential_file" >/dev/null \
+        && ! ${pkgs.jq}/bin/jq -e '."github-copilot" | type == "object"' \
+          "$auth_file" >/dev/null 2>&1; then
+        ${pkgs.coreutils}/bin/mkdir -p "$auth_dir"
+        ${pkgs.coreutils}/bin/chmod 700 "$auth_dir"
+        base="$auth_dir/.auth-base.$$"
+        merged="$auth_dir/.auth-merged.$$"
+        if [ ! -e "$auth_file" ]; then
+          printf '{}\n' > "$base"
+        elif ${pkgs.jq}/bin/jq -e 'type == "object"' "$auth_file" >/dev/null 2>&1; then
+          ${pkgs.coreutils}/bin/cp "$auth_file" "$base"
+        else
+          echo "warning: $auth_file is invalid; GitHub Copilot credential was not installed" >&2
+          base=""
+        fi
+
+        if [ -n "$base" ]; then
+          ${pkgs.jq}/bin/jq -s '.[0] + {"github-copilot": .[1]}' \
+            "$base" "$credential_file" > "$merged"
+          ${pkgs.coreutils}/bin/chmod 600 "$merged"
+          ${pkgs.coreutils}/bin/mv "$merged" "$auth_file"
+          ${pkgs.coreutils}/bin/rm -f "$base"
+        fi
+      fi
+    '';
+
+    # git-crypt 默认从每个 worktree 独立的 Git 目录读取 key，而 key 实际只存在于
+    # 主仓库的 common Git 目录。让过滤器显式使用 common dir，避免 agents 创建
+    # worktree 时因 smudge 找不到 key 而失败。
+    piAgentsGitCryptWorktree = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+      repo="$HOME/${myvars.repositoryDirectory}"
+      if ${pkgs.git}/bin/git -C "$repo" rev-parse --git-dir >/dev/null 2>&1; then
+        ${pkgs.git}/bin/git -C "$repo" config --local filter.git-crypt.smudge \
+          'GIT_DIR="$(git rev-parse --git-common-dir)" git-crypt smudge'
+        ${pkgs.git}/bin/git -C "$repo" config --local filter.git-crypt.clean \
+          'GIT_DIR="$(git rev-parse --git-common-dir)" git-crypt clean'
+        ${pkgs.git}/bin/git -C "$repo" config --local diff.git-crypt.textconv \
+          'GIT_DIR="$(git rev-parse --git-common-dir)" git-crypt diff'
+      fi
+    '';
+  };
 
   # @pi-orca/agents：声明式维护用户级子代理模板。
   # scout/planner 使用低开销 SDK；写入和审查代理使用独立进程，避免子代理故障影响主 Pi。
