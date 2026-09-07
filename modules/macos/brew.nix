@@ -43,8 +43,9 @@ let
     "neteasemusic"
   ];
   productivity = [
-    # "zotero"
-    # "wpsoffice-cn"
+    "tencent-meeting"
+    "zotero"
+    "wpsoffice-cn"
   ];
 in
 {
