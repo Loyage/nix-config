@@ -10,6 +10,18 @@
   # PATH 钩子会丢失，~/.nix-profile/bin（eza、nvim、nix…）全部不可见。
   targets.genericLinux.enable = true;
 
+  # headless 服务器没有 GPU/桌面，默认打开的 GPU 驱动集成会白拉约 1.1GB
+  # （llvm、mesa、intel-media-driver 等），这里关掉，仅保留 nix.sh 的 PATH 注入。
+  targets.genericLinux.gpu.enable = false;
+
+  # 这台机器通常没有 /etc/nix/nix.conf（rootless 安装），nix-command/flakes
+  # 默认关闭会让 `nix eval`、`just remote-switch` 的 preflight 直接失败。
+  # 不用 nix.settings 是因为它强制要求 nix.package，会把 profile 里的 nix 从
+  # 安装器版本（如 2.35.2）换成 nixpkgs 的版本；直接写文件更稳。
+  xdg.configFile."nix/nix.conf".text = ''
+    experimental-features = nix-command flakes
+  '';
+
   # agenix 机密：pi provider 凭据（standalone home-manager 级）
   # 与 NixOS/macOS 的系统级定义（modules/base/secrets.nix）等价，
   # 但 home-manager 的解密路径是 ${XDG_RUNTIME_DIR}/agenix/...（运行时展开），
