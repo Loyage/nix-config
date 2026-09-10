@@ -42,7 +42,7 @@
       };
 
       # 绕过用户全局 ~/.npmrc 的 min-release-age=7（只拒绝 7 天内的新版本），
-      # 否则 pi-web-access@0.22.0 等刚发布的插件会 npm install ETARGET。
+      # 允许未锁定版本的插件及时安装 npm latest。
       npmCommand = [
         "npm"
         "--min-release-age=0"
@@ -50,18 +50,19 @@
 
       # 插件声明：这里有意保留两种导入方式，不强行统一：
       # - 纯文件、无 npm 依赖的插件/技能使用 flake input：版本由 flake.lock 锁定，构建和离线使用更稳定；
-      # - 依赖 npm 运行时安装的插件使用 npm 源：由 npm 处理依赖，维护方式更贴近上游发布方式。
-      # pi 启动时按 pi-package 规则从这些源收集 extensions/skills。
+      # - 依赖 npm 运行时安装的插件使用不带版本号的 npm 源，`pi update --extensions`
+      #   会自动解析并安装 npm latest，无需逐个维护版本号。
+      # pi 启动时按 pi-package 规则从这些源收集 extensions/skills，并提示可用更新。
       packages = [
         "${inputs.academic-research-skills}"
-        "npm:pi-web-access@0.22.0"
-        "npm:pi-context-view@0.5.0"
-        "npm:pi-btw@0.4.1"
-        "npm:@juicesharp/rpiv-ask-user-question@2.8.0"
-        "npm:pi-dynamic-workflows@1.0.1"
-        "npm:pi-plan-mode@0.4.8"
-        "npm:pi-powerline-footer@0.16.0"
-        "npm:@pi-orca/agents@0.0.5"
+        "npm:pi-web-access"
+        "npm:pi-context-view"
+        "npm:pi-btw"
+        "npm:@juicesharp/rpiv-ask-user-question"
+        "npm:pi-dynamic-workflows"
+        "npm:pi-plan-mode"
+        "npm:pi-powerline-footer"
+        "npm:@pi-orca/agents"
       ];
 
     };
