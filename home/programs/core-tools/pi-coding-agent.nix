@@ -56,7 +56,6 @@
         "${inputs.academic-research-skills}"
         "npm:pi-web-access@0.22.0"
         "npm:pi-context-view@0.5.0"
-        "npm:pi-hashline-edit@0.8.3"
         "npm:pi-btw@0.4.1"
         "npm:@juicesharp/rpiv-ask-user-question@2.8.0"
         "npm:pi-dynamic-workflows@1.0.1"

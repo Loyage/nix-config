@@ -37,8 +37,11 @@
 
   # 网络管理
   networking.networkmanager.enable = true;
-  # 对外开放本机 TCP 8080 端口
-  networking.firewall.allowedTCPPorts = [ 8080 ];
+  # 对外开放本机 TCP 端口
+  networking.firewall.allowedTCPPorts = [
+    8080
+    8180
+  ];
 
   # 安全相关
   security.pam.services.greetd.enableGnomeKeyring = true;

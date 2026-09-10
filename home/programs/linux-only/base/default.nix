@@ -7,7 +7,7 @@
   imports = mylib.scanPaths ./.;
   home.packages = with pkgs; [
     # firefox
-    # chromium
+    chromium
     hardinfo2
     bluetuith
     usbutils
