@@ -224,6 +224,18 @@ git push
 > 文件（包括 git-crypt-key.age → 连 git-crypt 解锁能力一起丢）。
 > 若 `agenix -r` 报错：检查 publicKeys 是否混入 `ssh-rsa`。
 
+### C.3 每台机器都要重新部署（不是重启服务）
+
+rekey 改变了 `.age` 密文内容 → 密文在 Nix store 里的路径跟着变，而 agenix 的解密
+脚本把该路径硬编码在内。所以每台机器 pull 后必须重跑 switch 重建 unit：
+
+```bash
+just switch        # NixOS/macOS/headless 统一入口；只 restart agenix.service 无效
+```
+
+验证：`cat /run/agenix/<secret>`（或 headless 的 `$XDG_RUNTIME_DIR/agenix/<secret>`）
+能读出明文。详见 `docs/new-machine-setup.md` 第 7.3 与第 11 节。
+
 ---
 
 ## 5. 场景 D：修改 git-crypt 加密的 `vars/private.nix`

@@ -361,13 +361,29 @@ git push
 > 若无任何旧机器可用：必须从密码管理器/服务商找回明文机密，再用
 > `age -e -r "$(cat ~/.ssh/id_ed25519.pub)" -o secrets/<name>.age` 重新加密（会丢失旧机器解密能力）。
 
-### 7.3 拉取 rekey 结果
+### 7.3 拉取 rekey 结果并重新部署
 
 ```bash
 cd ~/nix-config
 git pull
 git log --oneline -2                 # ✅ 应看到 "rekey for <机器名>"
 ```
+
+⚠️ **接下来必须重新执行 switch，重启服务不够。** rekey 会改变 `.age` 密文内容，
+而 agenix 的解密脚本把密文在 Nix store 里的路径**硬编码**在内部：
+
+```
+decrypting '/nix/store/<hash>-deepseek-api-key.age' to '...'   ← hash 来自密文内容
+```
+
+密文一变 hash 就变，旧的 `agenix.service` 仍指向旧密文，`systemctl restart` 只会
+继续失败。`switch` 会重新生成 unit（内含新密文路径）：
+
+```bash
+just switch                          # ✅ 重建 agenix unit
+```
+
+> 若这台机器还没跑过首次部署（第 8 步），直接做第 8 步即可，首次 switch 就会带上新密文。
 
 ---
 
@@ -449,19 +465,35 @@ ls ~/.agents/skills/                       # 项目 skills 已链接
 
 ### 9.3 pi agent 可用
 
+deepseek / xiaomi 的 apiKey 由 `programs.pi-coding-agent.models`（写入 `~/.pi/agent/models.json`）
+以 `!cat <agenix 路径>` 形式**在每次请求时读取**，因此**不需要手工创建 auth.json**：
+
+- NixOS / macOS：`!cat /run/agenix/deepseek-api-key`
+- 远程服务器：`!cat ${XDG_RUNTIME_DIR}/agenix/deepseek-api-key`
+
 ```bash
-pi
+# 只检查凭据而不产生真实请求：
+pi auth check --provider deepseek --json      # 期望 {"status":"ready","provider":"deepseek",...}
+# 真实验收（会发一次很小的请求）：
+pi -p --no-session "Reply with exactly: ok"
 ```
 
-无需手动配置：`programs.pi-coding-agent` 已写入 `~/.pi/agent/settings.json`，
-`apiKey = "!cat /run/agenix/deepseek-api-key"`（remote 覆盖为 XDG 路径），请求时自动读取。
-验证默认 provider/model 能正常对话。
+> headless 上 `auth.json` 里**不需要** deepseek 条目：`settings.json` 的默认 provider 已在
+> `home/remote-server.nix` 覆盖为 `deepseek`（openai-codex 需要交互式 `/login`，服务器上没有凭据）。
 
-> 可选双保险（与 thinkpad 一致）：手动建 `~/.pi/agent/auth.json`：
-> ```json
-> { "deepseek": { "type": "api_key", "key": "!cat /run/agenix/deepseek-api-key" } }
-> ```
-> remote 路径换成 `${XDG_RUNTIME_DIR}/agenix/deepseek-api-key`。不建也没关系。
+`~/.pi/agent/auth.json` 只用于 **OAuth 类** provider（该文件不受 Nix 管理，由 pi 自己读写）：
+
+| provider | 凭据来源 |
+|----------|----------|
+| `github-copilot` | 由 age secret **自动种入**：NixOS/macOS 走 `home.activation.piGithubCopilotAuth`；headless 走 `agenix.service` 的 `ExecStartPost`（因为用户级 agenix 解密晚于 activation）。之后由 pi 原地刷新短期 token，已有条目时不会用旧种子覆盖 |
+| `openai-codex` | 需交互式 `pi` → `/login`（订阅 OAuth，无法用 agenix 代管） |
+
+```bash
+pi auth check --provider github-copilot --json   # 期望 ready；not_ready 见第 11 节
+```
+
+> ⚠️ 不要把 API key 明文写进 `auth.json`：它不在 Nix 管理范围内，会一直留在磁盘上，
+> 机器重建也不会清理。API key 一律走 agenix（见 `docs/change-secrets.md`）。
 
 ---
 
@@ -484,11 +516,13 @@ pi
 | unlock 后提示已设置密钥、但现有文件未解密 | `nix run` 启动的 smudge 子进程找不到 `git-crypt` | 用 `nix shell nixpkgs#git-crypt -c git checkout -- vars/private.nix` |
 | `git-crypt export-key` 报 `Unable to open key file` | 当前仓库从未成功解锁 | 换到已解锁旧机器导出，或从密码管理器/agenix 备份恢复 |
 | 部署日志 `[agenix] decrypting` 失败 / 找不到 key | 公钥没进 `publicKeys`，或 rekey 后没 pull | 重做第 7 步；确认是 `ssh-ed25519` |
+| rekey 后 pull 了，但改密钥仍解密失败（重启服务无效） | `.age` 内容变了 → store 路径变了，旧 unit 仍指向旧密文 | `just switch` 重建 unit，见 7.3（`restart` 不解决问题） |
+| `pi auth check --provider github-copilot` 报 `not_ready` | headless 上 activation 早于 agenix 解密（已改挂 `ExecStartPost`）／secret 缺失 | `just switch`；确认 `$XDG_RUNTIME_DIR/agenix/github-copilot-auth` 可读 |
 | 旧机器 `agenix -r` 报错 | `publicKeys` 混入了 `ssh-rsa` | 移除 rsa 条目后重跑 `agenix -r` |
 | `nixos-rebuild` 提示 flake 里没有 `.#nixos` | `hosts/local/` 不存在 | 重做第 6 步 NixOS 分支 |
 | `nixos-rebuild` 报 hosts/local 路径错误 | 没带 `--impure` | 首次部署必须带 `--impure` |
 | `nix` 报 experimental feature disabled | 未启用 flakes/nix-command | 见第 2 步 nix.conf 配置 |
-| `pi` 提示 `Provider is not configured: deepseek` | agenix 未解密或路径错 | 重查 9.1；`sudo systemctl restart agenix.service` 或重跑 switch |
+| `pi` 提示 `Provider is not configured: deepseek` | agenix 未解密或路径错 | 重查 9.1；headless 上是**用户级**单元：`systemctl --user restart agenix.service`；刚 rekey 过则必须 `just switch`（见 7.3） |
 | remote 上 `$XDG_RUNTIME_DIR` 为空 | 无 systemd 登录会话 | 重新登录 SSH / `sudo systemctl start systemd-logind` |
 | macOS 重启后 `/run/agenix` 空了 | `/run` 是临时目录，重启清空 | 重新 `just switch` 即重新解密 |
 | GitHub clone/push 报 permission denied | 新机器公钥未加到 GitHub | 🛑 USER-ACTION A |
@@ -506,5 +540,7 @@ pi
 - [ ] `git log --oneline -2` 显示 rekey 提交已拉到
 - [ ] 首次部署日志有 `[agenix] decrypting...`
 - [ ] `cat /run/agenix/deepseek-api-key`（或 XDG 路径）输出 `sk-...`，权限 0400
-- [ ] `pi` 启动且 deepseek 对话正常
+- [ ] rekey 之后重新执行过 `just switch`（只重启服务会继续解旧密文，见 7.3）
+- [ ] `pi auth check --provider deepseek` 为 `ready`，`pi -p` 能正常对话
+- [ ] `~/.pi/agent/auth.json` 里没有明文 API key（只应出现 OAuth 类 provider）
 - [ ] `~/.config/nvim` 是指向 `~/nix-config/config/nvim` 的符号链接
