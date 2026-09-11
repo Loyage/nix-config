@@ -63,6 +63,13 @@ let
     # 因此这里始终返回 0。
     exit 0
   '';
+
+  # orca 子代理的推理模型：openai-codex 的凭据只能靠交互式 `pi` → `/login` 获取，
+  # headless（无桌面）上没人登录，会让 planner/worker/worktree/reviewer 全部失败，
+  # 因此降级到 deepseek —— 它的 apiKey 由 agenix 在每台机器提供。
+  # scout 不受影响：它本来就用便宜的 deepseek-v4-flash。
+  subagentModel =
+    if hostProfile.graphical or true then "openai-codex/gpt-5.6-sol" else "deepseek/deepseek-v4-pro";
 in
 {
   programs.pi-coding-agent = {
@@ -213,7 +220,7 @@ in
           ---
           name: planner
           description: 分解复杂任务并制定依赖明确的实施计划
-          model: openai-codex/gpt-5.6-sol
+          model: ${subagentModel}
           thinking: high
           context: fresh
           tools: [read, grep, find, ls]
@@ -237,7 +244,7 @@ in
           ---
           name: worker
           description: 按明确任务实施代码改动并进行验证
-          model: openai-codex/gpt-5.6-sol
+          model: ${subagentModel}
           thinking: medium
           context: fresh
           tools: [read, write, edit, grep, find, ls, bash]
@@ -261,7 +268,7 @@ in
           ---
           name: worktree
           description: 在独立 Git worktree 和分支中实施代码改动
-          model: openai-codex/gpt-5.6-sol
+          model: ${subagentModel}
           thinking: medium
           context: fresh
           tools: [read, write, edit, grep, find, ls, bash]
@@ -288,7 +295,7 @@ in
           ---
           name: reviewer
           description: 只读审查代码的正确性、安全性和一致性
-          model: openai-codex/gpt-5.6-sol
+          model: ${subagentModel}
           thinking: high
           context: fresh
           tools: [read, grep, find, ls, bash]
