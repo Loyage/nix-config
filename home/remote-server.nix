@@ -1,4 +1,4 @@
-{ config, ... }:
+{ config, lib, ... }:
 {
   imports = [
     ./home-setting.nix
@@ -43,10 +43,19 @@
     };
   };
 
-  # remote 上覆盖 pi 的 apiKey 路径，指向 home-manager 实际解密位置
-  programs.pi-coding-agent.models.providers.deepseek.apiKey =
-    "!cat ${config.age.secrets.deepseek-api-key.path}";
+  programs.pi-coding-agent = {
+    # remote 上覆盖 pi 的 apiKey 路径，指向 home-manager 实际解密位置
+    models.providers = {
+      deepseek.apiKey = "!cat ${config.age.secrets.deepseek-api-key.path}";
+      xiaomi.apiKey = "!cat ${config.age.secrets.mimo-api-key.path}";
+    };
 
-  programs.pi-coding-agent.models.providers.xiaomi.apiKey =
-    "!cat ${config.age.secrets.mimo-api-key.path}";
+    # headless 默认走 deepseek：openai-codex 凭据只能靠交互式 `pi` → `/login` 获取，
+    # 服务器上不会有人登录一次；而 deepseek 的 key 已由上面的 agenix 机密提供。
+    # 模型必须一起覆盖，否则会继续指向 openai-codex 的 gpt-5.6-sol（deepseek 下不存在）。
+    settings = {
+      defaultProvider = lib.mkForce "deepseek";
+      defaultModel = lib.mkForce "deepseek-v4-pro";
+    };
+  };
 }
