@@ -1,10 +1,69 @@
 {
+  config,
   inputs,
   pkgs,
   lib,
   myvars,
+  hostProfile,
   ...
 }:
+let
+  # 把 agenix 解密出的 GitHub Copilot 长期凭据种子合并进 pi 可写的 auth.json。
+  # 幂等：auth.json 里已有 github-copilot 时不覆盖（pi 会原地刷新短期 token，
+  # 旧种子不应覆盖更新的登录）；缺凭据或格式不对时静默跳过并返回 0。
+  #
+  # 两个调用入口，由 hostProfile.systemManaged 区分：
+  # - NixOS/macOS：机密由系统级 agenix 在启动时解密到 /run/agenix，早于 HM
+  #   activation → 用 home.activation.piGithubCopilotAuth。
+  # - headless（standalone HM）：agenix 是用户级 systemd 单元，解密晚于 activation
+  #   （activation 里永远看不到凭据）→ 挂到该单元的 ExecStartPost。
+  copilotSeed = pkgs.writeShellScript "pi-github-copilot-seed" ''
+    if [ -z "''${HOME:-}" ]; then
+      echo "[pi-copilot] HOME is not set; skipping credential seed" >&2
+      exit 0
+    fi
+
+    auth_dir="$HOME/.pi/agent"
+    auth_file="$auth_dir/auth.json"
+    credential_file="/run/agenix/github-copilot-auth"
+    runtime_dir="''${XDG_RUNTIME_DIR:-}"
+
+    if [ -n "$runtime_dir" ] && [ -r "$runtime_dir/agenix/github-copilot-auth" ]; then
+      credential_file="$runtime_dir/agenix/github-copilot-auth"
+    fi
+
+    if [ -r "$credential_file" ] \
+      && ${pkgs.jq}/bin/jq -e '.type == "oauth" and (.refresh | type == "string")' \
+        "$credential_file" >/dev/null \
+      && ! ${pkgs.jq}/bin/jq -e '."github-copilot" | type == "object"' \
+        "$auth_file" >/dev/null 2>&1; then
+      ${pkgs.coreutils}/bin/mkdir -p "$auth_dir"
+      ${pkgs.coreutils}/bin/chmod 700 "$auth_dir"
+      base="$auth_dir/.auth-base.$$"
+      merged="$auth_dir/.auth-merged.$$"
+      if [ ! -e "$auth_file" ]; then
+        printf '{}\n' > "$base"
+      elif ${pkgs.jq}/bin/jq -e 'type == "object"' "$auth_file" >/dev/null 2>&1; then
+        ${pkgs.coreutils}/bin/cp "$auth_file" "$base"
+      else
+        echo "warning: $auth_file is invalid; GitHub Copilot credential was not installed" >&2
+        base=""
+      fi
+
+      if [ -n "$base" ]; then
+        ${pkgs.jq}/bin/jq -s '.[0] + {"github-copilot": .[1]}' \
+          "$base" "$credential_file" > "$merged"
+        ${pkgs.coreutils}/bin/chmod 600 "$merged"
+        ${pkgs.coreutils}/bin/mv "$merged" "$auth_file"
+        ${pkgs.coreutils}/bin/rm -f "$base"
+      fi
+    fi
+
+    # 作为 agenix.service 的 ExecStartPost 运行时，非零退出会让解密单元整体失败，
+    # 因此这里始终返回 0。
+    exit 0
+  '';
+in
 {
   programs.pi-coding-agent = {
     enable = true;
@@ -88,46 +147,11 @@
   };
 
   home.activation = {
-    # GitHub Copilot 的长期 GitHub OAuth token 以独立 age secret 保存。首次部署时把
-    # 凭据种子合并进 pi 可写的 auth.json；之后由 pi 原地刷新短期 Copilot token。
-    # 已有登录不会被旧种子覆盖，其他 provider 的凭据也会保留。
-    piGithubCopilotAuth = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-      auth_dir="$HOME/.pi/agent"
-      auth_file="$auth_dir/auth.json"
-      credential_file="/run/agenix/github-copilot-auth"
-      runtime_dir="''${XDG_RUNTIME_DIR:-}"
-
-      if [ -n "$runtime_dir" ] && [ -r "$runtime_dir/agenix/github-copilot-auth" ]; then
-        credential_file="$runtime_dir/agenix/github-copilot-auth"
-      fi
-
-      if [ -r "$credential_file" ] \
-        && ${pkgs.jq}/bin/jq -e '.type == "oauth" and (.refresh | type == "string")' \
-          "$credential_file" >/dev/null \
-        && ! ${pkgs.jq}/bin/jq -e '."github-copilot" | type == "object"' \
-          "$auth_file" >/dev/null 2>&1; then
-        ${pkgs.coreutils}/bin/mkdir -p "$auth_dir"
-        ${pkgs.coreutils}/bin/chmod 700 "$auth_dir"
-        base="$auth_dir/.auth-base.$$"
-        merged="$auth_dir/.auth-merged.$$"
-        if [ ! -e "$auth_file" ]; then
-          printf '{}\n' > "$base"
-        elif ${pkgs.jq}/bin/jq -e 'type == "object"' "$auth_file" >/dev/null 2>&1; then
-          ${pkgs.coreutils}/bin/cp "$auth_file" "$base"
-        else
-          echo "warning: $auth_file is invalid; GitHub Copilot credential was not installed" >&2
-          base=""
-        fi
-
-        if [ -n "$base" ]; then
-          ${pkgs.jq}/bin/jq -s '.[0] + {"github-copilot": .[1]}' \
-            "$base" "$credential_file" > "$merged"
-          ${pkgs.coreutils}/bin/chmod 600 "$merged"
-          ${pkgs.coreutils}/bin/mv "$merged" "$auth_file"
-          ${pkgs.coreutils}/bin/rm -f "$base"
-        fi
-      fi
-    '';
+    # 系统级 agenix（NixOS/macOS）在 activation 前已解密机密，这里同步种入凭据。
+    # headless 走下方的 systemd ExecStartPost。
+    piGithubCopilotAuth = lib.mkIf (hostProfile.systemManaged or true) (
+      lib.hm.dag.entryAfter [ "writeBoundary" ] "${copilotSeed}"
+    );
 
     # git-crypt 默认从每个 worktree 独立的 Git 目录读取 key，而 key 实际只存在于
     # 主仓库的 common Git 目录。让过滤器显式使用 common dir，避免 agents 创建
@@ -144,6 +168,16 @@
       fi
     '';
   };
+
+  # headless（standalone HM）：agenix 机密由用户级 systemd 单元解密，解密完成前
+  # home-manager activation 已经结束，因此 activation 里的 seed 永远读不到凭据。
+  # 挂到该单元的 ExecStartPost，保证在机密解密之后、同一单元内执行。
+  # 仅当确实声明了 HM 级 age.secrets 时才挂载（否则会生成没有 ExecStart 的单元）。
+  systemd.user.services.agenix.Service.ExecStartPost = lib.mkIf (
+    !(hostProfile.systemManaged or true)
+    && pkgs.stdenv.hostPlatform.isLinux
+    && lib.attrByPath [ "age" "secrets" ] { } config != { }
+  ) "${copilotSeed}";
 
   # @pi-orca/agents：声明式维护用户级子代理模板。
   # scout/planner 使用低开销 SDK；写入和审查代理使用独立进程，避免子代理故障影响主 Pi。
