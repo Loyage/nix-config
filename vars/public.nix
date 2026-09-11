@@ -26,6 +26,10 @@
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBOMetoPGnwCyaaLrTu1e03t0zfJFBtorpauDUwEsFfD loyage@nixos"
     # remote jzh 服务器
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOkGycDKREAwvpU0/IOwkh7kaalg02N4mFDmVt828M8g jzh@cyy"
+    # tenshin 家庭服务器（headless / Ubuntu / 用户 myh）
+    # 一钥两用：GitHub 推送 + agenix 解密身份。新增后必须在旧机器 rekey
+    # （`cd secrets && agenix -r`），否则本机仍解不开 .age。
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFcAWtOVNl+PquOhPlECuBgNvU1l9uRzmcfQZPlczrGV tenshin-headless"
   ];
 
   # authorized_keys 的兼容默认值。建议各目标机通过 Home Manager 的
