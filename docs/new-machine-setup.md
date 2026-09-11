@@ -492,6 +492,16 @@ pi -p --no-session "Reply with exactly: ok"
 pi auth check --provider github-copilot --json   # 期望 ready；not_ready 见第 11 节
 ```
 
+orca 子代理的模型也会随桌面能力降级（避免服务器上因缺 codex 凭据而失败）：
+
+| 机器 | `scout` | `planner` / `worker` / `worktree` / `reviewer` |
+|------|---------|--------------------------------------------------|
+| NixOS / macOS | `deepseek/deepseek-v4-flash` | `openai-codex/gpt-5.6-sol` |
+| headless | 同上 | `deepseek/deepseek-v4-pro` |
+
+选择逻辑在 `home/programs/core-tools/pi-coding-agent.nix` 的 `subagentModel`，生成到
+`~/.pi/agent/orca/agents/*.md`；可对照 `grep -H '^model:' ~/.pi/agent/orca/agents/*.md` 验证。
+
 > ⚠️ 不要把 API key 明文写进 `auth.json`：它不在 Nix 管理范围内，会一直留在磁盘上，
 > 机器重建也不会清理。API key 一律走 agenix（见 `docs/change-secrets.md`）。
 
