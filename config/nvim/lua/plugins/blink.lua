@@ -22,14 +22,6 @@ return {
         ["<CR>"] = { "accept", "fallback" },
         ["<Tab>"] = {
           "accept",
-          function()
-            -- 如果接受 copilot 建议，自动将原输入设置为撤销前结果
-            if require("copilot.suggestion").is_visible() then
-              LazyVim.create_undo()
-              require("copilot.suggestion").accept()
-              return true
-            end
-          end,
           "snippet_forward",
           "fallback",
         },

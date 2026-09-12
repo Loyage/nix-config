@@ -17,6 +17,14 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
+-- 覆盖 LazyVim 的 lazyvim_wrap_spell：这些文件类型也不再自动换行
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = { "text", "plaintex", "typst", "gitcommit", "markdown" },
+  callback = function()
+    vim.opt_local.wrap = false
+  end,
+})
+
 -- 为 markdown、python 设置默认缩进空格数为 4
 vim.api.nvim_create_autocmd("FileType", {
   pattern = { "markdown", "python" },

@@ -11,6 +11,9 @@ if vim.g.vscode then
   require("config.vscode").init()
 end
 
+-- 默认关闭自动换行（LazyVim 会在 markdown/text 等文件类型重新开启，见 autocmds.lua）
+vim.opt.wrap = false
+
 -- If using Neovim under SSH, using OSC52 to synchronous system clipboard.
 -- In wsl, using clip.exe
 vim.opt.clipboard:append("unnamedplus")
