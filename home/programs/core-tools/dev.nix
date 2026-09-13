@@ -10,6 +10,7 @@
     lua
     luarocks
     nodejs
+    bun
 
     cmake
     gnumake
