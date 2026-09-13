@@ -43,7 +43,7 @@ return {
   -- CMDS: MarkliveToggle, ..Enable, ..Disable
   {
     "yelog/marklive.nvim",
-    enable = false,
+    enabled = false,
     dependencies = { "nvim-treesitter/nvim-treesitter" },
     lazy = true,
     ft = "markdown",
