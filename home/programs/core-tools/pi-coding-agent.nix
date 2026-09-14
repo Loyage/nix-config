@@ -92,9 +92,10 @@ in
       theme = "dark";
       collapseChangelog = true;
       tuiMode = "regular";
-      defaultProvider = "openai-codex";
-      defaultModel = "gpt-5.6-sol";
-      defaultThinkingLevel = "medium";
+      defaultProvider = "deepseek";
+      defaultModel = "deepseek-flash";
+      # deepseek-flash 只支持 off/low/high/max，medium 会被 pi clamp 到 low
+      defaultThinkingLevel = "high";
 
       # pi-powerline-footer：状态栏、欢迎面板和快捷操作
       powerline = {
