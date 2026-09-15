@@ -9,6 +9,9 @@ in
   # pi agent 的 mimo API key（机密，age 加密）
   "mimo-api-key.age".publicKeys = keys;
 
+  # pi agent 的智谱 Z.AI Coding CN API key（机密，age 加密）
+  "zai-coding-cn-api-key.age".publicKeys = keys;
+
   # pi agent 的 GitHub Copilot OAuth 凭据种子（机密，age 加密）
   "github-copilot-auth.age".publicKeys = keys;
 

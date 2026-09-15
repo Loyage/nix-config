@@ -23,6 +23,11 @@
         mode = "0400";
         owner = myvars.username;
       };
+      zai-coding-cn-api-key = {
+        file = ../../secrets/zai-coding-cn-api-key.age;
+        mode = "0400";
+        owner = myvars.username;
+      };
       github-copilot-auth = {
         file = ../../secrets/github-copilot-auth.age;
         mode = "0400";

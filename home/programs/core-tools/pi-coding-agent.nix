@@ -142,15 +142,17 @@ in
     # `cat` 读取 agenix 解密后的机密（/run/agenix/...，解密自 secrets/*.age）。
     # ⚠️ remote 服务器（standalone home-manager）的解密路径不同
     # （${XDG_RUNTIME_DIR}/agenix/...），由 home/remote-server.nix 覆盖此值。
-    models = {
-      providers.deepseek = {
+    models.providers = {
+      deepseek = {
         # mkDefault：NixOS/macOS 用系统级路径；remote 在 home/remote-server.nix 覆盖
         apiKey = lib.mkDefault "!cat /run/agenix/deepseek-api-key";
       };
 
-      providers.xiaomi = {
-        apiKey = lib.mkDefault "!cat /run/agenix/mimo-api-key";
-      };
+      xiaomi.apiKey = lib.mkDefault "!cat /run/agenix/mimo-api-key";
+
+      # 智谱 Z.AI Coding CN（open.bigmodel.cn）也是 pi 内置 provider，
+      # 只 override apiKey，glm-* 内置模型保留。
+      zai-coding-cn.apiKey = lib.mkDefault "!cat /run/agenix/zai-coding-cn-api-key";
     };
   };
 

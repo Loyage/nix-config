@@ -37,6 +37,11 @@
       mode = "0400";
     };
 
+    zai-coding-cn-api-key = {
+      file = ../secrets/zai-coding-cn-api-key.age;
+      mode = "0400";
+    };
+
     github-copilot-auth = {
       file = ../secrets/github-copilot-auth.age;
       mode = "0400";
@@ -48,6 +53,7 @@
     models.providers = {
       deepseek.apiKey = "!cat ${config.age.secrets.deepseek-api-key.path}";
       xiaomi.apiKey = "!cat ${config.age.secrets.mimo-api-key.path}";
+      zai-coding-cn.apiKey = "!cat ${config.age.secrets.zai-coding-cn-api-key.path}";
     };
 
     # headless 默认走 deepseek：openai-codex 凭据只能靠交互式 `pi` → `/login` 获取，
