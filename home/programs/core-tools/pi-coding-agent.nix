@@ -121,7 +121,7 @@ in
       #   会自动解析并安装 npm latest，无需逐个维护版本号。
       # pi 启动时按 pi-package 规则从这些源收集 extensions/skills，并提示可用更新。
       packages = [
-        "${inputs.academic-research-skills}"
+        # "${inputs.academic-research-skills}"
         "npm:pi-web-access"
         "npm:pi-context-view"
         "npm:pi-btw"

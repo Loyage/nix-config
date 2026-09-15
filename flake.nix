@@ -92,11 +92,11 @@
       url = "github:cachix/git-hooks.nix";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
-    academic-research-skills = {
-      # ARS 学术研究技能套件（Pi wrapper），纯文件无 npm 依赖。
-      url = "github:Imbad0202/academic-research-skills";
-      flake = false;
-    };
+    # academic-research-skills = {
+    #   # ARS 学术研究技能套件（Pi wrapper），纯文件无 npm 依赖。
+    #   url = "github:Imbad0202/academic-research-skills";
+    #   flake = false;
+    # };
     orca = {
       url = "github:stslex/orca-nix";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
