@@ -24,6 +24,7 @@ let
     "zen"
     "codex-app"
     "stablyai/orca/orca"
+    "stats"
   ];
   utilities = [
     "jordanbaird-ice" # menu bar management tool
