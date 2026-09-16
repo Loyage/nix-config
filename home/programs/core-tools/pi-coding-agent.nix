@@ -130,6 +130,7 @@ in
         "npm:pi-plan-mode"
         "npm:pi-powerline-footer"
         "npm:@pi-orca/agents"
+        "npm:pi-usage"
       ];
 
     };
