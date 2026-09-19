@@ -1,0 +1,9 @@
+onboarding = false
+
+[keys]
+# macOS：Option + ←/→ 切换前/后一个 tab，Option + ↑/↓ 切换上/下一个 workspace。
+# 数组写法保留默认的 prefix 绑定（prefix+p / prefix+n）作为兜底。
+previous_tab = ["prefix+p", "alt+left"]
+next_tab = ["prefix+n", "alt+right"]
+previous_workspace = "alt+up"
+next_workspace = "alt+down"

@@ -47,6 +47,8 @@ in
       "opencode/tui.jsonc".source = mkLink "${confPath}/opencode/tui.jsonc";
       # pi-web-access 配置
       "pi/web-search.json".source = mkLink "${confPath}/pi/web-search.json";
+      # herdr 快捷键等配置（config.toml 之外的运行时文件仍留在 ~/.config/herdr）
+      "herdr/config.toml".source = mkLink "${confPath}/herdr/config.toml";
     }
     // lib.optionalAttrs hostProfile.graphical {
       "avater.png".source = mkLink "${confPath}/avater.png";
