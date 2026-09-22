@@ -5,6 +5,10 @@ return {
     opts = {
       completion = {
         menu = {
+          -- Markdown 中不自动弹出补全建议，仍可手动触发补全
+          auto_show = function()
+            return vim.bo.filetype ~= "markdown"
+          end,
           min_width = 7,
           border = "single",
           draw = {
