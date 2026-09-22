@@ -34,7 +34,6 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 
 -- 设置退出 insert 模式时fcitx自动切换英文输入法
--- macos 下的输入法切换见 plugins/im-select.lua
 vim.api.nvim_create_autocmd("InsertLeave", {
   pattern = "*",
   callback = function()

@@ -2,7 +2,7 @@
   "shortcuts": {
     "curate": "ctrl+shift+r"
   },
-  "provider": "openai",
+  "provider": "all",
   "workflow": "summary-review",
   "allowBrowserCookies": false
 }

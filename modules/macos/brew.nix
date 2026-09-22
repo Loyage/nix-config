@@ -54,9 +54,6 @@ in
     enable = true;
     # casks is for gui softwares, brews for shell softwares
     casks = dev-tools ++ utilities ++ social-media ++ entertainment ++ productivity;
-    brews = [
-      "im-select" # auto select input method
-    ];
     masApps = { };
     # rebuild 只收敛声明，不执行未锁定的更新、升级或破坏性 zap 清理。
     # 需要维护时显式运行 `just brew-maintain`。
