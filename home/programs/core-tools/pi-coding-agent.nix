@@ -92,8 +92,14 @@ in
       theme = "dark";
       collapseChangelog = true;
       tuiMode = "regular";
+
+      # # 默认模型用 openai-codex 的 GPT-5.6 Sol，凭据靠交互式 `pi` → `/login` 写入 auth.json
+      # defaultProvider = "openai-codex";
+      # defaultModel = "gpt-6-astra";
+
       defaultProvider = "deepseek";
       defaultModel = "deepseek-flash";
+
       # deepseek-flash 只支持 off/low/high/max，medium 会被 pi clamp 到 low
       defaultThinkingLevel = "high";
 
