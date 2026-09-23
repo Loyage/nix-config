@@ -73,7 +73,8 @@ let
 in
 {
   programs.pi-coding-agent = {
-    enable = true;
+    # Pi 改由 npm 管理；保留整份模块，之后将此值改回 true 即可恢复 Nix 安装。
+    enable = false;
 
     # pi 安装的插件所需的额外命令（如 npm、git 等）会追加到 pi 的 PATH。
     # npm 源插件（pi-web-access）首次加载时需 npm install；
