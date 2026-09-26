@@ -73,18 +73,14 @@ let
 in
 {
   programs.pi-coding-agent = {
-    # Pi 改由 npm 管理；保留整份模块，之后将此值改回 true 即可恢复 Nix 安装。
-    enable = false;
-
-    # pi 安装的插件所需的额外命令（如 npm、git 等）会追加到 pi 的 PATH。
-    # npm 源插件（pi-web-access）首次加载时需 npm install；
-    # ffmpeg/yt-dlp 是 web-access 视频提取所需。
-    extraPackages = [
-      pkgs.nodejs # 提供 npm，pi 安装 npm 源插件时使用
-      pkgs.git
-      pkgs.ffmpeg # 视频帧提取、时长探测
-      pkgs.yt-dlp # YouTube 流地址获取
-    ];
+    # 配置仍由 Nix 声明式写入（settings.json / models.json / orca agents），
+    # 但 pi 本体由 npm 全局安装（~/.npm-global，见 dev.nix 的 NPM_CONFIG_PREFIX）。
+    # package = null：该模块的 package option 是 nullable 类型，为 null 时不把
+    # pkgs.pi-coding-agent 加入 home.packages，避免 Nix 版和 npm 版两份 pi 打架。
+    # 代价：extraPackages wrapper 也失效，npm/git/ffmpeg/yt-dlp 必须真在 PATH 上
+    # （前两者由 dev.nix / git.nix 提供，后两者见 core-tools/default.nix 的 tools）。
+    enable = true;
+    package = null;
 
     settings = {
       # lastChangelogVersion 由 pi 自动维护，这里声明以保持声明式一致

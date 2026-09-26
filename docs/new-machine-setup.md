@@ -465,6 +465,20 @@ ls ~/.agents/skills/                       # 项目 skills 已链接
 
 ### 9.3 pi agent 可用
 
+pi **本体**由 npm 全局安装（`NPM_CONFIG_PREFIX=~/.npm-global`，见 `home/programs/core-tools/dev.nix`）：
+
+```bash
+npm install -g @earendil-works/pi-coding-agent
+```
+
+`programs.pi-coding-agent` 只负责**声明式写配置**（`enable = true; package = null;`，见
+`home/programs/core-tools/pi-coding-agent.nix`）：不装 Nix 版 pi，因此也不会和 npm 版打架，
+但 `settings.json` / `models.json` / orca agents 仍由 Home Manager 生成。
+
+> headless 上 `package = null` 会让模块的 `extraPackages` wrapper 失效，所以 `ffmpeg` / `yt-dlp`
+> 改为进 `home/programs/core-tools/default.nix` 的 `tools`（即 `home.packages`）；npm、git
+> 分别由 `dev.nix`、`home/programs/core-tools/git.nix` 提供。
+
 deepseek / xiaomi 的 apiKey 由 `programs.pi-coding-agent.models`（写入 `~/.pi/agent/models.json`）
 以 `!cat <agenix 路径>` 形式**在每次请求时读取**，因此**不需要手工创建 auth.json**：
 

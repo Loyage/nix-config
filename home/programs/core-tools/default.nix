@@ -21,6 +21,9 @@ let
     fh # flakehub cli
     gomi # rm to trash
     git-crypt # 仓库级文件透明加密（vars/private.nix 等私有数据）
+    # pi 由 npm 全局安装（无 extraPackages wrapper），插件要用的命令必须在 PATH 上：
+    ffmpeg # pi-web-access 视频帧提取、时长探测
+    yt-dlp # pi-web-access YouTube 流地址获取
     clash-rs
     gnused
     gnutar
