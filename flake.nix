@@ -16,8 +16,6 @@
   };
 
   inputs = {
-    # nixpkgs-master.url = "github:nixos/nixpkgs/master";
-    # nixpkgs-stable-darwin.url = "github:nixos/nixpkgs/nixpkgs-25.05-darwin";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
 
     nix-homebrew.url = "github:zhaofengli-wip/nix-homebrew";
@@ -69,19 +67,10 @@
       url = "github:linuxmobile/hibiki";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
-    nix-openclaw = {
-      url = "github:openclaw/nix-openclaw";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
-      inputs.home-manager.follows = "home-manager";
-    };
     plasma-manager = {
       url = "github:nix-community/plasma-manager";
       inputs.nixpkgs.follows = "home-manager";
       inputs.home-manager.follows = "home-manager";
-    };
-    fcitx5-vinput = {
-      url = "github:xifan2333/fcitx5-vinput";
-      flake = false;
     };
     catppuccin.url = "github:catppuccin/nix";
     agenix = {
@@ -92,11 +81,6 @@
       url = "github:cachix/git-hooks.nix";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
-    # academic-research-skills = {
-    #   # ARS 学术研究技能套件（Pi wrapper），纯文件无 npm 依赖。
-    #   url = "github:Imbad0202/academic-research-skills";
-    #   flake = false;
-    # };
     orca = {
       url = "github:stslex/orca-nix";
       inputs.nixpkgs.follows = "nixpkgs-unstable";

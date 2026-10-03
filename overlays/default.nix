@@ -10,8 +10,4 @@ inputs: [
       meta = prev.wechat.meta;
     };
   })
-
-  # (final: prev: {
-  #   fcitx5-vinput = final.callPackage ./pkgs/fcitx5-vinput.nix { inherit inputs; };
-  # })
 ]

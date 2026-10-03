@@ -40,7 +40,6 @@ Same `just switch` on macOS runs `darwin-rebuild switch --flake path:.`; recipes
 - `home/{nixos,mac,remote-server}.nix` — per-platform HM entrypoints
 - `hosts/local{,example}/`, `hosts/remote/` — machine-specific overrides
 - `secrets/` — agenix encrypted `.age` files; public keys in `vars/public.nix`. `secrets/secrets.nix` is pure (imports `../vars` directly, no `<nixpkgs>` channel), so `agenix -r` works without a nixpkgs channel. `secrets/git-crypt-key.age` is the agenix-encrypted git-crypt key for unlocking `vars/private.nix`.
-- `pkgs/` — custom derivations (currently only `fcitx5-vinput.nix`, commented out in overlays)
 - `git-hooks.nix` — pre-commit hooks config (nixfmt-rfc-style, deadnix, trim-trailing-whitespace, end-of-file-fixer)
 
 ## Pre-commit hooks

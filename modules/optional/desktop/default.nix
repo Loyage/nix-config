@@ -13,7 +13,6 @@ in
 
   programs = {
     niri.enable = true;
-    hyprland.enable = false;
   };
 
   services = {
