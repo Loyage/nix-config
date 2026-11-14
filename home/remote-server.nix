@@ -20,6 +20,8 @@
   # 安装器版本（如 2.35.2）换成 nixpkgs 的版本；直接写文件更稳。
   xdg.configFile."nix/nix.conf".text = ''
     experimental-features = nix-command flakes
+    substituters = https://mirror.nju.edu.cn/nix-channels/store https://mirrors.ustc.edu.cn/nix-channels/store https://nix-community.cachix.org https://cache.nixos.org/
+    trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs=
   '';
 
   # agenix 机密：pi provider 凭据（standalone home-manager 级）
