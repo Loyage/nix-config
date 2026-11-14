@@ -1,6 +1,5 @@
 {
   pkgs,
-  lib,
   ...
 }:
 {
@@ -16,7 +15,7 @@
         package = full-border;
         setup = true;
         settings = {
-          type = lib.mkLuaInline "ui.Border.ROUNDED";
+          set = "rounded";
         };
       };
       chmod.package = chmod;
