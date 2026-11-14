@@ -63,7 +63,7 @@
     # 模型必须一起覆盖，否则会继续指向 openai-codex 的 gpt-5.6-sol（deepseek 下不存在）。
     settings = {
       defaultProvider = lib.mkForce "deepseek";
-      defaultModel = lib.mkForce "deepseek-v4-pro";
+      defaultModel = lib.mkForce "deepseek-flash";
     };
   };
 }
