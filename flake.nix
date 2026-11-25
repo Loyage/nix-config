@@ -16,7 +16,9 @@
   };
 
   inputs = {
+    # 源码锁定到 Git 提交；上面的 substituters 仅用于二进制缓存。
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    nixpkgs.follows = "nixpkgs-unstable";
 
     nix-homebrew.url = "github:zhaofengli-wip/nix-homebrew";
     nix-darwin = {
