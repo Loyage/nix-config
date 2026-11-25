@@ -12,8 +12,8 @@
     with pkgs;
     [
       herdr
-      opencode
-      claude-code
+      # opencode
+      # claude-code
       codex
     ]
     ++ lib.optionals (pkgs.stdenv.hostPlatform.isLinux && hostProfile.graphical) [
